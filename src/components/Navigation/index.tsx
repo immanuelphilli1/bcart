@@ -45,39 +45,39 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
           </a>
           <div className="hidden lg:flex gap-10 lg:gap-4">
             <a
-              href="/"
+              href="/about"
               className={`hover:text-[#2B1139] py-2 lg:px-2 ${active === "about" ? " text-[#520B1F] font-bold" : ""
                 }`}
             >
               about
             </a>
             <a
-              href="/about-us"
+              href="/promo-pack"
               className={`hover:text-[#2B1139] py-2 lg:px-2 ${active === "promo packs" ? " text-[#520B1F] font-bold" : ""
                 }`}
             >
               promo packs
             </a>
             <a
-              href="/parcel-content"
+              href="/"
               className={`hover:text-[#2B1139] py-2 lg:px-2 ${active === "blog" ? " text-[#520B1F] font-bold" : ""
                 }`}
             >
               blog
             </a>
             <a
-              href="/contact-us"
+              href="/technical-support"
               className={`hover:text-[#2B1139] py-2 lg:px-2 ${active === "support" ? " text-[#520B1F] font-bold" : ""
                 }`}
             >
               support
             </a>
             <a
-              href="/disclaimer"
+              href="/partners"
               className={`hover:text-[#2B1139] py-2 lg:px-2 ${active === "partner" ? " text-[#520B1F] font-bold" : ""
                 }`}
             >
-              partner
+              partners
             </a>
           </div>
           </div>

@@ -20,24 +20,24 @@ const Footer: React.FC = () => {
             <div className='flex flex-col gap-4'>
                 <div className='text-white font-bold text-lg'>Content</div>
                 <a href='/' className='font-semibold text-gray-100 hover:text-gray-300'>Categories</a>
-                <a href='/' className='font-semibold text-gray-100 hover:text-gray-300'>Promo Pack</a>
+                <a href='/promo-pack' className='font-semibold text-gray-100 hover:text-gray-300'>Promo Pack</a>
                 <a href='/' className='font-semibold text-gray-100 hover:text-gray-300'>Blog</a>
             </div>
             <div className='flex flex-col gap-4'>
                 <div className='text-white font-bold text-lg'>Company</div>
-                <a href='/' className='font-semibold text-gray-100 hover:text-gray-300'>About</a>
+                <a href='/about' className='font-semibold text-gray-100 hover:text-gray-300'>About</a>
                 <a href='/' className='font-semibold text-gray-100 hover:text-gray-300'>Product</a>
-                <a href='/' className='font-semibold text-gray-100 hover:text-gray-300'>FAQs</a>
+                <a href='/faqs' className='font-semibold text-gray-100 hover:text-gray-300'>FAQs</a>
             </div>
             <div className='flex flex-col gap-4'>
                 <div className='text-white font-bold text-lg'>Legal</div>
-                <a href='/' className='font-semibold text-gray-100 hover:text-gray-300'>Terms & Conditions</a>
-                <a href='/' className='font-semibold text-gray-100 hover:text-gray-300'>Privacy Policy</a>
+                <a href='/terms-and-conditions' className='font-semibold text-gray-100 hover:text-gray-300'>Terms & Conditions</a>
+                <a href='/privacy-policy' className='font-semibold text-gray-100 hover:text-gray-300'>Privacy Policy</a>
             </div>
             <div className='flex flex-col gap-4'>
                 <div className='text-white font-bold text-lg'>Support</div>
-                <a href='/' className='font-semibold text-gray-100 hover:text-gray-300'>Help</a>
-                <a href='/' className='font-semibold text-gray-100 hover:text-gray-300'>Technical Support</a>
+                <a href='/help' className='font-semibold text-gray-100 hover:text-gray-300'>Help</a>
+                <a href='/technical-support' className='font-semibold text-gray-100 hover:text-gray-300'>Technical Support</a>
                 <a href='/' className='font-semibold text-gray-100 hover:text-gray-300'>Suggestions</a>
             </div>
             <div className='flex flex-col gap-4'>
