@@ -98,7 +98,7 @@ const IndexPage: React.FC<PageProps> = () => {
           </div>
         </div>
       </div>
-      <div className="container">
+      <div id="categories" className="container">
         <div className="py-20">
       <div className=" pb-10">
             <h1 className="text-lg font-bold text-[#2B1139]">All Categories</h1>
