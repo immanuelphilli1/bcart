@@ -16,7 +16,7 @@ const Accordion: React.FC<AccordionProps> = ({ title, children }) => {
   };
 
   return (
-    <div className={`border-b border-[#C4C4C4] bg-white ${isOpen ? 'mb-2 shadow-md' : ''}`}>
+    <div className={`border-b border-[#C4C4C4] bg-white ${isOpen ? 'mb-2' : ''}`}>
       <div
         className="w-full py-6 cursor-pointer flex gap-6 items-start"
         onClick={toggleAccordion}

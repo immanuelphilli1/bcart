@@ -2,7 +2,7 @@ import React from 'react'
 import Layout from '../components/layout'
 import type { HeadFC } from "gatsby"
 
-export default function TermsAndConditions() {
+export default function Partners() {
     return (
         <Layout active="partner">
       <div className="container">

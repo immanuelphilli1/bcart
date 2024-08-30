@@ -12,3 +12,34 @@
   @apply mx-auto;
   @apply max-w-[1440px];
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  }
+
+/* radio input */
+
+input[type="radio"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color: #ffffff00;
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: .50em;
+  height: .50em;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+}
+
+input[type="radio"]:checked {
+  background-color: #520B1F;
+}
