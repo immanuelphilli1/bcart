@@ -1,5 +1,5 @@
 import * as React from "react"
-import type { HeadFC, PageProps } from "gatsby"
+import { navigate, type HeadFC, type PageProps } from "gatsby"
 import Layout from "../components/layout"
 import Banner from "../components/Banner"
 import { ArrowRight } from "@phosphor-icons/react"
@@ -31,9 +31,9 @@ const IndexPage: React.FC<PageProps> = () => {
               </div>
             </div>
             <div className="flex">
-              <div className="border rounded-full p-4 lg:p-8 text-white bg-[#520B1F]">
+              <button onClick={() => navigate("/search")} className="border rounded-full p-4 lg:p-8 text-white bg-[#520B1F] hover:bg-[#520b1fb2]">
                 <ArrowRight size={40} />
-              </div>
+              </button>
             </div>
           </div>
         </div>
@@ -46,7 +46,7 @@ const IndexPage: React.FC<PageProps> = () => {
               <div><h1 className="text-3xl font-bold text-[#2B1139]">Featured creative <br/> of the week.</h1></div>
               <div className="text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sodales, tortor eu tincidunt pharetra, metus augue facilisis tellus, at maximus tortor ante ac massa. Duis ac lorem elit. Nulla consectetur diam ex, eu pellentesque mi dapibus vel. Suspendisse nec justo porta, lobortis enim non, pharetra nunc. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Quisque libero nisi, tempor ac volutpat sed, condimentum non libero. </div>
               <div>
-                <button className="bg-[#520B1F] text-white rounded-full px-4 py-2">Read more</button>
+                <button onClick={() => navigate("/featured-creative")} className="bg-[#520B1F] hover:bg-[#520b1fb2] text-white rounded-full px-4 py-2">Read more</button>
               </div>
             </div>
           </div>
@@ -90,9 +90,9 @@ const IndexPage: React.FC<PageProps> = () => {
               </div>
             </div>
             <div className="flex">
-              <div className="border rounded-full p-4 lg:p-8 text-white bg-[#520B1F]">
+              <button onClick={() => navigate("/search")} className="border rounded-full p-4 lg:p-8 text-white bg-[#520B1F] hover:bg-[#520b1fb2]">
                 <ArrowRight size={40} />
-              </div>
+              </button>
             </div>
           </div>
           </div>
