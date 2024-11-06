@@ -93,11 +93,11 @@ const IndexPage: React.FC<PageProps> = () => {
             </h1>
           </div>
           <div className="flex gap-4 lg:gap-10 items-center justify-between">
-            <div className="flex gap-4 lg:gap-10 items-center">
+            <div className="flex gap-4 lg:gap-10 items-center overflow-scroll no-scrollbar">
               {categories.map((cat: any, index: number) => (
                 cat.image_url &&
                 <div key={index}>
-                  <div className="border rounded-lg overflow-hidden bg-red-500">
+                  <div className="border w-72 h-48 rounded-lg overflow-hidden bg-red-500">
                     <img
                       src={cat.image_url}
                       alt="logo"
@@ -156,11 +156,11 @@ const IndexPage: React.FC<PageProps> = () => {
         <div className="px-4 pt-10 pb-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div className="border rounded-2xl overflow-hidden">
-              <img src={featuredCreative.profile_picture} alt="logo" className="w-full h-full" />
+              <img src={featuredCreative.profile_picture ? featuredCreative.profile_picture : "/img/f-3.webp"} alt="logo" className="w-full h-full" />
             </div>
             <div className="flex flex-col justify-center gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-[#2B1139]">
+                <h1 className="text-3xl font-bold text-[#3c3441]">
                   Featured creative <br /> of the week.
                 </h1>
               </div>
@@ -188,106 +188,30 @@ const IndexPage: React.FC<PageProps> = () => {
               </h1>
             </div>
             <div className="flex gap-4 lg:gap-10 items-center justify-between">
+            <div className="flex gap-4 lg:gap-10 items-center overflow-scroll no-scrollbar">
               {featuredCreatives.map((creative: any, index: number) => (
                 <div key={index}>
-                  <div className="border rounded-full overflow-hidden bg-red-500">
-                    <img
+                  <div className="border w-28 h-28 rounded-full overflow-hidden bg-white">
+                    {creative.profile_picture ? (
+                      <img
                       src={creative.profile_picture}
                       alt="logo"
                       className="w-full h-full"
                     />
+                    ) :(
+                    <img
+                      src="/img/user-avatar.svg"
+                      alt="logo"
+                      className="w-full h-full p-2"
+                    />
+                    )}
                   </div>
                   <div className="pt-2 text-sm font-bold text-center">
                     {creative.username}
                   </div>
                 </div>
               ))}
-              {/* <div className="flex gap-4 lg:gap-10 items-center">
-                <div>
-                  <div className="border rounded-full overflow-hidden bg-red-500">
-                    <img
-                      src="/img/c-1.webp"
-                      alt="logo"
-                      className="w-full h-full"
-                    />
-                  </div>
-                  <div className="pt-2 text-sm font-bold text-center">
-                    Category 1
-                  </div>
-                </div>
-                <div>
-                  <div className="border rounded-full overflow-hidden bg-red-500">
-                    <img
-                      src="/img/c-1.webp"
-                      alt="logo"
-                      className="w-full h-full"
-                    />
-                  </div>
-                  <div className="pt-2 text-sm font-bold text-center">
-                    Category 1
-                  </div>
-                </div>
-                <div className="hidden md:block">
-                  <div className="border rounded-full overflow-hidden bg-red-500">
-                    <img
-                      src="/img/c-1.webp"
-                      alt="logo"
-                      className="w-full h-full"
-                    />
-                  </div>
-                  <div className="pt-2 text-sm font-bold text-center">
-                    Category 1
-                  </div>
-                </div>
-                <div className="hidden md:block">
-                  <div className="border rounded-full overflow-hidden bg-red-500">
-                    <img
-                      src="/img/c-1.webp"
-                      alt="logo"
-                      className="w-full h-full"
-                    />
-                  </div>
-                  <div className="pt-2 text-sm font-bold text-center">
-                    Category 1
-                  </div>
-                </div>
-                <div className="hidden lg:block">
-                  <div className="border rounded-full overflow-hidden bg-red-500">
-                    <img
-                      src="/img/c-1.webp"
-                      alt="logo"
-                      className="w-full h-full"
-                    />
-                  </div>
-                  <div className="pt-2 text-sm font-bold text-center">
-                    Category 1
-                  </div>
-                </div>
-                <div className="hidden lg:block">
-                  <div className="border rounded-full overflow-hidden bg-red-500">
-                    <img
-                      src="/img/c-1.webp"
-                      alt="logo"
-                      className="w-full h-full"
-                    />
-                  </div>
-                  <div className="pt-2 text-sm font-bold text-center">
-                    Category 1
-                  </div>
-                </div>
-                <div className="hidden lg:block">
-                  <div className="border rounded-full overflow-hidden bg-red-500">
-                    <img
-                      src="/img/c-1.webp"
-                      alt="logo"
-                      className="w-full h-full"
-                    />
-                  </div>
-                  <div className="pt-2 text-sm font-bold text-center">
-                    Category 1
-                  </div>
-                </div>
-              </div> */}
+              </div>
               <div className="flex">
                 <button
                   type="button"
@@ -307,7 +231,7 @@ const IndexPage: React.FC<PageProps> = () => {
           <div className=" pb-10">
             <h1 className="text-lg font-bold text-[#2B1139]">All Categories</h1>
           </div>
-          <div className="grid grid-cols-2 gap-x-4 w-full lg:gap-x-10 gap-y-10 md:grid-cols-4 lg:grid-cols-6">
+          <div className="grid grid-cols-2 gap-x-4 w-full lg:gap-x-10 gap-y-10 md:grid-cols-4 lg:grid-cols-5">
             {categories.map((cat: any, index: number) => (
               <div className="flex flex-col gap-10">
                 <a

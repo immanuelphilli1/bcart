@@ -11,7 +11,7 @@ interface NavigationProps {
 const Navigation: React.FC<NavigationProps> = ({ active }) => {
   const [showMobileMenu, setMobileMenu] = useState(false);
   const [check, setCheck] = useState(false);
-  const [user, setUser] = useState<string | null>("");
+  const [user, setUser] = useState<any | null>("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   
 
@@ -159,22 +159,26 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
                     type="button"
                     title="Open menu"
                     onClick={toggleSidebar}
-                    className="fill-[#737B7D] hover:fill-gray-600"
+                    className="fill-[#ccc] stroke-black hover:fill-gray-600"
                   >
-                    <ShoppingCartSimple size={24} color="" />
+                    <ShoppingCartSimple size={24} color="" weight="fill" />
                   </button>
                   <button 
                     type="button"
                     title="Open menu" 
-                    className="fill-[#737B7D] hover:fill-gray-600">
-                    <Bell size={24} color="" 
+                    className="fill-[#737B7D] hover:fill-gray-900">
+                    <Bell size={24} color="" weight="fill"
                     />
                   </button>
               <div className="relative menu-avatar cursor-pointer hidden lg:block">
                 <div className="flex gap-4 items-center">
                   
                   <div className="bg-gray-200 rounded-full w-12 h-12 overflow-hidden">
-                    <img src={!!user ? user.user.profile_picture : "/img/f-1.webp"} alt="logo" className="w-full h-full" />
+                    {user.user.profile_picture ? (
+                    <img src={user.user.profile_picture} alt="logo" className="w-full h-full" />  
+                    ): (
+                    <img src="/img/user-avatar.svg" alt="logo" className="w-full h-full p-2" />
+                    )}
                   </div>
                 </div>
                 <div className="absolute dropdown border-0 mt-4 border-aluminium top-10 right-0 w-[150px] bg-white text-black shadow-xl rounded-md overflow-hidden">
@@ -184,6 +188,12 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
                       className="px-4 hover:bg-blue hover:text-white hover:bg-[#520B1F] py-3 cursor-pointer"
                     >
                       Profile
+                    </li>
+                    <li
+                      onClick={() => navigate("/settings")}
+                      className="px-4 hover:bg-blue hover:text-white hover:bg-[#520B1F] py-3 cursor-pointer"
+                    >
+                      Settings
                     </li>
                     <li
                       onClick={handleLogout}

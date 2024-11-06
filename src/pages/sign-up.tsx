@@ -3,6 +3,7 @@ import { navigate, type HeadFC, type PageProps } from "gatsby";
 import { useState } from "react";
 import { Eye, EyeClosed } from "@phosphor-icons/react";
 import { storeUserData, storeUserToken } from "../services/user_service";
+import { Toaster } from "sonner";
 
 const SignUpPage: React.FC<PageProps> = () => {
     const [fname, setFname] = useState<string>("");
@@ -194,6 +195,7 @@ const SignUpPage: React.FC<PageProps> = () => {
                     </div>
                 </div>
             </div>
+            <Toaster richColors />
         </div>
     );
 };
