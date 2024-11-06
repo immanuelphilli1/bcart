@@ -3,6 +3,7 @@ import { navigate, type HeadFC, type PageProps } from "gatsby"
 import { useState } from "react";
 import { Eye, EyeClosed } from "@phosphor-icons/react"
 import { storeUserData,storeUserToken } from "../services/user_service";
+import { Toaster } from "sonner";
 
 const LoginPage: React.FC<PageProps> = () => {
     const [email, setEmail] = useState<string>("");
@@ -96,6 +97,7 @@ const LoginPage: React.FC<PageProps> = () => {
                     </div>
                 </div>
             </div>
+            <Toaster richColors />
         </div>
     )
 }
