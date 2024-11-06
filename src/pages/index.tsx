@@ -50,7 +50,9 @@ const IndexPage: React.FC<PageProps> = () => {
       const data = await response.json();
       
       setFeaturedCreatives(data.data);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   //*******fetch featured creatives */

@@ -6,53 +6,109 @@ import { useEffect, useState } from "react";
 import { getUserData } from '../services/user_service';
 
 const Profile = () => {
+    let [userData, setUserData] = useState<any>([]);
     const [showModal, setShowModal] = React.useState(false)
     const [showEditModal, setShowEditModal] = React.useState(false)
-    const userData = getUserData();
+    const [featuredCreative, setFeaturedCreative] = useState<any>([]);
 
-    // useEffect(() => {
-    //     const userData = getUserData();
-    //   }, []);
+    //****** fetch the params from the url*/
+    const urlParams = new URLSearchParams(window.location.search);
+    const featured = urlParams.get("featured");
 
-      console.log("User Data : ",userData);
+    useEffect(() => {
+        if(featured === "true"){
+          getFeaturedCreative();
+        }
+        // else{
+        //     userData = getUserData();
+        // }
+      }, []);
+
+    //*******fetch featured creatives */
+    const getFeaturedCreative = async () => {
+        try {
+          const response = await fetch(
+            'https://backend.bcartgh.com/api/featured-creative',
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const data = await response.json();
+
+          setUserData({user:data.data});
+
+        //   userData = {
+        //     user:data.data
+        //   };
+        //   setFeaturedCreative(data.data);
+
+        console.log("First User Data : ",userData);
+        } catch (error) {}
+      };
+
+      ;
+    
+
+
+
+      console.log("User Data : ",userData.user);
 
     return (
         <Layout active="partner">
             <div className=" relative">
 
-
-                <div className=' pb-40'>
+            <div className=' pb-40'>
                     <div className='bg-[#520b1f21] px-10 py-24'>
                         <div className='container flex items-center'>
                             <div className='flex items-center w-full px-4 gap-10'>
                                 <div className='rounded-full overflow-hidden w-40 h-40'>
-                                    <img src={userData.user.profile_picture} alt="logo" className="w-full h-full" />
+                                    <img src={userData?.user?.profile_picture ? userData?.user?.profile_picture : "/img/f-1.webp"} alt="logo" className="w-full h-full" />
                                 </div>
                                 <div className='flex flex-col justify-center gap-1 w-80'>
-                                    <div className='text-2xl font-bold text-[#520B1F]'>{userData.user.username}</div>
-                                    <div className='text-xs text-[#737B7D]'>{userData.user.physical_address}</div>
-                                    <div className='text-xs'>{userData.user.description}</div>
+                                    <div className='text-2xl font-bold text-[#520B1F]'>{userData?.user?.username}</div>
+                                    <div className='text-xs text-[#737B7D]'>{userData?.user?.physical_address}</div>
+                                    <div className='text-xs'>{userData?.user?.description}</div>
+                                    {userData?.user?.creative_hire_status === true ?
                                     <div className='w-fit pt-4'>
                                         <button title='hire me' type='button' onClick={() => setShowModal(true)} className="text-white bg-[#520B1F] border border-[#520B1F] font-bold w-full px-4 py-2 text-sm rounded-full">Hire Me</button>
                                     </div>
+                                    :null
+                                    }
                                 </div>
                             </div>
-                            <div className='flex flex-col border-l border-gray-300 text-sm justify-center p-4 gap-1'>
+                            {userData?.user?.creative_hire_status === true ?
+                            <>
+                                <div className='flex flex-col border-l border-gray-300 text-sm justify-center p-4 gap-1'>
                                 <div className='text-[#2B1139]'>hire me for </div>
-                                <div>{userData.user.creative_categories.map((cat:any, index:number) => (
+                                <div>{userData?.user?.creative_categories.map((cat:any, index:number) => (
                                         <div key={index}>{cat.creative_category},</div>
                                             ))}</div>
-                            </div>
+                             </div>
+                            </>
+                            : null}
+                            
                         </div>
                     </div>
                     <div className='container mx-auto'>
                         <div className='pt-20'>
                             <div className="grid grid-cols-2 md:grid-cols-5 grid-rows-3 gap-4">
-                                {userData.user.photos.length > 0 ? userData.user.photos.map((photo:any, index:number) => (
+
+                            {userData?.user?.creative_hire_status === true ?
+                            <>
+                               {userData?.user?.photos.length > 0 ? userData?.user?.photos.map((photo:any, index:number) => (
                                     <button type='button' title='photo' key={index} className=" row-span-2">
                                         <img src={photo.image_url} alt="Image 1" className="w-full h-full rounded-lg object-cover" />
                                     </button>
                                 )): "No Photos Yet"}
+                            </>
+                            : null}
+
+                                
+
+
                                 {/* <button className=" row-span-2">
                                     <img src="/img/f-1.webp" alt="Image 1" className="w-full h-full rounded-lg object-cover" />
                                 </button>
@@ -87,6 +143,7 @@ const Profile = () => {
                         </div>
                     </div>
                 </div>
+                
             </div>
             {showModal &&
                 <Modal bigModal={true} back='bg-[#DCCED2]' handleClose={() => setShowModal(false)}
