@@ -8,6 +8,8 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ active, children }) => {
+
+    
     return (
         <div className="min-h-screen flex flex-col justify-between">
             <div>

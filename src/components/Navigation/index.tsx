@@ -2,6 +2,7 @@ import { Bell, List, ShoppingCartSimple } from "@phosphor-icons/react";
 import { navigate } from "gatsby";
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { getUserData, logoutUserData } from "../../services/user_service";
 
 interface NavigationProps {
   active: string;
@@ -9,9 +10,10 @@ interface NavigationProps {
 
 const Navigation: React.FC<NavigationProps> = ({ active }) => {
   const [showMobileMenu, setMobileMenu] = useState(false);
-  const [check, setCheck] = useState<string | null>(null);
-  const [user, setUser] = useState<string | null>(null);
+  const [check, setCheck] = useState(false);
+  const [user, setUser] = useState<string | null>("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -22,23 +24,28 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
-    setUser(storedUser);
-    setCheck(token);
-  }, []);
+    const userData = getUserData();
+
+    if (!!userData) {
+      setUser(userData);
+      setCheck(true);
+    }
+
+    console.log("check : ",check);
+  }, [check]);
 
   const showMenuTray = () => {
     setMobileMenu(!showMobileMenu);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setCheck(null);
+    logoutUserData();
+    setCheck(false);
     setUser(null);
     navigate("/");
   };
+
+  console.log("user : ",user);
 
   return (
     <div>
@@ -146,22 +153,28 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
                 </a>
               </div>
             </div>
-            {check === null ? (
+            {check === true ? (
               <div className="flex gap-4">
                 <button
+                    type="button"
+                    title="Open menu"
                     onClick={toggleSidebar}
                     className="fill-[#737B7D] hover:fill-gray-600"
                   >
                     <ShoppingCartSimple size={24} color="" />
                   </button>
-                  <button className="fill-[#737B7D] hover:fill-gray-600">
-                    <Bell size={24} color="" />
+                  <button 
+                    type="button"
+                    title="Open menu" 
+                    className="fill-[#737B7D] hover:fill-gray-600">
+                    <Bell size={24} color="" 
+                    />
                   </button>
               <div className="relative menu-avatar cursor-pointer hidden lg:block">
                 <div className="flex gap-4 items-center">
                   
                   <div className="bg-gray-200 rounded-full w-12 h-12 overflow-hidden">
-                    <img src="/img/f-1.webp" alt="logo" className="w-full h-full" />
+                    <img src={!!user ? user.user.profile_picture : "/img/f-1.webp"} alt="logo" className="w-full h-full" />
                   </div>
                 </div>
                 <div className="absolute dropdown border-0 mt-4 border-aluminium top-10 right-0 w-[150px] bg-white text-black shadow-xl rounded-md overflow-hidden">
@@ -190,7 +203,11 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
               </div>
             )}
             <div className="lg:hidden flex items-center">
-              <button className="mobile-menu-button" onClick={showMenuTray}>
+              <button 
+                type="button"
+                title="Open menu"
+                className="mobile-menu-button" 
+                onClick={showMenuTray}>
                 <List size={28} />
               </button>
             </div>
@@ -230,7 +247,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
             >
               disclaimer
             </a>
-            {check === null ? (
+            {check === false ? (
               <div>
                 <a
                   href="/login"
@@ -254,6 +271,8 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
                   profile
                 </a>
                 <button
+                  type="button"
+                  title=""
                   onClick={handleLogout}
                   className="block py-2 px-4 text-sm uppercase text-red hover:text-white hover:bg-blue"
                 >

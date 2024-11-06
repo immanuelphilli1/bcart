@@ -2,10 +2,20 @@ import React from 'react'
 import Layout from '../components/layout'
 import Modal from '../components/modal'
 import { CloudArrowUp } from '@phosphor-icons/react'
+import { useEffect, useState } from "react";
+import { getUserData } from '../services/user_service';
 
 const Profile = () => {
     const [showModal, setShowModal] = React.useState(false)
     const [showEditModal, setShowEditModal] = React.useState(false)
+    const userData = getUserData();
+
+    // useEffect(() => {
+    //     const userData = getUserData();
+    //   }, []);
+
+      console.log("User Data : ",userData);
+
     return (
         <Layout active="partner">
             <div className=" relative">
@@ -16,27 +26,34 @@ const Profile = () => {
                         <div className='container flex items-center'>
                             <div className='flex items-center w-full px-4 gap-10'>
                                 <div className='rounded-full overflow-hidden w-40 h-40'>
-                                    <img src="/img/f-1.webp" alt="logo" className="w-full h-full" />
+                                    <img src={userData.user.profile_picture} alt="logo" className="w-full h-full" />
                                 </div>
                                 <div className='flex flex-col justify-center gap-1 w-80'>
-                                    <div className='text-2xl font-bold text-[#520B1F]'>Username</div>
-                                    <div className='text-xs text-[#737B7D]'>Location</div>
-                                    <div className='text-xs'>This is a brief description of the user called username. He specializes in this and that...</div>
+                                    <div className='text-2xl font-bold text-[#520B1F]'>{userData.user.username}</div>
+                                    <div className='text-xs text-[#737B7D]'>{userData.user.physical_address}</div>
+                                    <div className='text-xs'>{userData.user.description}</div>
                                     <div className='w-fit pt-4'>
-                                        <button onClick={() => setShowModal(true)} className="text-white bg-[#520B1F] border border-[#520B1F] font-bold w-full px-4 py-2 text-sm rounded-full">Hire Me</button>
+                                        <button title='hire me' type='button' onClick={() => setShowModal(true)} className="text-white bg-[#520B1F] border border-[#520B1F] font-bold w-full px-4 py-2 text-sm rounded-full">Hire Me</button>
                                     </div>
                                 </div>
                             </div>
                             <div className='flex flex-col border-l border-gray-300 text-sm justify-center p-4 gap-1'>
-                                <div className='text-[#2B1139]'>hire me</div>
-                                <div>category,category,category,category,category,category,category</div>
+                                <div className='text-[#2B1139]'>hire me for </div>
+                                <div>{userData.user.creative_categories.map((cat:any, index:number) => (
+                                        <div key={index}>{cat.creative_category},</div>
+                                            ))}</div>
                             </div>
                         </div>
                     </div>
                     <div className='container mx-auto'>
                         <div className='pt-20'>
                             <div className="grid grid-cols-2 md:grid-cols-5 grid-rows-3 gap-4">
-                                <button className=" row-span-2">
+                                {userData.user.photos.length > 0 ? userData.user.photos.map((photo:any, index:number) => (
+                                    <button type='button' title='photo' key={index} className=" row-span-2">
+                                        <img src={photo.image_url} alt="Image 1" className="w-full h-full rounded-lg object-cover" />
+                                    </button>
+                                )): "No Photos Yet"}
+                                {/* <button className=" row-span-2">
                                     <img src="/img/f-1.webp" alt="Image 1" className="w-full h-full rounded-lg object-cover" />
                                 </button>
                                 <div className=" row-span-1">
@@ -59,7 +76,7 @@ const Profile = () => {
                                 </div>
                                 <div className=" row-span-1">
                                     <img src="/img/f-1.webp" alt="Image 8" className="w-full h-full rounded-lg object-cover" />
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                         <div className='pt-20'>
