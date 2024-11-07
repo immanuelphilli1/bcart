@@ -3,10 +3,11 @@ import { navigate } from "gatsby";
 import React from "react";
 
 interface SearchProps {
+    handleOneImage: (take: any) => void;
   featuredCreatives: any;
 }
 
-const CreativeSearch: React.FC<SearchProps> = ({ featuredCreatives }) => {
+const CreativeSearch: React.FC<SearchProps> = ({ featuredCreatives, handleOneImage }) => {
   return (
     <div className="pt-20">
       <div className="flex gap-10">
@@ -306,11 +307,16 @@ const CreativeSearch: React.FC<SearchProps> = ({ featuredCreatives }) => {
                   creative?.photos.map((photo: any, index: number) => (
                     <div key={index}>
                       <div className="rounded-2xl overflow-hidden w-40 h-28">
-                        <img
+                      <button onClick={(take:any) => handleOneImage(photo.id)} className=" row-span-2">
+              
+                      <img
                           src={photo.image_url}
                           alt="logo"
                           className="w-full h-full"
                         />
+              
+            </button>
+                        
                       </div>
                     </div>
                   ))

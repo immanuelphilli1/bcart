@@ -100,8 +100,13 @@ export default function Search() {
         }
       );
       const data = await response.json();
-
-      setPhotos(data.data);
+      if(data.data.length === 0){
+        setPhotos(data.data);
+      }
+      else{
+        setPhotos([]);
+      }
+      
     } catch (error) {
         console.log(error);
     }
@@ -139,6 +144,10 @@ export default function Search() {
             setPhotos(data_.data);
             console.log("data photo: ", data_);
           }
+          else{
+            //TODO:Place a toaster here
+            setPhotos([]);
+          }
 
         if (data.data.length > 0) {
             //TODO:Place a toaster here
@@ -148,6 +157,7 @@ export default function Search() {
         else{
             //TODO:Place a toaster here
             console.log("something");
+            setFeaturedCreatives([]);
         }
       } catch (error) {
         //TODO:Place a toaster here
@@ -155,7 +165,7 @@ export default function Search() {
       }
   }
 
-    const searchedCreatives = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+const searchedCreatives = async (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
             e.preventDefault();
             console.log("query : ", query);
@@ -190,6 +200,10 @@ export default function Search() {
             setPhotos(data_.data);
             console.log("data photo: ", data_);
           }
+          else{
+            //TODO:Place a toaster here
+            setPhotos([]);
+          }
 
                 if (data.data.length > 0) {
                     //TODO:Place a toaster here
@@ -198,7 +212,7 @@ export default function Search() {
                 }
                 else{
                     //TODO:Place a toaster here
-                    console.log("something");
+                    setFeaturedCreatives([]);
                 }
               } catch (error) {
                 //TODO:Place a toaster here
@@ -209,7 +223,7 @@ export default function Search() {
       };
 
       useEffect(() => {
-        if(searchKey !== ""){
+        if(searchKey !== "" && searchKey !== null){
             searchFromUrl();
             // setQuery(searchKey)
         }
@@ -227,7 +241,7 @@ export default function Search() {
                         </div>
                     </div>
                     {!showCreativeSearch && <SearchIndex handleOneImage={handleOneImage} handleSearchCreatives={handleSearchCreatives} featuredCreatives={featuredCreatives} photos={photos} />}
-                    {showCreativeSearch && <CreativeSearch featuredCreatives={featuredCreatives} />}
+                    {showCreativeSearch && <CreativeSearch featuredCreatives={featuredCreatives} handleOneImage={handleOneImage} />}
                     <div className='pt-20'>
                         <div className='flex flex-col gap-1 text-center text-[#737B7D] font-bold'>
                             <span>You have reached the end of the line. </span>
@@ -249,12 +263,12 @@ export default function Search() {
                             <div className='flex gap-4'>
                             <div>
                             <div className='rounded-full overflow-hidden w-28 h-28'>
-                        <img src={pickedPhoto.image_url} alt="logo" className="w-full h-full" />
+                        <img src={pickedPhoto?.creative?.profile_picture} alt="logo" className="w-full h-full" />
                     </div>
                             </div>
                     <div className='flex flex-col justify-center gap-1 w-80'>
-                        <div className='text-lg font-bold'>{pickedPhoto.title}</div>
-                        <div className='text-sm text-[#737B7D]'>Location</div>
+                        <div className='text-lg font-bold'>{pickedPhoto?.creative?.username}</div>
+                        <div className='text-sm text-[#737B7D]'>{pickedPhoto?.creative?.physical_address}</div>
                         </div> 
                             </div>
                             </div>

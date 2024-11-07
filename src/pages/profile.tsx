@@ -136,7 +136,7 @@ const Profile = () => {
     return (
         <Layout active="partner">
             <div className=" relative">
-            {loader === true ? <Loader size='sm' /> : null}
+            {loader === true ? <Loader size='w-8 h-8' /> : null}
             <div className=' pb-40'>
                     <div className='bg-[#520b1f21] px-10 py-24'>
                         <div className='container flex items-center'>
