@@ -222,34 +222,40 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
           >
             <a
               href="/"
-              className="block py-2 px-4 text-sm text-white hover:bg-blue"
+              className="block py-2 px-4 text-sm text-[#520B1F] hover:text-[#2B1139]"
             >
               Home
             </a>
             <a
-              href="/about-us"
-              className="block py-2 px-4 text-sm text-white hover:bg-blue"
-            >
-              about us
-            </a>
-            <a
-              href="/parcel-content"
-              className="block py-2 px-4 text-sm text-white hover:bg-blue"
-            >
-              parcels
-            </a>
-            <a
-              href="/contact-us"
-              className="block py-2 px-4 text-sm text-white hover:bg-blue"
-            >
-              contact us
-            </a>
-            <a
-              href="/disclaimer"
-              className="block py-2 px-4 text-sm text-white hover:bg-blue"
-            >
-              disclaimer
-            </a>
+                  href="/about"
+                  className="block py-2 px-4 text-sm text-[#520B1F] hover:text-[#2B1139]" 
+                >
+                  about
+                </a>
+                <a
+                  href="/promo-pack"
+                  className="block py-2 px-4 text-sm text-[#520B1F] hover:text-[#2B1139]"
+                >
+                  promo packs
+                </a>
+                <a
+                  href="/"
+                  className="block py-2 px-4 text-sm text-[#520B1F] hover:text-[#2B1139]"
+                >
+                  blog
+                </a>
+                <a
+                  href="/technical-support"
+                  className="block py-2 px-4 text-sm text-[#520B1F] hover:text-[#2B1139]"
+                >
+                  support
+                </a>
+                <a
+                  href="/partners"
+                  className="block py-2 px-4 text-sm text-[#520B1F] hover:text-[#2B1139]"
+                >
+                  partners
+                </a>
             {check === false ? (
               <div>
                 <a
@@ -268,11 +274,19 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
             ) : (
               <div>
                 <a
-                  href="/profile"
+                  onClick={() => window.location.href = "/profile"}
                   className="block py-2 px-4 text-sm text-blue hover:text-white hover:bg-blue"
                 >
                   profile
                 </a>
+                <button
+                  type="button"
+                  title=""
+                  onClick={() => window.location.href = "/settings"}
+                  className="block py-2 px-4 text-sm uppercase text-red hover:text-white hover:bg-blue"
+                >
+                  settings
+                </button>
                 <button
                   type="button"
                   title=""
