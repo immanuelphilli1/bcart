@@ -32,7 +32,7 @@ const IndexPage: React.FC<PageProps> = () => {
       const data = await response.json();
 
       setCategories(data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   //*******fetch all featured creatives */
@@ -49,7 +49,7 @@ const IndexPage: React.FC<PageProps> = () => {
         }
       );
       const data = await response.json();
-      
+
       setFeaturedCreatives(data.data);
     } catch (error) {
       console.log(error)
@@ -70,14 +70,14 @@ const IndexPage: React.FC<PageProps> = () => {
       );
       const data = await response.json();
 
-      
+
       setFeaturedCreative(data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
 
-  function search(e: React.KeyboardEvent<HTMLInputElement>){
+  function search(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
-    navigate(`/search?q=${searchKey}`);
+      navigate(`/search?q=${encodeURIComponent(searchKey)}`);
     }
   }
 
@@ -90,7 +90,7 @@ const IndexPage: React.FC<PageProps> = () => {
   return (
     <Layout active="about">
       <div className="container">
-        <Banner search ={search} searchKey={searchKey} setSearchKey={setSearchKey} />
+        <Banner search={search} searchKey={searchKey} setSearchKey={setSearchKey} />
       </div>
       <div className="container">
         <div className="px-4 py-10">
@@ -103,8 +103,8 @@ const IndexPage: React.FC<PageProps> = () => {
             <div className="flex gap-4 lg:gap-10 items-center overflow-scroll no-scrollbar">
               {categories.map((cat: any, index: number) => (
                 cat.image_url &&
-                <div key={index}>
-                  <div className="border w-72 h-48 rounded-lg overflow-hidden bg-red-500">
+                <button onClick={() => navigate(`/search?q=${encodeURIComponent(cat.creative_category)}`)} key={index}>
+                  <div className="border w-72 h-48 rounded-lg overflow-hidden bg-gray-100">
                     <img
                       src={cat.image_url}
                       alt="logo"
@@ -114,39 +114,10 @@ const IndexPage: React.FC<PageProps> = () => {
                   <div className="pt-2 text-sm font-bold">
                     {cat.creative_category}
                   </div>
-                  </div>
-                ))
+                </button>
+              ))
               }
-              {/* <div>
-                <div className="border rounded-lg overflow-hidden bg-red-500">
-                  <img
-                    src="/img/f-1.webp"
-                    alt="logo"
-                    className="w-full h-full"
-                  />
-                </div>
-                <div className="pt-2 text-sm font-bold">Category 1</div>
-              </div>
-              <div className="hidden md:block">
-                <div className="border rounded-lg overflow-hidden bg-red-500">
-                  <img
-                    src="/img/f-2.webp"
-                    alt="logo"
-                    className="w-full h-full"
-                  />
-                </div>
-                <div className="pt-2 text-sm font-bold">Category 2</div>
-              </div>
-              <div className="hidden md:block">
-                <div className="border rounded-lg overflow-hidden bg-red-500">
-                  <img
-                    src="/img/f-3.webp"
-                    alt="logo"
-                    className="w-full h-full"
-                  />
-                </div>
-                <div className="pt-2 text-sm font-bold">Category 3</div>
-              </div> */}
+
             </div>
             <div className="flex">
               <button
@@ -195,30 +166,30 @@ const IndexPage: React.FC<PageProps> = () => {
               </h1>
             </div>
             <div className="flex gap-4 lg:gap-10 items-center justify-between">
-            <div className="flex gap-4 lg:gap-10 items-center overflow-scroll no-scrollbar">
-              {featuredCreatives.map((creative: any, index: number) => (
-                <div key={index}>
-                  <div className="border w-28 h-28 rounded-full overflow-hidden bg-white">
-                    {creative.profile_picture ? (
-                      <img
-                      src={creative.profile_picture}
-                      alt="logo"
-                      className="w-full h-full"
-                    />
-                    ) :(
-                    <img
-                      src="/img/user-avatar.svg"
-                      alt="logo"
-                      className="w-full h-full p-2"
-                    />
-                    )}
-                  </div>
-                  <div className="pt-2 text-sm font-bold text-center">
-                  <a href={`/profile?creative=${creative.username}`}>{creative.username}</a>
-                    {/* {creative.username} */}
-                  </div>
-                </div>
-              ))}
+              <div className="flex gap-4 lg:gap-10 items-center overflow-scroll no-scrollbar">
+                {featuredCreatives.map((creative: any, index: number) => (
+                  <button onClick={() => navigate(`/profile?creative=${encodeURIComponent(creative.username)}`)} key={index}>
+                    <div className="border w-28 h-28 rounded-full overflow-hidden bg-white">
+                      {creative.profile_picture ? (
+                        <img
+                          src={creative.profile_picture}
+                          alt="logo"
+                          className="w-full h-full"
+                        />
+                      ) : (
+                        <img
+                          src="/img/user-avatar.svg"
+                          alt="logo"
+                          className="w-full h-full p-2"
+                        />
+                      )}
+                    </div>
+                    <div className="pt-2 text-sm font-bold text-center">
+                      <a href={`/profile?creative=${creative.username}`}>{creative.username}</a>
+                      {/* {creative.username} */}
+                    </div>
+                  </button>
+                ))}
               </div>
               <div className="flex">
                 <button
@@ -242,134 +213,15 @@ const IndexPage: React.FC<PageProps> = () => {
           <div className="grid grid-cols-2 gap-x-4 w-full lg:gap-x-10 gap-y-10 md:grid-cols-4 lg:grid-cols-5">
             {categories.map((cat: any, index: number) => (
               <div className="flex flex-col gap-10">
-                <a
-                  href="/"
-                  className="font-semibold text-gray-800 hover:text-gray-600"
+                <button
+                  onClick={() => navigate(`/search/?q=${encodeURIComponent(cat.creative_category)}`)}
+                  className="font-semibold text-left text-gray-800 hover:text-gray-600"
                 >
                   {cat.creative_category}
-                </a>
-                {/* <a
-                  href="/"
-                  className="font-semibold text-gray-800 hover:text-gray-600"
-                >
-                  Sports
-                </a>
-                <a
-                  href="/"
-                  className="font-semibold text-gray-800 hover:text-gray-600"
-                >
-                  Drone Images
-                </a> */}
+                </button>
+
               </div>
             ))}
-            {/* <div className="flex flex-col gap-10">
-              <a
-                href="/"
-                className="font-semibold text-gray-800 hover:text-gray-600"
-              >
-                Technology
-              </a>
-              <a
-                href="/"
-                className="font-semibold text-gray-800 hover:text-gray-600"
-              >
-                Sports
-              </a>
-              <a
-                href="/"
-                className="font-semibold text-gray-800 hover:text-gray-600"
-              >
-                Drone Images
-              </a>
-            </div> */}
-            {/* <div className="flex flex-col gap-10">
-              <a
-                href="/"
-                className="font-semibold text-gray-800 hover:text-gray-600"
-              >
-                Architecture
-              </a>
-              <a
-                href="/"
-                className="font-semibold text-gray-800 hover:text-gray-600"
-              >
-                Nature
-              </a>
-              <a
-                href="/"
-                className="font-semibold text-gray-800 hover:text-gray-600"
-              >
-                Interior Decor
-              </a>
-            </div>
-            <div className="flex flex-col gap-10">
-              <a
-                href="/"
-                className="font-semibold text-gray-800 hover:text-gray-600"
-              >
-                Food
-              </a>
-              <a
-                href="/"
-                className="font-semibold text-gray-800 hover:text-gray-600"
-              >
-                Music
-              </a>
-              <a
-                href="/"
-                className="font-semibold text-gray-800 hover:text-gray-600"
-              >
-                Documentary
-              </a>
-            </div>
-            <div className="flex flex-col gap-10">
-              <a
-                href="/"
-                className="font-semibold text-gray-800 hover:text-gray-600"
-              >
-                People
-              </a>
-              <a
-                href="/"
-                className="font-semibold text-gray-800 hover:text-gray-600"
-              >
-                Editorial
-              </a>
-              <a
-                href="/"
-                className="font-semibold text-gray-800 hover:text-gray-600"
-              >
-                Wallpaper
-              </a>
-            </div>
-            <div className="flex flex-col gap-10">
-              <a
-                href="/"
-                className="font-semibold text-gray-800 hover:text-gray-600"
-              >
-                Fashion
-              </a>
-              <a
-                href="/"
-                className="font-semibold text-gray-800 hover:text-gray-600"
-              >
-                Commercial
-              </a>
-            </div>
-            <div className="flex flex-col gap-10">
-              <a
-                href="/"
-                className="font-semibold text-gray-800 hover:text-gray-600"
-              >
-                Wildlife
-              </a>
-              <a
-                href="/"
-                className="font-semibold text-gray-800 hover:text-gray-600"
-              >
-                Blog
-              </a>
-            </div> */}
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import { navigate } from "gatsby";
 import React from "react";
 
 interface SearchProps {
-    handleOneImage: (take: any) => void;
+  handleOneImage: (take: any) => void;
   featuredCreatives: any;
 }
 
@@ -286,12 +286,21 @@ const CreativeSearch: React.FC<SearchProps> = ({ featuredCreatives, handleOneIma
           {featuredCreatives.map((creative: any, index: number) => (
             <>
               <div className="flex items-center border-b-2 pb-10 gap-6 w-full">
-                <div className="rounded-full overflow-hidden w-28 h-28">
-                  <img
-                    src={creative.profile_picture}
-                    alt="logo"
-                    className="w-full h-full"
-                  />
+                <div className="rounded-full bg-gray-100 overflow-hidden w-28 h-28">
+                  {creative.profile_picture ? (
+                    <img
+                      src={creative.profile_picture}
+                      alt="logo"
+                      className="w-full h-full"
+                    />
+                  ) : (
+                    <img
+                      src="/img/user-avatar.svg"
+                      alt="logo"
+                      className="w-full h-full p-4"
+                    />
+
+                  )}
                 </div>
                 <div className="flex flex-col justify-center gap-1 w-80">
                   <div className="text-xs font-bold text-[#520B1F]">
@@ -299,7 +308,7 @@ const CreativeSearch: React.FC<SearchProps> = ({ featuredCreatives, handleOneIma
                     <a href={`/profile?creative=${creative.username}`}>{creative.username}</a>
                   </div>
                   <div className="text-xs text-[#737B7D]">
-                    {creative.physical_address}
+                    {creative.physical_address ? creative.physical_address : "No address added"}
                   </div>
                   <div className="text-xs">{creative.description}</div>
                 </div>
@@ -307,16 +316,16 @@ const CreativeSearch: React.FC<SearchProps> = ({ featuredCreatives, handleOneIma
                   creative?.photos.map((photo: any, index: number) => (
                     <div key={index}>
                       <div className="rounded-2xl overflow-hidden w-40 h-28">
-                      <button onClick={(take:any) => handleOneImage(photo.id)} className=" row-span-2">
-              
-                      <img
-                          src={photo.image_url}
-                          alt="logo"
-                          className="w-full h-full"
-                        />
-              
-            </button>
-                        
+                        <button onClick={(take: any) => handleOneImage(photo.id)} className=" row-span-2">
+
+                          <img
+                            src={photo.image_url}
+                            alt="logo"
+                            className="w-full h-full"
+                          />
+
+                        </button>
+
                       </div>
                     </div>
                   ))

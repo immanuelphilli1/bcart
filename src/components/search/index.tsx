@@ -24,97 +24,37 @@ const SearchIndex: React.FC<SearchProps> = ({
         </div>
         <div className="flex gap-4 lg:gap-10 items-center justify-between">
           <div className="flex gap-8 lg:gap-10 items-center overflow-scroll no-scrollbar">
-          { featuredCreatives.length > 0 ? 
-          featuredCreatives.map((creative: any, index: number) => (
-            <div  key={index}>
-            <div className="border w-28 h-28 rounded-full overflow-hidden bg-gray-200">
-            {creative.profile_picture ? (
+            {featuredCreatives.length > 0 ?
+              featuredCreatives.map((creative: any, index: number) => (
+                <a href={`/profile?creative=${creative.username}`} key={index}>
+                  <div className="border w-28 h-28 rounded-full overflow-hidden bg-gray-200">
+                    {creative.profile_picture ? (
                       <img
-                      src={creative.profile_picture}
-                      alt="logo"
-                      className="w-full h-full"
-                    />
-                    ) :(
-                    <img
-                      src="/img/user-avatar.svg"
-                      alt="logo"
-                      className="w-full h-full p-2"
-                    />
+                        src={creative.profile_picture}
+                        alt="logo"
+                        className="w-full h-full"
+                      />
+                    ) : (
+                      <img
+                        src="/img/user-avatar.svg"
+                        alt="logo"
+                        className="w-full h-full p-2"
+                      />
                     )}
-            </div>
-            <div className="pt-2 text-sm font-bold text-center">
-            <a href={`/profile?creative=${creative.username}`}>{creative.username}</a>
-            </div>
-          </div>
-
-                // <div key={index}>
-                //   <div className="border rounded-full overflow-hidden bg-red-500">
-                //     <img
-                //       src={creative.profile_picture}
-                //       alt="logo"
-                //       className="w-full h-full"
-                //     />
-                //   </div>
-                //   <div className="pt-2 text-sm font-bold text-center">
-                //     {creative.username}
-                //   </div>
-                // </div>
+                  </div>
+                  <div className="pt-2 text-sm font-bold text-center">
+                    <a href={`/profile?creative=${creative.username}`}>{creative.username}</a>
+                  </div>
+                </a>
               )) : "No Creatives Found"}
-            
-            {/* <div>
-              <div className="border rounded-full overflow-hidden bg-red-500">
-                <img src="/img/c-1.webp" alt="logo" className="w-full h-full" />
-              </div>
-              <div className="pt-2 text-sm font-bold text-center">
-                Category 1
-              </div>
-            </div>
-            <div className="hidden md:block">
-              <div className="border rounded-full overflow-hidden bg-red-500">
-                <img src="/img/c-1.webp" alt="logo" className="w-full h-full" />
-              </div>
-              <div className="pt-2 text-sm font-bold text-center">
-                Category 1
-              </div>
-            </div>
-            <div className="hidden md:block">
-              <div className="border rounded-full overflow-hidden bg-red-500">
-                <img src="/img/c-1.webp" alt="logo" className="w-full h-full" />
-              </div>
-              <div className="pt-2 text-sm font-bold text-center">
-                Category 1
-              </div>
-            </div>
-            <div className="hidden lg:block">
-              <div className="border rounded-full overflow-hidden bg-red-500">
-                <img src="/img/c-1.webp" alt="logo" className="w-full h-full" />
-              </div>
-              <div className="pt-2 text-sm font-bold text-center">
-                Category 1
-              </div>
-            </div>
-            <div className="hidden lg:block">
-              <div className="border rounded-full overflow-hidden bg-red-500">
-                <img src="/img/c-1.webp" alt="logo" className="w-full h-full" />
-              </div>
-              <div className="pt-2 text-sm font-bold text-center">
-                Category 1
-              </div>
-            </div>
-            <div className="hidden lg:block">
-              <div className="border rounded-full overflow-hidden bg-red-500">
-                <img src="/img/c-1.webp" alt="logo" className="w-full h-full" />
-              </div>
-              <div className="pt-2 text-sm font-bold text-center">
-                Category 1
-              </div>
-            </div> */}
           </div>
-          <button type="button" title="forward" onClick={handleSearchCreatives} className="flex">
-            <div className="border rounded-full p-4 lg:p-8 text-white bg-[#520B1F]">
-              <ArrowRight size={40} />
-            </div>
-          </button>
+          {featuredCreatives.length > 0 &&
+            <button type="button" title="forward" onClick={handleSearchCreatives} className="flex">
+              <div className="border rounded-full p-4 lg:p-8 text-white bg-[#520B1F]">
+                <ArrowRight size={40} />
+              </div>
+            </button>
+          }
         </div>
       </div>
       <div className="pt-20">
@@ -122,77 +62,21 @@ const SearchIndex: React.FC<SearchProps> = ({
           <h1 className="text-lg font-bold text-[#2B1139]">Photos</h1>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 grid-rows-3 gap-4">
-          { photos.length > 0 ? photos.map((photo: any, index: number) => (
+          {photos.length > 0 ? photos.map((photo: any, index: number) => (
             <>
-            {photo.image_url &&
-            <button onClick={(take:any) => handleOneImage(photo.id)} className=" row-span-2">
-              
-              <img
-              src={photo.image_url}
-              alt="Image 1"
-              className="w-full h-full rounded-lg object-cover"
-            />
-              
-            </button>
-            }
+              {photo.image_url &&
+                <button onClick={(take: any) => handleOneImage(photo.id)} className=" row-span-2">
+
+                  <img
+                    src={photo.image_url}
+                    alt="Image 1"
+                    className="w-full h-full rounded-lg object-cover"
+                  />
+
+                </button>
+              }
             </>
-          )): "No Photos Found"}
-          {/* <button onClick={(take:any) => handleOneImage(take=1)} className=" row-span-2">
-            <img
-              src="/img/f-1.webp"
-              alt="Image 1"
-              className="w-full h-full rounded-lg object-cover"
-            />
-          </button>
-          <div className=" row-span-1">
-            <img
-              src="/img/f-2.webp"
-              alt="Image 2"
-              className="w-full h-full rounded-lg object-cover"
-            />
-          </div>
-          <div className=" row-span-2">
-            <img
-              src="/img/f-3.webp"
-              alt="Image 3"
-              className="w-full h-full rounded-lg object-cover"
-            />
-          </div>
-          <div className=" row-span-1">
-            <img
-              src="/img/f-4.webp"
-              alt="Image 4"
-              className="w-full h-full rounded-lg object-cover"
-            />
-          </div>
-          <div className=" row-span-2">
-            <img
-              src="/img/f-2.webp"
-              alt="Image 5"
-              className="w-full h-full rounded-lg object-cover"
-            />
-          </div>
-          <div className=" row-span-2">
-            <img
-              src="/img/f-1.webp"
-              alt="Image 6"
-              className="w-full h-full rounded-lg object-cover"
-            />
-          </div>
-          <div className=" row-span-2">
-            <img
-              src="/img/f-3.webp"
-              alt="Image 7"
-              className="w-full h-full rounded-lg object-cover"
-            />
-          </div>
-          <div className=" row-span-1">
-            <img
-              src="/img/f-1.webp"
-              alt="Image 8"
-              className="w-full h-full rounded-lg object-cover"
-            />
-          </div> */}
+          )) : "No Photos Found"}
         </div>
       </div>
     </div>

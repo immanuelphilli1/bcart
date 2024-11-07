@@ -13,7 +13,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
   const [check, setCheck] = useState(false);
   const [user, setUser] = useState<any | null>("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  
+
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -31,7 +31,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
       setCheck(true);
     }
 
-    console.log("check : ",check);
+    console.log("check : ", check);
   }, [check]);
 
   const showMenuTray = () => {
@@ -45,7 +45,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
     navigate("/");
   };
 
-  console.log("user : ",user);
+  console.log("user : ", user);
 
   return (
     <div>
@@ -58,9 +58,8 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
       )}
 
       <div
-        className={`fixed top-0 right-0 w-72 md:w-96 lg:w-[30rem] bg-white h-full z-10 transform ${
-          isSidebarOpen ? "translate-x-0" : "translate-x-full"
-        } transition-transform duration-300 ease-in-out`}
+        className={`fixed top-0 right-0 w-72 md:w-96 lg:w-[30rem] bg-white h-full z-10 transform ${isSidebarOpen ? "translate-x-0" : "translate-x-full"
+          } transition-transform duration-300 ease-in-out`}
       >
         <div className="pt-24 lg:pt-36 px-4">
           <div className="px-4 font-bold pb-5 text-[#520B1F]">Your Cart</div>
@@ -72,10 +71,10 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
               <div className="text-lg font-bold pb-5">Description</div>
               <div className="text-sm tracking-wider">
                 We’re sorry you couldn’t find what you are looking for. Feel
-                free to tell us what 
+                free to tell us what
               </div>
               <div className="pt-7 text-xl font-semibold text-[#2B1139]">
-                $ 20.00 
+                $ 20.00
               </div>
             </div>
           </div>
@@ -113,41 +112,36 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
               <div className="hidden lg:flex gap-10 lg:gap-4">
                 <a
                   href="/about"
-                  className={`hover:text-[#2B1139] py-2 lg:px-2 ${
-                    active === "about" ? " text-[#520B1F] font-bold" : ""
-                  }`}
+                  className={`hover:text-[#2B1139] py-2 lg:px-2 ${active === "about" ? " text-[#520B1F] font-bold" : ""
+                    }`}
                 >
                   about
                 </a>
                 <a
                   href="/promo-pack"
-                  className={`hover:text-[#2B1139] py-2 lg:px-2 ${
-                    active === "promo packs" ? " text-[#520B1F] font-bold" : ""
-                  }`}
+                  className={`hover:text-[#2B1139] py-2 lg:px-2 ${active === "promo packs" ? " text-[#520B1F] font-bold" : ""
+                    }`}
                 >
                   promo packs
                 </a>
                 <a
                   href="/"
-                  className={`hover:text-[#2B1139] py-2 lg:px-2 ${
-                    active === "blog" ? " text-[#520B1F] font-bold" : ""
-                  }`}
+                  className={`hover:text-[#2B1139] py-2 lg:px-2 ${active === "blog" ? " text-[#520B1F] font-bold" : ""
+                    }`}
                 >
                   blog
                 </a>
                 <a
                   href="/technical-support"
-                  className={`hover:text-[#2B1139] py-2 lg:px-2 ${
-                    active === "support" ? " text-[#520B1F] font-bold" : ""
-                  }`}
+                  className={`hover:text-[#2B1139] py-2 lg:px-2 ${active === "support" ? " text-[#520B1F] font-bold" : ""
+                    }`}
                 >
                   support
                 </a>
                 <a
                   href="/partners"
-                  className={`hover:text-[#2B1139] py-2 lg:px-2 ${
-                    active === "partner" ? " text-[#520B1F] font-bold" : ""
-                  }`}
+                  className={`hover:text-[#2B1139] py-2 lg:px-2 ${active === "partner" ? " text-[#520B1F] font-bold" : ""
+                    }`}
                 >
                   partners
                 </a>
@@ -156,54 +150,54 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
             {check === true ? (
               <div className="flex gap-4">
                 <button
-                    type="button"
-                    title="Open menu"
-                    onClick={toggleSidebar}
-                    className="fill-[#ccc] stroke-black hover:fill-gray-600"
-                  >
-                    <ShoppingCartSimple size={24} color="" weight="fill" />
-                  </button>
-                  <button 
-                    type="button"
-                    title="Open menu" 
-                    className="fill-[#737B7D] hover:fill-gray-900">
-                    <Bell size={24} color="" weight="fill"
-                    />
-                  </button>
-              <div className="relative menu-avatar cursor-pointer hidden lg:block">
-                <div className="flex gap-4 items-center">
-                  
-                  <div className="bg-gray-200 rounded-full w-12 h-12 overflow-hidden">
-                    {user.user.profile_picture ? (
-                    <img src={user.user.profile_picture} alt="logo" className="w-full h-full" />  
-                    ): (
-                    <img src="/img/user-avatar.svg" alt="logo" className="w-full h-full p-2" />
-                    )}
+                  type="button"
+                  title="Open menu"
+                  onClick={toggleSidebar}
+                  className="fill-[#ccc] stroke-black hover:fill-gray-600"
+                >
+                  <ShoppingCartSimple size={24} color="" weight="fill" />
+                </button>
+                <button
+                  type="button"
+                  title="Open menu"
+                  className="fill-[#737B7D] hover:fill-gray-900">
+                  <Bell size={24} color="" weight="fill"
+                  />
+                </button>
+                <div className="relative menu-avatar cursor-pointer hidden lg:block">
+                  <div className="flex gap-4 items-center">
+
+                    <div className="bg-gray-200 rounded-full w-12 h-12 overflow-hidden">
+                      {user.user.profile_picture ? (
+                        <img src={user.user.profile_picture} alt="logo" className="w-full h-full" />
+                      ) : (
+                        <img src="/img/user-avatar.svg" alt="logo" className="w-full h-full p-2" />
+                      )}
+                    </div>
+                  </div>
+                  <div className="absolute dropdown border-0 mt-4 border-aluminium top-10 right-0 w-[150px] bg-white text-black shadow-xl rounded-md overflow-hidden">
+                    <ul className="py-1 w-full">
+                      <li
+                        onClick={() => window.location.href = "/profile"}
+                        className="px-4 hover:bg-blue hover:text-white hover:bg-[#520B1F] py-3 cursor-pointer"
+                      >
+                        Profile
+                      </li>
+                      <li
+                        onClick={() => navigate("/settings")}
+                        className="px-4 hover:bg-blue hover:text-white hover:bg-[#520B1F] py-3 cursor-pointer"
+                      >
+                        Settings
+                      </li>
+                      <li
+                        onClick={handleLogout}
+                        className="px-4 hover:bg-blue hover:text-white hover:bg-[#520B1F] py-3 cursor-pointer"
+                      >
+                        Logout
+                      </li>
+                    </ul>
                   </div>
                 </div>
-                <div className="absolute dropdown border-0 mt-4 border-aluminium top-10 right-0 w-[150px] bg-white text-black shadow-xl rounded-md overflow-hidden">
-                  <ul className="py-1 w-full">
-                    <li
-                      onClick={() => navigate("/profile")}
-                      className="px-4 hover:bg-blue hover:text-white hover:bg-[#520B1F] py-3 cursor-pointer"
-                    >
-                      Profile
-                    </li>
-                    <li
-                      onClick={() => navigate("/settings")}
-                      className="px-4 hover:bg-blue hover:text-white hover:bg-[#520B1F] py-3 cursor-pointer"
-                    >
-                      Settings
-                    </li>
-                    <li
-                      onClick={handleLogout}
-                      className="px-4 hover:bg-blue hover:text-white hover:bg-[#520B1F] py-3 cursor-pointer"
-                    >
-                      Logout
-                    </li>
-                  </ul>
-                </div>
-              </div>
               </div>
             ) : (
               <div className="bg-[#520B1F] hover:bg-[#520b1fd5] text-white px-4 py-3 font-medium items-center hidden lg:flex gap-4 rounded-full">
@@ -213,19 +207,18 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
               </div>
             )}
             <div className="lg:hidden flex items-center">
-              <button 
+              <button
                 type="button"
                 title="Open menu"
-                className="mobile-menu-button" 
+                className="mobile-menu-button"
                 onClick={showMenuTray}>
                 <List size={28} />
               </button>
             </div>
           </div>
           <div
-            className={`mobile-menu py-2 uppercase z-10 ${
-              showMobileMenu ? "" : "hidden"
-            } lg:hidden`}
+            className={`mobile-menu py-2 uppercase z-10 ${showMobileMenu ? "" : "hidden"
+              } lg:hidden`}
           >
             <a
               href="/"
