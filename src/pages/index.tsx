@@ -10,6 +10,7 @@ const IndexPage: React.FC<PageProps> = () => {
   const [categories, setCategories] = useState<any>([]);
   const [featuredCreative, setFeaturedCreative] = useState<any>([]);
   const [featuredCreatives, setFeaturedCreatives] = useState<any>([]);
+  const [searchKey, setSearchKey] = useState<string>("");
   const [loader, setLoader] = useState<boolean>(false);
 
   const apiUrl = process.env.BASE_URL;
@@ -74,6 +75,12 @@ const IndexPage: React.FC<PageProps> = () => {
     } catch (error) {}
   };
 
+  function search(e: React.KeyboardEvent<HTMLInputElement>){
+    if (e.key === "Enter") {
+    navigate(`/search?q=${searchKey}`);
+    }
+  }
+
   useEffect(() => {
     getCreativeCategories();
     getFeaturedCreatives();
@@ -83,7 +90,7 @@ const IndexPage: React.FC<PageProps> = () => {
   return (
     <Layout active="about">
       <div className="container">
-        <Banner />
+        <Banner search ={search} searchKey={searchKey} setSearchKey={setSearchKey} />
       </div>
       <div className="container">
         <div className="px-4 py-10">
@@ -207,7 +214,8 @@ const IndexPage: React.FC<PageProps> = () => {
                     )}
                   </div>
                   <div className="pt-2 text-sm font-bold text-center">
-                    {creative.username}
+                  <a href={`/profile?creative=${creative.username}`}>{creative.username}</a>
+                    {/* {creative.username} */}
                   </div>
                 </div>
               ))}

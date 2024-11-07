@@ -30,7 +30,7 @@ const SearchIndex: React.FC<SearchProps> = ({
               <img src={creative.profile_picture} alt="logo" className="w-full h-full" />
             </div>
             <div className="pt-2 text-sm font-bold text-center">
-                {creative.username}
+            <a href={`/profile?creative=${creative.username}`}>{creative.username}</a>
             </div>
           </div>
 

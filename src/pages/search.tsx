@@ -19,6 +19,10 @@ export default function Search() {
     const [relatedPhotos, setRelatedPhotos] = useState<any>([]);
     const [loader, setLoader] = useState<boolean>(false);
 
+    //****** fetch the params from the url*/
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchKey = urlParams.get("q");
+
     function handleSearchCreatives() {
         setShowCreativeSearch(true)
     }
@@ -87,7 +91,7 @@ export default function Search() {
   const getPhotos = async () => {
     try {
       const response = await fetch(
-        `https://backend.bcartgh.com/api/photo-categories?paginate=true`,
+        `https://backend.bcartgh.com/api/photos`,
         {
           method: "GET",
           headers: {
@@ -103,13 +107,61 @@ export default function Search() {
     }
   };
 
+  async function searchFromUrl(){
+    try {
+        const response = await fetch(
+          `https://backend.bcartgh.com/api/search-creative?keyword=${searchKey}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            //   "Authorization": `Bearer ${token.token}`,
+            },
+          }
+        );
+        const data = await response.json();
+
+        //******search for photos */
+        const response_ = await fetch(
+            `https://backend.bcartgh.com/api/search-photo?keyword=${searchKey}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              //   "Authorization": `Bearer ${token.token}`,
+              },
+            }
+          );
+          const data_ = await response_.json();
+
+          if (Object.keys(data_.data).length > 0) {
+            //TODO:Place a toaster here
+            setPhotos(data_.data);
+            console.log("data photo: ", data_);
+          }
+
+        if (data.data.length > 0) {
+            //TODO:Place a toaster here
+            setFeaturedCreatives(data.data);
+            console.log("data : ", data);
+        }
+        else{
+            //TODO:Place a toaster here
+            console.log("something");
+        }
+      } catch (error) {
+        //TODO:Place a toaster here
+          console.log(error);
+      }
+  }
+
     const searchedCreatives = async (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
             e.preventDefault();
             console.log("query : ", query);
             try {
                 const response = await fetch(
-                  `https://backend.bcartgh.com/api/creatives?filter[first_name]=${query}`,
+                  `https://backend.bcartgh.com/api/search-creative?keyword=${query}`,
                   {
                     method: "GET",
                     headers: {
@@ -119,6 +171,25 @@ export default function Search() {
                   }
                 );
                 const data = await response.json();
+
+                //******search for photos */
+        const response_ = await fetch(
+            `https://backend.bcartgh.com/api/search-photo?keyword=${query}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              //   "Authorization": `Bearer ${token.token}`,
+              },
+            }
+          );
+          const data_ = await response_.json();
+
+          if (Object.keys(data_.data).length > 0) {
+            //TODO:Place a toaster here
+            setPhotos(data_.data);
+            console.log("data photo: ", data_);
+          }
 
                 if (data.data.length > 0) {
                     //TODO:Place a toaster here
@@ -138,10 +209,12 @@ export default function Search() {
       };
 
       useEffect(() => {
-        // getCreativeCategories();
+        if(searchKey !== ""){
+            searchFromUrl();
+            // setQuery(searchKey)
+        }
         getFeaturedCreatives();
         getPhotos();
-        // getFeaturedCreative();
       }, []);
     return (
         <Layout active="partner">

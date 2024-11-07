@@ -1,7 +1,14 @@
 import { MagnifyingGlass } from '@phosphor-icons/react'
 import React from 'react'
 
-const Banner: React.FC =() => {
+interface SearchProps {
+  search: (e: any) => void;
+  // handleOneImage: (take: any) => void;
+  searchKey: any;
+  setSearchKey: any;
+}
+
+const Banner: React.FC<SearchProps> =({search, searchKey, setSearchKey}) => {
   return (
     <div className="relative px-4">
       <div className="rounded-2xl overflow-hidden border w-full md:mt-8">
@@ -15,7 +22,7 @@ const Banner: React.FC =() => {
     <div className="font-bold md:text-3xl"> Real pictures, <br/> by the creatives you love</div>
     <div className="flex rounded-full pl-4 items-center overflow-hidden bg-white gap-3 fill-black">
      <div ><MagnifyingGlass color="" /></div>
-      <input type="text" className="w-full rounded-lg px-4 py-2 outline-none text-black" />
+      <input placeholder='Search' type="text" className="w-full rounded-lg px-4 py-3 outline-none text-black" value={searchKey} onChange={(e) => setSearchKey(e.target.value)} onKeyDown={search} />
     </div>
   </div>
   <div className="flex items-end md:self-end text-xs">Image of the day by <span className="underline pl-1"> Brandon Nichelle</span></div>

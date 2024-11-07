@@ -3,26 +3,24 @@ import Layout from '../components/layout'
 import Modal from '../components/modal'
 import { CloudArrowUp } from '@phosphor-icons/react'
 import { useEffect, useState } from "react";
-import { getUserData } from '../services/user_service';
+import { getUserData, getUserToken } from '../services/user_service';
+import Loader from '../components/loader';
+import { navigate } from 'gatsby';
 
 const Profile = () => {
+    const token = getUserToken();
     let [userData, setUserData] = useState<any>([]);
     const [showModal, setShowModal] = React.useState(false)
     const [showEditModal, setShowEditModal] = React.useState(false)
     const [featuredCreative, setFeaturedCreative] = useState<any>([]);
+    const [suggestion, setSuggestion] = useState<string>("");
+    const [loader, setLoader] = useState<boolean>(false);
+    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
     //****** fetch the params from the url*/
     const urlParams = new URLSearchParams(window.location.search);
     const featured = urlParams.get("featured");
-
-    useEffect(() => {
-        if(featured === "true"){
-          getFeaturedCreative();
-        }
-        // else{
-        //     userData = getUserData();
-        // }
-      }, []);
+    const creative = urlParams.get("creative");
 
     //*******fetch featured creatives */
     const getFeaturedCreative = async () => {
@@ -40,26 +38,105 @@ const Profile = () => {
 
           setUserData({user:data.data});
 
-        //   userData = {
-        //     user:data.data
-        //   };
-        //   setFeaturedCreative(data.data);
+        console.log("Featured User Data : ",userData);
 
-        console.log("First User Data : ",userData);
-        } catch (error) {}
-      };
+        } catch (error) {console.log(error)}
+    };
 
-      ;
+    //******fetch creative user */
+    const getCreativeUser = async () => {
+        setLoader(true);
+        try {
+            const response = await fetch(
+              `https://backend.bcartgh.com/api/search-creative?keyword=${creative}`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            const data = await response.json();
+
+            if (data.data.length > 0) {
+                setUserData({user:data.data[0]});
+            }
+            setLoader(false);
+  
+          } catch (error) {console.log(error)}
+    }
+
+    //******logged in user data */
+    const getUserData_ = async () => {
+        setLoader(true);
+        try {
+            const response = await fetch(`https://backend.bcartgh.com/api/user-profile`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token.token}`,
+                },
+            });
+            const data = await response.json();
+            
+            if ( Object.keys(data.data).length > 0) {
+                setIsLoggedIn(true);
+                setUserData({user:data.data});
+            }
+            setLoader(false);
+      
+          } catch (error) {console.log(error)}    
+    }
+
+    //*****submit suggestion */
+    const submitSuggestion = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setLoader(true);
+        const response = await fetch(`https://backend.bcartgh.com/api/suggest-upload`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                // "Authorization": `Bearer ${token.token}`,
+            },
+            body: JSON.stringify({
+              suggestion: suggestion,
+            }),
+        });
+        const data = await response.json();
+        if (response.status === 200) {
+            setLoader(false);
+            // storeUserData({"user":data.data});
+            alert(data.message);
+        } else {
+            setLoader(false);
+            alert(data.message);
+        }
+    }
     
 
+    useEffect(() => {
+        if(featured === "true"){
+            console.log("fetching featured creative");
+          getFeaturedCreative();
+        }
+        else if(creative !== '' && creative !== null){
+            console.log("fetching creative user");
+            getCreativeUser()
+        }
+        else{
+            console.log("fetching user data");
+            getUserData_();
+        }
+      }, []);
 
+    
 
-      console.log("User Data : ",userData.user);
+      console.log("User Data : ",userData?.user?.username);
 
     return (
         <Layout active="partner">
             <div className=" relative">
-
+            {loader === true ? <Loader size='sm' /> : null}
             <div className=' pb-40'>
                     <div className='bg-[#520b1f21] px-10 py-24'>
                         <div className='container flex items-center'>
@@ -71,15 +148,26 @@ const Profile = () => {
                                     <div className='text-2xl font-bold text-[#520B1F]'>{userData?.user?.username}</div>
                                     <div className='text-xs text-[#737B7D]'>{userData?.user?.physical_address}</div>
                                     <div className='text-xs'>{userData?.user?.description}</div>
-                                    {userData?.user?.creative_hire_status === true ?
+                                    {userData?.user?.creative_hire_status === true && isLoggedIn === false ?
                                     <div className='w-fit pt-4'>
                                         <button title='hire me' type='button' onClick={() => setShowModal(true)} className="text-white bg-[#520B1F] border border-[#520B1F] font-bold w-full px-4 py-2 text-sm rounded-full">Hire Me</button>
                                     </div>
-                                    :null
+                                    : isLoggedIn ?
+                                    <>
+                                     <div className='w-fit pt-4'>
+                                        <button title='Upload Photo' type='button' onClick={() => navigate("/upload-image")} className="text-white bg-[#520B1F] border border-[#520B1F] font-bold w-full px-4 py-2 text-sm rounded-full">Upload Photo</button>
+                                    </div>
+                                    <div className='w-fit pt-4'>
+                                        <button title='Edit' type='button' onClick={() => navigate("/settings")} className="text-white bg-[#520B1F] border border-[#520B1F] font-bold w-full px-4 py-2 text-sm rounded-full">Edit Profile</button>
+                                    </div>
+                                    
+                                    </>
+                                   
+                                    : null
                                     }
                                 </div>
                             </div>
-                            {userData?.user?.creative_hire_status === true ?
+                            {userData?.user?.creative_hire_status === true && isLoggedIn ?
                             <>
                                 <div className='flex flex-col border-l border-gray-300 text-sm justify-center p-4 gap-1'>
                                 <div className='text-[#2B1139]'>hire me for </div>
@@ -105,10 +193,6 @@ const Profile = () => {
                                 )): "No Photos Yet"}
                             </>
                             : null}
-
-                                
-
-
                                 {/* <button className=" row-span-2">
                                     <img src="/img/f-1.webp" alt="Image 1" className="w-full h-full rounded-lg object-cover" />
                                 </button>
@@ -163,19 +247,19 @@ const Profile = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                    <div>
                                         <label className='text-sm font-bold text-[#5C5C5C]'>Date</label>
-                                        <input type="text" className='w-full mt-1 rounded-full px-4 py-2' />
+                                        <input type="text" title='date' className='w-full mt-1 rounded-full px-4 py-2' />
                                     </div>
                                     <div>
                                         <label className='text-sm font-bold text-[#5C5C5C]'>Location</label>
-                                        <input type="text" className='w-full mt-1 rounded-full px-4 py-2' />
+                                        <input type="text" title='location' className='w-full mt-1 rounded-full px-4 py-2' />
                                     </div>
                                     <div>
                                         <label className='text-sm font-bold text-[#5C5C5C]'>No of Days</label>
-                                        <input type="text" className='w-full mt-1 rounded-full px-4 py-2' />
+                                        <input type="text" title='days' className='w-full mt-1 rounded-full px-4 py-2' />
                                     </div>
                                     <div className=''>
                                         <label className='text-xs lg:text-sm font-bold text-[#5C5C5C]'>No of Hours (One day only)</label>
-                                        <input type="text" className='w-full mt-1 rounded-full px-4 py-2' />
+                                        <input type="text" title='hours' className='w-full mt-1 rounded-full px-4 py-2' />
                                     </div>
                                 </div>
                             </div>
@@ -294,14 +378,14 @@ const Profile = () => {
                                     
                                     <div className=''>
                                         <label className='text-sm font-bold text-[#5C5C5C]'>Give a short description of the services to be provided. Remeber to include anything that isn’t available in this form.</label>
-                                        <textarea className='w-full mt-1 rounded-3xl px-4 py-2' rows={5} cols={5} />
+                                        <textarea title='description' className='w-full mt-1 rounded-3xl px-4 py-2' rows={5} cols={5} />
                                     </div>
                                 </div>
                             </div>
                             <div className='flex justify-end pt-4'>
-        <button className="bg-[#520B1F] text-white rounded-full px-10 md:px-14 text-sm py-2">Submit</button>
-        </div>
-        </form>
+                            <button className="bg-[#520B1F] text-white rounded-full px-10 md:px-14 text-sm py-2">Submit</button>
+                             </div>
+                         </form>
                         </div>
                     }
                 />}
@@ -314,19 +398,19 @@ const Profile = () => {
                                     <CloudArrowUp size={80} color='' />
                                 </div>
                             </div>
-                            <form>
+                            <form onSubmit={submitSuggestion}>
                             <div className='pb-8 pt-2'>
                                 <div className='font-bold text-[#520B1F] text-2xl pb-4 text-center'>Suggest an upload</div>
                                 <div className="grid grid-cols-1 gap-4">
                                     
                                     <div className=''>
                                         <div className='text-sm font-bold text-[#5C5C5C] text-center'>We’re sorry you couldn’t find what you are looking for. Feel free to tell us what you want and our creatives will make your wishes come true</div>
-                                        <textarea className='w-full mt-2 rounded-3xl px-4 py-2' rows={5} cols={5} />
+                                        <textarea title='suggestion' value={suggestion} onChange={(e) => setSuggestion(e.target.value)} className='w-full mt-2 rounded-3xl px-4 py-2' rows={5} cols={5} />
                                     </div>
                                 </div>
                             </div>
                             <div className='flex justify-center pt-4'>
-        <button className="bg-[#520B1F] text-white rounded-full px-10 md:px-14 text-sm py-2">Submit</button>
+        <button  type='submit' className="bg-[#520B1F] text-white rounded-full px-10 md:px-14 text-sm py-2">Submit</button>
         </div>
         </form>
                         </div>
