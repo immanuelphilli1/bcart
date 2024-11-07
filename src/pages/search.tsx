@@ -221,7 +221,7 @@ export default function Search() {
             <div className="container relative">
                 <div className='pt-5 md:pt-14 pb-40 px-4'>
                     <div className='w-full flex items-center justify-center'>
-                        <div className="flex w-1/2 rounded-full pl-4 border border-[#520B1F] items-center overflow-hidden bg-white gap-3 fill-[#520B1F]">
+                        <div className="flex w-full md:w-1/2 rounded-full pl-4 border border-[#520B1F] items-center overflow-hidden bg-white gap-3 fill-[#520B1F]">
                             <div ><MagnifyingGlass color="" /></div>
                             <input type="text" className="w-full rounded-lg px-4 py-3 outline-none text-black" value={query} placeholder='Query item' onKeyDown={searchedCreatives} onChange={(e) => setQuery(e.target.value)} />
                         </div>
@@ -241,15 +241,17 @@ export default function Search() {
                 Content={
                     <div>
                         <div className='w-full pb-10 border-b-2 border-[#a3a2a249] flex gap-10'>
-                            <div className='w-1/2'>
+                            <div className='w-1/2 hidden lg:block'>
                                 <img src={pickedPhoto.image_url} alt="logo" className="w-full rounded-2xl h-full" />
                             </div>
-                            <div className='w-1/2'>
+                            <div className='w-full lg:w-1/2'>
                             <div className='flex flex-col gap-4'>
                             <div className='flex gap-4'>
+                            <div>
                             <div className='rounded-full overflow-hidden w-28 h-28'>
                         <img src={pickedPhoto.image_url} alt="logo" className="w-full h-full" />
                     </div>
+                            </div>
                     <div className='flex flex-col justify-center gap-1 w-80'>
                         <div className='text-lg font-bold'>{pickedPhoto.title}</div>
                         <div className='text-sm text-[#737B7D]'>Location</div>
@@ -258,6 +260,9 @@ export default function Search() {
                             </div>
                             <div className='flex gap-4 flex-col pt-10'>
                                 <div className='text-lg font-bold'>{pickedPhoto.description}</div>
+                                <div className=' lg:hidden '>
+                                <img src={pickedPhoto.image_url} alt="logo" className="w-full rounded-2xl h-full" />
+                            </div>
                                 {/* <div className='text-sm text-[#5c5c5c] font-bold'>We’re sorry you couldn’t find what you are looking for. Feel free to tell us what you want and our creatives will make your wishes come true</div>
                                 <div className='text-xs text-[#5c5c5c]'>food, color, eggs, people, meal, treat, easter</div> */}
                             </div>

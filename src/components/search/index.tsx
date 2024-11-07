@@ -23,11 +23,23 @@ const SearchIndex: React.FC<SearchProps> = ({
           <h1 className="text-lg font-bold text-[#2B1139]">Creatives</h1>
         </div>
         <div className="flex gap-4 lg:gap-10 items-center justify-between">
-          <div className="flex gap-4 lg:gap-10 items-center">
+          <div className="flex gap-8 lg:gap-10 items-center overflow-scroll no-scrollbar">
           {featuredCreatives.map((creative: any, index: number) => (
             <div  key={index}>
-            <div className="border rounded-full overflow-hidden bg-red-500">
-              <img src={creative.profile_picture} alt="logo" className="w-full h-full" />
+            <div className="border w-28 h-28 rounded-full overflow-hidden bg-gray-200">
+            {creative.profile_picture ? (
+                      <img
+                      src={creative.profile_picture}
+                      alt="logo"
+                      className="w-full h-full"
+                    />
+                    ) :(
+                    <img
+                      src="/img/user-avatar.svg"
+                      alt="logo"
+                      className="w-full h-full p-2"
+                    />
+                    )}
             </div>
             <div className="pt-2 text-sm font-bold text-center">
             <a href={`/profile?creative=${creative.username}`}>{creative.username}</a>
@@ -110,13 +122,19 @@ const SearchIndex: React.FC<SearchProps> = ({
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 grid-rows-3 gap-4">
           {photos.map((photo: any, index: number) => (
+            <>
+            {photo.image_url &&
             <button onClick={(take:any) => handleOneImage(photo.id)} className=" row-span-2">
+              
               <img
-                src={photo.image_url}
-                alt="Image 1"
-                className="w-full h-full rounded-lg object-cover"
-              />
+              src={photo.image_url}
+              alt="Image 1"
+              className="w-full h-full rounded-lg object-cover"
+            />
+              
             </button>
+            }
+            </>
           ))}
           {/* <button onClick={(take:any) => handleOneImage(take=1)} className=" row-span-2">
             <img
