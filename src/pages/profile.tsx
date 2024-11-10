@@ -226,6 +226,15 @@ const Profile = () => {
                                             ))}</div>
                                         </div>
                                     </>
+                                    : userData?.user?.creative_hire_status === true ?
+                                    <>
+                                        <div className='flex flex-col border-l border-gray-300 text-sm justify-center p-4 gap-1'>
+                                            <div className='text-[#2B1139]'>hire me for </div>
+                                            <div>{userData?.user?.creative_categories.map((cat: any, index: number) => (
+                                                <div key={index}>{cat.creative_category},</div>
+                                            ))}</div>
+                                        </div>
+                                    </>
                                     : null}
 
                             </div>
@@ -234,15 +243,15 @@ const Profile = () => {
                             <div className='pt-20'>
                                 <div className="grid grid-cols-2 md:grid-cols-5 grid-rows-3 gap-4">
 
-                                    {userData?.user?.creative_hire_status === true ?
-                                        <>
+                                    {/* {userData?.user?.creative_hire_status === true ? */}
+                                        {/* <> */}
                                             {userData?.user?.photos.length > 0 ? userData?.user?.photos.map((photo: any, index: number) => (
                                                 <button onClick={(take: any) => handleOneImage(photo.id)} type='button' title='photo' key={index} className=" row-span-2">
                                                     <img src={photo.image_url} alt="Image 1" className="w-full h-full rounded-lg object-cover" />
                                                 </button>
                                             )) : "No Photos Yet"}
-                                        </>
-                                        : null}
+                                        {/* </> */}
+                                        {/* : null} */}
                                     {/* <button className=" row-span-2">
                               <img src="/img/f-1.webp" alt="Image 1" className="w-full h-full rounded-lg object-cover" />
                           </button>
