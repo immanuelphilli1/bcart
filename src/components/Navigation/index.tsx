@@ -2,7 +2,7 @@ import { Bell, List, ShoppingCartSimple } from "@phosphor-icons/react";
 import { navigate } from "gatsby";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { getUserData, logoutUserData } from "../../services/user_service";
+import { getUserData, logoutUserData, storeUserData, storeUserToken } from "../../services/user_service";
 
 interface NavigationProps {
   active: string;
@@ -13,6 +13,40 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
   const [check, setCheck] = useState(false);
   const [user, setUser] = useState<any | null>("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  //*****fetch token from the url for those who used google auth */
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get("token");
+  const getUserData_ = async () => {
+    // setLoader(true);
+    try {
+      const response = await fetch(
+        `https://backend.bcartgh.com/api/user-profile`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+
+      if (Object.keys(data.data).length > 0) {
+        //****Store User Data in Local Storage****//
+        storeUserData({ user: data.data });
+        storeUserToken({ token: token });
+        // toast.success('Login Successful', {
+        //   position: 'top-center',
+        //   duration: 5000,
+        //   description:data.message
+        // });
+      }
+      // setLoader(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
 
   const toggleSidebar = () => {
@@ -26,13 +60,17 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
   useEffect(() => {
     const userData = getUserData();
 
+    if (token !== null) {
+      getUserData_();
+    }
+
     if (!!userData) {
       setUser(userData);
       setCheck(true);
     }
 
     console.log("check : ", check);
-  }, [check]);
+  }, []);
 
   const showMenuTray = () => {
     setMobileMenu(!showMobileMenu);

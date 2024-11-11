@@ -51,7 +51,7 @@ const Profile = () => {
         setLoader(true);
         try {
             const response = await fetch(
-                `https://backend.bcartgh.com/api/search-creative?keyword=${creative}`,
+                `https://backend.bcartgh.com/api/search-creative?filter[keyword]=${creative}`,
                 {
                     method: "GET",
                     headers: {
@@ -157,8 +157,7 @@ const Profile = () => {
         } catch (error) { }
 
     }
-
-
+ 
     useEffect(() => {
         setLoader(true)
         setTimeout(() => {
@@ -178,11 +177,6 @@ const Profile = () => {
         }
     }, []);
 
-
-
-
-    console.log("User Data : ", userData?.user?.username);
-
     return (
         <Layout active="partner">
             <div className=" relative">
@@ -195,7 +189,7 @@ const Profile = () => {
                                         <img src={userData?.user?.profile_picture ? userData?.user?.profile_picture : "/img/f-1.webp"} alt="logo" className="w-full h-full" />
                                     </div>
                                     <div className='flex flex-col justify-center gap-1 w-80'>
-                                        <div className='text-2xl font-bold text-[#520B1F]'>{userData?.user?.username}</div>
+                                        <div className='text-2xl font-bold text-[#520B1F]'>{userData?.user?.username || userData?.user?.last_name}</div>
                                         <div className='text-xs text-[#737B7D]'>{userData?.user?.physical_address}</div>
                                         <div className='text-xs'>{userData?.user?.description}</div>
                                         {userData?.user?.creative_hire_status === true && isLoggedIn === false ?

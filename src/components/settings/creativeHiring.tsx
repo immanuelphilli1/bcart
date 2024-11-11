@@ -5,6 +5,7 @@ import {
   getUserToken,
 } from "../../services/user_service";
 import { navigate } from "gatsby";
+import { Toaster, toast } from "sonner";
 
 export default function CreativeHiring() {
   const userData = getUserData();
@@ -40,6 +41,7 @@ export default function CreativeHiring() {
   }
 
   useEffect(() => {
+    console.log(checks);
     getAllCreate();
   }, []);
 
@@ -88,10 +90,6 @@ export default function CreativeHiring() {
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCreativeHireStatus(event.target.checked);
   };
-
-  useEffect(() => {
-    console.log(checks);
-  }, [checks]);
 
   console.log("user : ", userData);
 

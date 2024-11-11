@@ -4,7 +4,8 @@ import Layout from "../components/layout";
 import Banner from "../components/Banner";
 import { ArrowRight } from "@phosphor-icons/react";
 import { useState, useEffect } from "react";
-import { getUserData } from "../services/user_service";
+import { storeUserData, storeUserToken } from "../services/user_service";
+import { Toaster, toast } from "sonner";
 
 const IndexPage: React.FC<PageProps> = () => {
   const [categories, setCategories] = useState<any>([]);
@@ -32,7 +33,7 @@ const IndexPage: React.FC<PageProps> = () => {
       const data = await response.json();
 
       setCategories(data.data);
-    } catch (error) { }
+    } catch (error) {}
   };
 
   //*******fetch all featured creatives */
@@ -52,7 +53,7 @@ const IndexPage: React.FC<PageProps> = () => {
 
       setFeaturedCreatives(data.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -60,7 +61,7 @@ const IndexPage: React.FC<PageProps> = () => {
   const getFeaturedCreative = async () => {
     try {
       const response = await fetch(
-        'https://backend.bcartgh.com/api/featured-creative',
+        "https://backend.bcartgh.com/api/featured-creative",
         {
           method: "GET",
           headers: {
@@ -70,9 +71,8 @@ const IndexPage: React.FC<PageProps> = () => {
       );
       const data = await response.json();
 
-
       setFeaturedCreative(data.data);
-    } catch (error) { }
+    } catch (error) {}
   };
 
   function search(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -81,7 +81,46 @@ const IndexPage: React.FC<PageProps> = () => {
     }
   }
 
+  //*****fetch token from the url for those who used google auth */
+  // const urlParams = new URLSearchParams(window.location.search);
+  // const token = urlParams.get("token");
+  // const getUserData_ = async () => {
+  //   setLoader(true);
+  //   try {
+  //     const response = await fetch(
+  //       `https://backend.bcartgh.com/api/user-profile`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       }
+  //     );
+  //     const data = await response.json();
+
+  //     if (Object.keys(data.data).length > 0) {
+  //       //****Store User Data in Local Storage****//
+  //       storeUserData({ user: data.data });
+  //       storeUserToken({ token: token });
+  //       toast.success('Login Successful', {
+  //         position: 'top-center',
+  //         duration: 5000,
+  //         description:data.message
+  //       });
+  //     }
+  //     setLoader(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   useEffect(() => {
+    // if (token !== null) {
+    //   setLoader(true);
+    //   getUserData_();
+    // }
+
     getCreativeCategories();
     getFeaturedCreatives();
     getFeaturedCreative();
@@ -90,7 +129,11 @@ const IndexPage: React.FC<PageProps> = () => {
   return (
     <Layout active="about">
       <div className="container">
-        <Banner search={search} searchKey={searchKey} setSearchKey={setSearchKey} />
+        <Banner
+          search={search}
+          searchKey={searchKey}
+          setSearchKey={setSearchKey}
+        />
       </div>
       <div className="container">
         <div className="px-4 py-10">
@@ -101,23 +144,32 @@ const IndexPage: React.FC<PageProps> = () => {
           </div>
           <div className="flex gap-4 lg:gap-10 items-center justify-between">
             <div className="flex gap-4 lg:gap-10 items-center overflow-scroll no-scrollbar">
-              {categories.map((cat: any, index: number) => (
-                cat.image_url &&
-                <button onClick={() => navigate(`/search?q=${encodeURIComponent(cat.creative_category)}`)} key={index}>
-                  <div className="border w-72 h-48 rounded-lg overflow-hidden bg-gray-100">
-                    <img
-                      src={cat.image_url}
-                      alt="logo"
-                      className="w-full h-full"
-                    />
-                  </div>
-                  <div className="pt-2 text-sm font-bold">
-                    {cat.creative_category}
-                  </div>
-                </button>
-              ))
-              }
-
+              {categories.map(
+                (cat: any, index: number) =>
+                  cat.image_url && (
+                    <button
+                      onClick={() =>
+                        navigate(
+                          `/search?q=${encodeURIComponent(
+                            cat.creative_category
+                          )}`
+                        )
+                      }
+                      key={index}
+                    >
+                      <div className="border w-72 h-48 rounded-lg overflow-hidden bg-gray-100">
+                        <img
+                          src={cat.image_url}
+                          alt="logo"
+                          className="w-full h-full"
+                        />
+                      </div>
+                      <div className="pt-2 text-sm font-bold">
+                        {cat.creative_category}
+                      </div>
+                    </button>
+                  )
+              )}
             </div>
             <div className="flex">
               <button
@@ -134,7 +186,15 @@ const IndexPage: React.FC<PageProps> = () => {
         <div className="px-4 pt-10 pb-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div className="border rounded-2xl overflow-hidden">
-              <img src={featuredCreative.profile_picture ? featuredCreative.profile_picture : "/img/f-3.webp"} alt="logo" className="w-full h-full" />
+              <img
+                src={
+                  featuredCreative.profile_picture
+                    ? featuredCreative.profile_picture
+                    : "/img/f-3.webp"
+                }
+                alt="logo"
+                className="w-full h-full"
+              />
             </div>
             <div className="flex flex-col justify-center gap-4">
               <div>
@@ -142,9 +202,7 @@ const IndexPage: React.FC<PageProps> = () => {
                   Featured creative <br /> of the week.
                 </h1>
               </div>
-              <div className="text-sm">
-                {featuredCreative.description}{" "}
-              </div>
+              <div className="text-sm">{featuredCreative.description} </div>
               <div>
                 <button
                   onClick={() => navigate("/featured-creative")}
@@ -168,7 +226,16 @@ const IndexPage: React.FC<PageProps> = () => {
             <div className="flex gap-4 lg:gap-10 items-center justify-between">
               <div className="flex gap-4 lg:gap-10 items-center overflow-scroll no-scrollbar">
                 {featuredCreatives.map((creative: any, index: number) => (
-                  <button onClick={() => navigate(`/profile?creative=${encodeURIComponent(creative.username)}`)} key={index}>
+                  <button
+                    onClick={() =>
+                      navigate(
+                        `/profile?creative=${encodeURIComponent(
+                          creative.username
+                        )}`
+                      )
+                    }
+                    key={index}
+                  >
                     <div className="border w-28 h-28 rounded-full overflow-hidden bg-white">
                       {creative.profile_picture ? (
                         <img
@@ -185,7 +252,9 @@ const IndexPage: React.FC<PageProps> = () => {
                       )}
                     </div>
                     <div className="pt-2 text-sm font-bold text-center">
-                      <a href={`/profile?creative=${creative.username}`}>{creative.username}</a>
+                      <a href={`/profile?creative=${creative.username}`}>
+                        {creative.username}
+                      </a>
                       {/* {creative.username} */}
                     </div>
                   </button>
@@ -214,12 +283,15 @@ const IndexPage: React.FC<PageProps> = () => {
             {categories.map((cat: any, index: number) => (
               <div className="flex flex-col gap-10">
                 <button
-                  onClick={() => navigate(`/search/?q=${encodeURIComponent(cat.creative_category)}`)}
+                  onClick={() =>
+                    navigate(
+                      `/search/?q=${encodeURIComponent(cat.creative_category)}`
+                    )
+                  }
                   className="font-semibold text-left text-gray-800 hover:text-gray-600"
                 >
                   {cat.creative_category}
                 </button>
-
               </div>
             ))}
           </div>

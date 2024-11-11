@@ -123,7 +123,7 @@ export default function Search() {
   async function searchFromUrl() {
     try {
       const response = await fetch(
-        `https://backend.bcartgh.com/api/search-creative?keyword=${searchKey}`,
+        `https://backend.bcartgh.com/api/search-creative?filter[keyword]=${searchKey}`,
         {
           method: "GET",
           headers: {
@@ -181,7 +181,7 @@ export default function Search() {
       console.log("query : ", query);
       try {
         const response = await fetch(
-          `https://backend.bcartgh.com/api/search-creative?keyword=${query}`,
+          `https://backend.bcartgh.com/api/search-creative?filter[keyword]=${query}`,
           {
             method: "GET",
             headers: {

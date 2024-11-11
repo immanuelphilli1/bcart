@@ -3,7 +3,8 @@ import { navigate, type HeadFC, type PageProps } from "gatsby";
 import { useState } from "react";
 import { Eye, EyeClosed } from "@phosphor-icons/react";
 import { storeUserData, storeUserToken } from "../services/user_service";
-import { Toaster } from "sonner";
+import { Toaster, toast } from "sonner";
+import Loader from '../components/loader';
 
 const SignUpPage: React.FC<PageProps> = () => {
     const [fname, setFname] = useState<string>("");
@@ -15,6 +16,7 @@ const SignUpPage: React.FC<PageProps> = () => {
     const [location, setLocation] = useState<string>("");
     const [toggler, setToggler] = useState<boolean>(false);
     const [togglerC, setTogglerC] = useState<boolean>(false);
+    const [loader, setLoader] = useState<boolean>(false);
 
     function handleToggler() {
         setToggler(!toggler);
@@ -27,6 +29,7 @@ const SignUpPage: React.FC<PageProps> = () => {
     // Registering User
     const registerUser = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setLoader(true);
         if (password !== cpassword) {
             alert("Passwords do not match");
             return;
@@ -48,10 +51,15 @@ const SignUpPage: React.FC<PageProps> = () => {
             //****Store User Data in Local Storage****//
             storeUserData({"user":data.data});
             storeUserToken({"token":data.token});
+            setLoader(false);
 
-            navigate("/settings"); // Uncomment if you want to navigate after registration
+            navigate("/verification"); // Uncomment if you want to navigate after registration
         } else {
-            alert(data.errors.email[0]);
+            toast.error('Registration Failed', {
+                position: 'top-center',
+                duration: 5000,
+                description:data.errors.email[0]
+              });
         }
     };
 
@@ -174,7 +182,7 @@ const SignUpPage: React.FC<PageProps> = () => {
                                         </div> */}
                                         <div className="pt-4">
                                             <button type="submit" className="w-full mt-4 rounded-full bg-[#FF6F51] text-white font-bold py-3">
-                                                Create Account
+                                               {loader ? <div className='flex items-center justify-center pt-20'><Loader size="w-12 h-12" />Processing</div> :"Complete"}
                                             </button>
                                         </div>
                                         <div className="flex justify-center items-center py-6 text-white">
@@ -183,7 +191,7 @@ const SignUpPage: React.FC<PageProps> = () => {
                                             <div className="w-1/4 h-[1px] bg-[#E2E8F0]" />
                                         </div>
                                         <div>
-                                            <button className="w-full rounded-full bg-[#FF6F51] text-white font-bold py-3">Continue with Google</button>
+                                            <button className="w-full rounded-full bg-[#FF6F51] text-white font-bold py-3" type="button" onClick={() => window.location.href = 'https://backend.bcartgh.com/api/auth/google'}>Continue with Google</button>
                                         </div>
                                         <div className="text-white pt-4 text-center text-sm">
                                             Already have an account? <a href="/login" className="underline">Sign In here</a>
