@@ -23,11 +23,14 @@ const ImageUpload: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [loader, setLoader] = useState<boolean>(false);
   const [categories, setCategories] = useState<any>([]);
+  const [image, setImage] =  useState<any>(null);
   const token = getUserToken();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
+      console.log("Files : ",files[0]);
+      setImage(files[0]);
       Array.from(files).forEach((file) => {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -109,7 +112,7 @@ const ImageUpload: React.FC = () => {
           "Authorization": `Bearer ${token.token}`,
         },
         body: JSON.stringify({
-          images: [imageForms[0].src],
+          images: [image],
           title: imageForms[0].title,
           description: imageForms[0].description,
           price: imageForms[0].price,
@@ -259,7 +262,7 @@ const ImageUpload: React.FC = () => {
                         <select title="category" className="w-full mt-1 rounded-full px-4 py-2" value={form.category} onChange={(e) => handleInputChange(form.id, "category", e.target.value)}>
                           <option>Select a category</option>
                           {categories.map((cat: any, index: number) => (
-                            <option key={index} value={cat.creative_category}>{cat.creative_category}</option>
+                            <option key={index} value={cat.id}>{cat.creative_category}</option>
                           ))}
                         </select>
                         {/* <input
