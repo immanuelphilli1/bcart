@@ -1,6 +1,6 @@
 import { ArrowRight } from "@phosphor-icons/react";
 import { navigate } from "gatsby";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 interface SearchProps {
   handleOneImage: (take: any) => void;
@@ -8,6 +8,34 @@ interface SearchProps {
 }
 
 const CreativeSearch: React.FC<SearchProps> = ({ featuredCreatives, handleOneImage }) => {
+
+  const [categories, setCategories] = useState<any>([]);
+  const [checks, setChecks] = useState<any>([]);
+  const [rate, setRate] = useState<any>([]);
+  const [location, setLocation] = useState<any>([]);
+
+//*******fetch all categories */
+const getAllCategories = async () => {
+  const response = await fetch(
+    `https://backend.bcartgh.com/api/creative-categories`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  const data = await response.json();
+  setCategories(data.data);
+};
+
+console.log("categories : ", checks);
+
+useEffect(() => {
+  // setLoader(true);
+  getAllCategories();
+}, []);
+
   return (
     <div className="pt-20">
       <div className="flex gap-10">
@@ -20,7 +48,31 @@ const CreativeSearch: React.FC<SearchProps> = ({ featuredCreatives, handleOneIma
               </div>
               {/* checkbox */}
               <div className="flex flex-col gap-4">
-                <div className="flex items-center me-4">
+              {categories.map((cat: any, index: number) => (
+                  <div className="flex items-center me-4">
+                  <input
+                    id="red-checkbox"
+                    type="checkbox"
+                    value=""
+                    className="w-4 h-4 text-[#520B1F] bg-[#520B1F] checked:bg-[#520B1F] border-gray-300 rounded focus:ring-[#520B1F] focus:ring-2"
+                    onChange={() => {
+                      if (checks?.length > 0 && checks.includes(cat.id))
+                        setChecks((checks: any) =>
+                          checks.filter((c: any) => c !== cat.id)
+                        );
+                      else
+                        setChecks((checks: any) => [...checks, cat.id]);
+                    }}
+                  />
+                  <label
+                    htmlFor="red-checkbox"
+                    className="ms-2 text-sm font-bold text-[#2B1139]"
+                  >
+                    {cat.creative_category}
+                  </label>
+                </div>
+              ))}
+                {/* <div className="flex items-center me-4">
                   <input
                     id="red-checkbox"
                     type="checkbox"
@@ -117,7 +169,7 @@ const CreativeSearch: React.FC<SearchProps> = ({ featuredCreatives, handleOneIma
                   >
                     Documentary
                   </label>
-                </div>
+                </div> */}
                 <div className="text-sm font-bold pt-4 text-[#2B1139]">
                   Minimum Rate
                 </div>

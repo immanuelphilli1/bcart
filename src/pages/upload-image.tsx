@@ -23,7 +23,7 @@ const ImageUpload: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [loader, setLoader] = useState<boolean>(false);
   const [categories, setCategories] = useState<any>([]);
-  const [image, setImage] =  useState<any>(null);
+  const [image, setImage] =  useState<any>([]);
   const token = getUserToken();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,43 +101,101 @@ const ImageUpload: React.FC = () => {
     setImageForms((prevForms) => prevForms.filter((form) => form.id !== id));
   };
 
+  //*******uploading image request */
   const uploadImage = async () => {
-    console.log("image forms : ",imageForms);
     setLoader(true);
     try {
-      const response = await fetch(`https://backend.bcartgh.com/api/photos`, {
-        method: "POST",
+      console.log("image forms : ",image);
+      const image_ = [image];
+        const formData = new FormData();
+        formData.append('images', image);
+        formData.append('title', imageForms[0].title);
+        formData.append('description', imageForms[0].description);
+        formData.append('price', imageForms[0].price);
+        formData.append('category', imageForms[0].category);
+        formData.append('tags', imageForms[0].tags);
+
+        console.log("form data : ",formData);
+
+      const response = await fetch('https://backend.bcartgh.com/api/photos', {
+        method: 'POST',
+        body: formData,
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token.token}`,
         },
-        body: JSON.stringify({
-          images: [image],
-          title: imageForms[0].title,
-          description: imageForms[0].description,
-          price: imageForms[0].price,
-          category: [imageForms[0].category],
-          tags: [imageForms[0].tags]
-        }),
       });
-      const data = await response.json();
-      console.log(data);
-      if (response.status === 200 && data.success === true) {
+      const result = await response.json();
+      // console.log('Success:', result);
+
+      // const data = await response.json();
+
+      if (response.status === 200 && result.success === true) {
         setLoader(false);
         setShowModal(true)
         toast.success('Add Photo Successful', {
           position: 'top-center',
           duration: 5000,
-          description:data.message
+          description:result.message
         });
       } else {
         setLoader(false);
         toast.error('Add Photo Failed', {
           position: 'top-center',
           duration: 5000,
-          description:data.message
+          description:result.message
         });
       }
+
+      // const handleSubmit = async (e) => {
+      //   e.preventDefault();
+      //   const formData = new FormData();
+      //   formData.append('image', image);
+    
+      //   try {
+      //     const response = await fetch('https://backend.bcartgh.com/api/photos', {
+      //       method: 'POST',
+      //       body: formData,
+      //     });
+      //     const result = await response.json();
+      //     console.log('Success:', result);
+      //   } catch (error) {
+      //     console.error('Error:', error);
+      //   }
+      // };
+      // const response = await fetch(`https://backend.bcartgh.com/api/photos`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     "Authorization": `Bearer ${token.token}`,
+      //   },
+      //   body: JSON.stringify({
+      //     images: [image],
+      //     title: imageForms[0].title,
+      //     description: imageForms[0].description,
+      //     price: imageForms[0].price,
+      //     category: [imageForms[0].category],
+      //     tags: [imageForms[0].tags]
+      //   }),
+      // });
+      // const data = await response.json();
+
+      // if (response.status === 200 && data.success === true) {
+      //   setLoader(false);
+      //   setShowModal(true)
+      //   toast.success('Add Photo Successful', {
+      //     position: 'top-center',
+      //     duration: 5000,
+      //     description:data.message
+      //   });
+      // } else {
+      //   setLoader(false);
+      //   toast.error('Add Photo Failed', {
+      //     position: 'top-center',
+      //     duration: 5000,
+      //     description:data.message
+      //   });
+      // }
     } catch (error) {
       toast.error('Add Photo Failed', {
         position: 'top-center',

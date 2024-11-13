@@ -33,7 +33,7 @@ function Verification() {
       console.log("verification response: ", data);
 
       if (response.status === 200 && data.success === true) {
-        toast("Verification Success", {
+        toast.success("Verification Success", {
           position: "top-center",
           duration: 5000,
           description: data.message,
@@ -45,7 +45,7 @@ function Verification() {
         if (data.message === "Email already verified") {
           setCheck(true);
           setLoader(false);
-          toast("Verification Already Done", {
+          toast.success("Verification Already Done", {
             position: "top-center",
             duration: 5000,
             description: data.message,
@@ -55,7 +55,7 @@ function Verification() {
             window.location.href = "/login";
           }, 2000);
         } else {
-          toast("Verification Failed", {
+          toast.error("Verification Failed", {
             position: "top-center",
             duration: 5000,
             description: data.message,

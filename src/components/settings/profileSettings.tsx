@@ -2,6 +2,7 @@ import React,{useState} from "react";
 import { getUserData, storeUserData, storeUserToken, getUserToken } from "../../services/user_service";
 import { navigate } from "gatsby";
 import { Eye, EyeClosed } from "@phosphor-icons/react";
+import { Toaster, toast } from "sonner";
 
 
 export default function ProfileSettings() {
@@ -44,12 +45,19 @@ export default function ProfileSettings() {
             setLoader(false);
             //****Store User Data in Local Storage****//
             storeUserData({"user":data.data});
-            alert(data.message);
+            toast.success('Profile Updated', {
+              position: 'top-center',
+              duration: 5000,
+              description:data.message
+            });
             // navigate("/");
         } else {
             setLoader(false);
-            // console.log(response.status);
-            alert(data.message);
+            toast.error('Updating Profile Failed', {
+              position: 'top-center',
+              duration: 5000,
+              description:data.message
+            });
         }
     };
 
@@ -57,7 +65,11 @@ export default function ProfileSettings() {
         e.preventDefault();
         setLoader(true);
         if (fresh !== confirmFresh) {
-          alert("Passwords do not match");
+          toast.error('Password Words Do Not Match', {
+            position: 'top-center',
+            duration: 5000,
+            description: "Check your passwords and try again"
+          });
           setLoader(false);
           return;
         }
@@ -75,11 +87,18 @@ export default function ProfileSettings() {
         });
         const data = await response.json();
         if (response.status === 200) {
-            // storeUserData({"user":data.data});
-            alert(data.message);
+          toast.success('Password Updated', {
+            position: 'top-center',
+            duration: 5000,
+            description:data.message
+          });
         } else {
             setLoader(false);
-            alert(data.message);
+            toast.error('Password Update Failed', {
+              position: 'top-center',
+              duration: 5000,
+              description:data.message
+            });
         }
       }
 
@@ -188,6 +207,7 @@ export default function ProfileSettings() {
         </div>
         </form>
       </div>
+      <Toaster richColors />
     </div>
   );
 }

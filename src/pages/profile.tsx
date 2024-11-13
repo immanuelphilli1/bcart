@@ -151,6 +151,7 @@ const Profile = () => {
     setCategories(data.data);
   };
 
+  //****Submit the form*/
   const submitHireMe = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoader(true);
