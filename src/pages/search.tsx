@@ -308,7 +308,22 @@ export default function Search() {
                     <div className='text-lg text-[#5c5c5c] font-bold'>$ {pickedPhoto.price}</div>
                   </div>
                   <div className='flex gap-8 py-8'>
+                    {pickedPhoto.price === 0 ? 
+                    <>
                     <div className='w-full'>
+                      <a
+                        className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
+                        href={pickedPhoto.image_url}
+                        download
+                        target="_blank"
+                      >
+                        Free Download Now
+                      </a>
+                    </div>
+                    </>
+                    : 
+                    <>
+                      <div className='w-full'>
                       <button
                         className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
                       >
@@ -322,6 +337,9 @@ export default function Search() {
                         Buy now
                       </button>
                     </div>
+                    </>
+                    }
+                    
                   </div>
                 </div>
               </div>

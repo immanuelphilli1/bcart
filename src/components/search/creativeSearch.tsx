@@ -13,6 +13,8 @@ const CreativeSearch: React.FC<SearchProps> = ({ featuredCreatives, handleOneIma
   const [checks, setChecks] = useState<any>([]);
   const [rate, setRate] = useState<any>([]);
   const [location, setLocation] = useState<any>([]);
+  const [loader, setLoader] = useState(false);
+  const [filter, setFilter] = useState(false);
 
 //*******fetch all categories */
 const getAllCategories = async () => {
@@ -29,12 +31,37 @@ const getAllCategories = async () => {
   setCategories(data.data);
 };
 
+const filterByCityCategoryMinimumRate = async () => {
+  setLoader(true);
+  setFilter(true);
+  const response = await fetch(
+    `https://backend.bcartgh.com/api/creatives?filter[city]=Accra,Kumasi&filter[minimum_rate]=1000_to_2500&filter[creative_categories.id]=1`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  const data = await response.json();
+
+  console.log("filterByCityCategoryMinimumRate: ", data);
+  // setChecks(data.data);s
+  setLoader(false);
+};
+
 console.log("categories : ", checks);
 
 useEffect(() => {
   // setLoader(true);
-  getAllCategories();
-}, []);
+  if (filter === false) {
+    getAllCategories();
+  }
+  else{
+    filterByCityCategoryMinimumRate();
+  }
+
+}, [checks]);
 
   return (
     <div className="pt-20">
