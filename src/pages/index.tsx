@@ -81,40 +81,6 @@ const IndexPage: React.FC<PageProps> = () => {
     }
   }
 
-  //*****fetch token from the url for those who used google auth */
-  // const urlParams = new URLSearchParams(window.location.search);
-  // const token = urlParams.get("token");
-  // const getUserData_ = async () => {
-  //   setLoader(true);
-  //   try {
-  //     const response = await fetch(
-  //       `https://backend.bcartgh.com/api/user-profile`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       }
-  //     );
-  //     const data = await response.json();
-
-  //     if (Object.keys(data.data).length > 0) {
-  //       //****Store User Data in Local Storage****//
-  //       storeUserData({ user: data.data });
-  //       storeUserToken({ token: token });
-  //       toast.success('Login Successful', {
-  //         position: 'top-center',
-  //         duration: 5000,
-  //         description:data.message
-  //       });
-  //     }
-  //     setLoader(false);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   useEffect(() => {
     // if (token !== null) {
     //   setLoader(true);

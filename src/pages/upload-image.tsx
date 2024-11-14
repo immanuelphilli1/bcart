@@ -25,6 +25,7 @@ const ImageUpload: React.FC = () => {
   const [categories, setCategories] = useState<any>([]);
   const [image, setImage] =  useState<any>([]);
   const token = getUserToken();
+  const [isClient, setIsClient] = useState(false);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -221,8 +222,11 @@ const ImageUpload: React.FC = () => {
     setCategories(data.data);
   };
 
+ 
+
   useEffect(() => {
     getAllCreate();
+    setIsClient(true); 
   }, []);
 
   return (
@@ -435,7 +439,7 @@ const ImageUpload: React.FC = () => {
               </div>
               <div className="flex justify-center pt-8">
                 <button
-                  onClick={() => window.location.reload()}
+                  type="button"
                   className="bg-[#520B1F] text-white rounded-full px-10 md:px-14 text-sm py-2"
                 >
                   Close

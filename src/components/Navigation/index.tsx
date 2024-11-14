@@ -15,7 +15,14 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   //*****fetch token from the url for those who used google auth */
-  const urlParams = new URLSearchParams(window.location.search);
+  let urlParams;
+
+  if (typeof window !== 'undefined') {
+    urlParams = new URLSearchParams(window.location.search);
+  } else {
+    // Handle the server-side rendering case if needed
+    urlParams = new URLSearchParams();
+  }
   const token = urlParams.get("token");
   const getUserData_ = async () => {
     // setLoader(true);
@@ -216,7 +223,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
                   <div className="absolute dropdown border-0 mt-4 border-aluminium top-10 right-0 w-[150px] bg-white text-black shadow-xl rounded-md overflow-hidden">
                     <ul className="py-1 w-full">
                       <li
-                        onClick={() => window.location.href = "/profile"}
+                        onClick={() => navigate("/profile")}
                         className="px-4 hover:bg-blue hover:text-white hover:bg-[#520B1F] py-3 cursor-pointer"
                       >
                         Profile
@@ -312,7 +319,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
             ) : (
               <div>
                 <a
-                  onClick={() => window.location.href = "/profile"}
+                  onClick={() => navigate("/profile")}
                   className="block py-2 px-4 text-sm text-blue hover:text-white hover:bg-blue"
                 >
                   profile
@@ -320,7 +327,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
                 <button
                   type="button"
                   title=""
-                  onClick={() => window.location.href = "/settings"}
+                  onClick={() => navigate("/settings")}
                   className="block py-2 px-4 text-sm uppercase text-red hover:text-white hover:bg-blue"
                 >
                   settings

@@ -32,7 +32,14 @@ const Profile = () => {
   const [checks, setChecks] = useState<any>([]);
 
   //****** fetch the params from the url*/
-  const urlParams = new URLSearchParams(window.location.search);
+  let urlParams;
+
+    if (typeof window !== 'undefined') {
+      urlParams = new URLSearchParams(window.location.search);
+    } else {
+      // Handle the server-side rendering case if needed
+      urlParams = new URLSearchParams();
+    }
   const featured = urlParams.get("featured");
   const creative = urlParams.get("creative");
 
@@ -723,6 +730,39 @@ const Profile = () => {
                     </div>
                   </div>
                   <div className="flex gap-8 py-8">
+                    {pickedPhoto.price === 0 ? (
+                      <>
+                        <div className="w-full">
+                          <a
+                            className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
+                            href={pickedPhoto.image_url}
+                            download
+                            target="_blank"
+                          >
+                            Free Download Now
+                          </a>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="w-full">
+                          <button
+                            className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
+                          >
+                            Add to cart
+                          </button>
+                        </div>
+                        <div className="w-full">
+                          <button
+                            className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
+                          >
+                            Buy now
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  {/* <div className="flex gap-8 py-8">
                     <div className="w-full">
                       <button
                         className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
@@ -737,7 +777,7 @@ const Profile = () => {
                         Buy now
                       </button>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="pt-10">

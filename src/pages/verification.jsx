@@ -3,10 +3,19 @@ import React, { useEffect } from "react";
 import { getUserData, getUserToken } from "../services/user_service";
 import Loader from "../components/loader";
 import { Toaster, toast } from "sonner";
+import { navigate } from "gatsby";
 
 function Verification() {
   //****** fetch the params from the url*/
-  const urlParams = new URLSearchParams(window.location.search);
+  let urlParams;
+
+if (typeof window !== 'undefined') {
+  urlParams = new URLSearchParams(window.location.search);
+} else {
+  // Handle the server-side rendering case if needed
+  urlParams = new URLSearchParams();
+}
+
   const userId = urlParams.get("id");
   const hash = urlParams.get("hash");
   const expires = urlParams.get("expires");
@@ -39,7 +48,7 @@ function Verification() {
           description: data.message,
         });
         setTimeout(() => {
-          window.location.href = "/settings";
+          navigate("/settings");
         }, 2000);
       } else {
         if (data.message === "Email already verified") {
@@ -52,7 +61,7 @@ function Verification() {
           });
 
           setTimeout(() => {
-            window.location.href = "/login";
+            navigate("/login");
           }, 2000);
         } else {
           toast.error("Verification Failed", {

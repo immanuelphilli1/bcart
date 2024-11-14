@@ -21,7 +21,14 @@ export default function Search() {
   const [loader, setLoader] = useState<boolean>(false);
 
   //****** fetch the params from the url*/
-  const urlParams = new URLSearchParams(window.location.search);
+  let urlParams;
+
+  if (typeof window !== 'undefined') {
+    urlParams = new URLSearchParams(window.location.search);
+  } else {
+    // Handle the server-side rendering case if needed
+    urlParams = new URLSearchParams();
+  }
   const searchKey = urlParams.get("q");
 
   function handleSearchCreatives() {
@@ -257,7 +264,7 @@ export default function Search() {
           {loader ? <div className='flex items-center justify-center pt-20'><Loader size="w-12 h-12" /></div> :
             <div>
               {!showCreativeSearch && <SearchIndex handleOneImage={handleOneImage} handleSearchCreatives={handleSearchCreatives} featuredCreatives={featuredCreatives} photos={photos} />}
-              {showCreativeSearch && <CreativeSearch featuredCreatives={featuredCreatives} handleOneImage={handleOneImage} />}
+              {showCreativeSearch && <CreativeSearch featuredCreatives={featuredCreatives} setFeaturedCreatives={setFeaturedCreatives} handleOneImage={handleOneImage} />}
               <div className='pt-20'>
                 <div className='flex flex-col gap-1 text-center text-[#737B7D] font-bold'>
                   <span>You have reached the end of the line. </span>

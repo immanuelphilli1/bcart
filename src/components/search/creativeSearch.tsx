@@ -5,13 +5,15 @@ import React, { useEffect, useState } from "react";
 interface SearchProps {
   handleOneImage: (take: any) => void;
   featuredCreatives: any;
+  setFeaturedCreatives: any;
 }
 
-const CreativeSearch: React.FC<SearchProps> = ({ featuredCreatives, handleOneImage }) => {
+const CreativeSearch: React.FC<SearchProps> = ({ featuredCreatives, setFeaturedCreatives, handleOneImage }) => {
 
   const [categories, setCategories] = useState<any>([]);
   const [checks, setChecks] = useState<any>([]);
-  const [rate, setRate] = useState<any>([]);
+  // const [rate, setRate] = useState<any>([]);\
+  const [rate, setRate] = useState<any>("");
   const [location, setLocation] = useState<any>([]);
   const [loader, setLoader] = useState(false);
   const [filter, setFilter] = useState(false);
@@ -31,11 +33,12 @@ const getAllCategories = async () => {
   setCategories(data.data);
 };
 
+
 const filterByCityCategoryMinimumRate = async () => {
   setLoader(true);
   setFilter(true);
   const response = await fetch(
-    `https://backend.bcartgh.com/api/creatives?filter[city]=Accra,Kumasi&filter[minimum_rate]=1000_to_2500&filter[creative_categories.id]=1`,
+    `https://backend.bcartgh.com/api/creatives?filter[city]=${location}&filter[minimum_rate]=${rate}&filter[creative_categories.id]=${checks}`,
     {
       method: "GET",
       headers: {
@@ -46,22 +49,26 @@ const filterByCityCategoryMinimumRate = async () => {
   const data = await response.json();
 
   console.log("filterByCityCategoryMinimumRate: ", data);
+
+  setFeaturedCreatives(data.data);
   // setChecks(data.data);s
   setLoader(false);
 };
 
 console.log("categories : ", checks);
+console.log("rates : ", rate);
+console.log("locations : ", location);
 
 useEffect(() => {
-  // setLoader(true);
   if (filter === false) {
+    filterByCityCategoryMinimumRate();
     getAllCategories();
   }
   else{
     filterByCityCategoryMinimumRate();
   }
 
-}, [checks]);
+}, [checks,rate,location]);
 
   return (
     <div className="pt-20">
@@ -204,8 +211,10 @@ useEffect(() => {
                   <input
                     id="red-checkbox"
                     type="checkbox"
+                    // checked={rate === "0_to_999" ? true : false}
                     value=""
                     className="w-4 h-4 text-[#520B1F] bg-[#520B1F] checked:bg-[#520B1F] border-gray-300 rounded focus:ring-[#520B1F] focus:ring-2"
+                    onChange={ () => setRate("0_to_999") }
                   />
                   <label
                     htmlFor="red-checkbox"
@@ -220,6 +229,7 @@ useEffect(() => {
                     type="checkbox"
                     value=""
                     className="w-4 h-4 text-[#520B1F] bg-[#520B1F] checked:bg-[#520B1F] border-gray-300 rounded focus:ring-[#520B1F] focus:ring-2"
+                    onChange={ () => setRate("1000_to_2499") }
                   />
                   <label
                     htmlFor="red-checkbox"
@@ -234,6 +244,7 @@ useEffect(() => {
                     type="checkbox"
                     value=""
                     className="w-4 h-4 text-[#520B1F] bg-[#520B1F] checked:bg-[#520B1F] border-gray-300 rounded focus:ring-[#520B1F] focus:ring-2"
+                    onChange={ () => setRate("2500_to_4999") }
                   />
                   <label
                     htmlFor="red-checkbox"
@@ -265,6 +276,14 @@ useEffect(() => {
                     type="checkbox"
                     value=""
                     className="w-4 h-4 text-[#520B1F] bg-[#520B1F] checked:bg-[#520B1F] border-gray-300 rounded focus:ring-[#520B1F] focus:ring-2"
+                    onChange={() => {
+                      if (location?.length > 0 && location.includes("Accra"))
+                        setLocation((location: any) =>
+                          location.filter((c: any) => c !== "Accra")
+                        );
+                      else
+                        setLocation((location: any) => [...location, "Accra"]);
+                    }}
                   />
                   <label
                     htmlFor="red-checkbox"
@@ -279,6 +298,14 @@ useEffect(() => {
                     type="checkbox"
                     value=""
                     className="w-4 h-4 text-[#520B1F] bg-[#520B1F] checked:bg-[#520B1F] border-gray-300 rounded focus:ring-[#520B1F] focus:ring-2"
+                    onChange={() => {
+                      if (location?.length > 0 && location.includes("Kumasi"))
+                        setLocation((location: any) =>
+                          location.filter((c: any) => c !== "Kumasi")
+                        );
+                      else
+                        setLocation((location: any) => [...location, "Kumasi"]);
+                    }}
                   />
                   <label
                     htmlFor="red-checkbox"
@@ -293,6 +320,14 @@ useEffect(() => {
                     type="checkbox"
                     value=""
                     className="w-4 h-4 text-[#520B1F] bg-[#520B1F] checked:bg-[#520B1F] border-gray-300 rounded focus:ring-[#520B1F] focus:ring-2"
+                    onChange={() => {
+                      if (location?.length > 0 && location.includes("Takoradi"))
+                        setLocation((location: any) =>
+                          location.filter((c: any) => c !== "Takoradi")
+                        );
+                      else
+                        setLocation((location: any) => [...location, "Takoradi"]);
+                    }}
                   />
                   <label
                     htmlFor="red-checkbox"
@@ -307,6 +342,14 @@ useEffect(() => {
                     type="checkbox"
                     value=""
                     className="w-4 h-4 text-[#520B1F] bg-[#520B1F] checked:bg-[#520B1F] border-gray-300 rounded focus:ring-[#520B1F] focus:ring-2"
+                    onChange={() => {
+                      if (location?.length > 0 && location.includes("Cape Coast"))
+                        setLocation((location: any) =>
+                          location.filter((c: any) => c !== "Cape Coast")
+                        );
+                      else
+                        setLocation((location: any) => [...location, "Cape Coast"]);
+                    }}
                   />
                   <label
                     htmlFor="red-checkbox"
@@ -321,6 +364,14 @@ useEffect(() => {
                     type="checkbox"
                     value=""
                     className="w-4 h-4 text-[#520B1F] bg-[#520B1F] checked:bg-[#520B1F] border-gray-300 rounded focus:ring-[#520B1F] focus:ring-2"
+                    onChange={() => {
+                      if (location?.length > 0 && location.includes("Temale"))
+                        setLocation((location: any) =>
+                          location.filter((c: any) => c !== "Temale")
+                        );
+                      else
+                        setLocation((location: any) => [...location, "Temale"]);
+                    }}
                   />
                   <label
                     htmlFor="red-checkbox"
@@ -335,6 +386,14 @@ useEffect(() => {
                     type="checkbox"
                     value=""
                     className="w-4 h-4 text-[#520B1F] bg-[#520B1F] checked:bg-[#520B1F] border-gray-300 rounded focus:ring-[#520B1F] focus:ring-2"
+                    onChange={() => {
+                      if (location?.length > 0 && location.includes("Akosombo"))
+                        setLocation((location: any) =>
+                          location.filter((c: any) => c !== "Akosombo")
+                        );
+                      else
+                        setLocation((location: any) => [...location, "Akosombo"]);
+                    }}
                   />
                   <label
                     htmlFor="red-checkbox"
@@ -349,6 +408,14 @@ useEffect(() => {
                     type="checkbox"
                     value=""
                     className="w-4 h-4 text-[#520B1F] bg-[#520B1F] checked:bg-[#520B1F] border-gray-300 rounded focus:ring-[#520B1F] focus:ring-2"
+                    onChange={() => {
+                      if (location?.length > 0 && location.includes("Ho"))
+                        setLocation((location: any) =>
+                          location.filter((c: any) => c !== "Ho")
+                        );
+                      else
+                        setLocation((location: any) => [...location, "Ho"]);
+                    }}
                   />
                   <label
                     htmlFor="red-checkbox"
