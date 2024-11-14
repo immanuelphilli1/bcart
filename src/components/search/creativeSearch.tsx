@@ -207,66 +207,75 @@ useEffect(() => {
                 <div className="text-sm font-bold pt-4 text-[#2B1139]">
                   Minimum Rate
                 </div>
+                
                 <div className="flex items-center me-4">
-                  <input
-                    id="red-checkbox"
-                    type="checkbox"
-                    // checked={rate === "0_to_999" ? true : false}
-                    value=""
-                    className="w-4 h-4 text-[#520B1F] bg-[#520B1F] checked:bg-[#520B1F] border-gray-300 rounded focus:ring-[#520B1F] focus:ring-2"
-                    onChange={ () => setRate("0_to_999") }
-                  />
-                  <label
-                    htmlFor="red-checkbox"
-                    className="ms-2 text-sm font-bold text-[#2B1139]"
-                  >
-                    Below 1000
-                  </label>
-                </div>
-                <div className="flex items-center me-4">
-                  <input
-                    id="red-checkbox"
-                    type="checkbox"
-                    value=""
-                    className="w-4 h-4 text-[#520B1F] bg-[#520B1F] checked:bg-[#520B1F] border-gray-300 rounded focus:ring-[#520B1F] focus:ring-2"
-                    onChange={ () => setRate("1000_to_2499") }
-                  />
-                  <label
-                    htmlFor="red-checkbox"
-                    className="ms-2 text-sm font-bold text-[#2B1139]"
-                  >
-                    1000 to 2500
-                  </label>
-                </div>
-                <div className="flex items-center me-4">
-                  <input
-                    id="red-checkbox"
-                    type="checkbox"
-                    value=""
-                    className="w-4 h-4 text-[#520B1F] bg-[#520B1F] checked:bg-[#520B1F] border-gray-300 rounded focus:ring-[#520B1F] focus:ring-2"
-                    onChange={ () => setRate("2500_to_4999") }
-                  />
-                  <label
-                    htmlFor="red-checkbox"
-                    className="ms-2 text-sm font-bold text-[#2B1139]"
-                  >
-                    2500 to 5000
-                  </label>
-                </div>
-                <div className="flex items-center me-4">
-                  <input
-                    id="red-checkbox"
-                    type="checkbox"
-                    value=""
-                    className="w-4 h-4 text-[#520B1F] bg-[#520B1F] checked:bg-[#520B1F] border-gray-300 rounded focus:ring-[#520B1F] focus:ring-2"
-                  />
-                  <label
-                    htmlFor="red-checkbox"
-                    className="ms-2 text-sm font-bold text-[#2B1139]"
-                  >
-                    Above 5000
-                  </label>
-                </div>
+              <div className="border-2 p-[2px] rounded-full border-gray-300 bg-white">
+                <input
+                  id="below-1000"
+                  type="radio"
+                  value=""
+                  name="minimum_rate"
+                  className="w-2 h-2 text-[#2B1139] bg-[#2B1139] cursor-pointer"
+                />
+              </div>
+              <label
+                htmlFor="below-1000"
+                className="ms-2 text-sm font-bold text-[#2B1139]"
+              >
+                Below 1000
+              </label>
+            </div>
+            <div className="flex items-center me-4">
+              <div className="border-2 p-[2px] rounded-full border-gray-300 bg-white">
+                <input
+                  id="1000-2500"
+                  type="radio"
+                  value=""
+                  name="minimum_rate"
+                  className="w-2 h-2 text-[#2B1139] bg-[#2B1139] cursor-pointer"
+                />
+              </div>
+              <label
+                htmlFor="1000-2500"
+                className="ms-2 text-sm font-bold text-[#2B1139]"
+              >
+                1000 to 2500
+              </label>
+            </div>
+            <div className="flex items-center me-4">
+              <div className="border-2 p-[2px] rounded-full border-gray-300 bg-white">
+                <input
+                  id="2500-5000"
+                  type="radio"
+                  value=""
+                  name="minimum_rate"
+                  className="w-2 h-2 text-[#2B1139] bg-[#2B1139] cursor-pointer"
+                />
+              </div>
+              <label
+                htmlFor="2500-5000"
+                className="ms-2 text-sm font-bold text-[#2B1139]"
+              >
+                2500 to 5000
+              </label>
+            </div>
+            <div className="flex items-center me-4">
+              <div className="border-2 p-[2px] rounded-full border-gray-300 bg-white">
+                <input
+                  id="above-5000"
+                  type="radio"
+                  value=""
+                  name="minimum_rate"
+                  className="w-2 h-2 text-[#2B1139] bg-[#2B1139] cursor-pointer"
+                />
+              </div>
+              <label
+                htmlFor="above-5000"
+                className="ms-2 text-sm font-bold text-[#2B1139]"
+              >
+                Above 5000
+              </label>
+            </div>
                 <div className="text-sm font-bold pt-4 text-[#2B1139]">
                   Location
                 </div>
