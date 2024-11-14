@@ -1,109 +1,111 @@
-import React,{useState} from "react";
-import { getUserData, storeUserData, storeUserToken, getUserToken } from "../../services/user_service";
-import { navigate } from "gatsby";
-import { Eye, EyeClosed } from "@phosphor-icons/react";
+import React, { useState, useCallback, useEffect } from "react";
+import { getUserData, storeUserData, getUserToken } from "../../services/user_service";
 import { Toaster, toast } from "sonner";
+import { Eye, EyeClosed } from "@phosphor-icons/react";
 
+type UserData = {
+  user: {
+    first_name: string;
+    last_name: string;
+    username: string;
+    email: string;
+  };
+};
 
+type UserToken = {
+  token: string;
+};
 export default function ProfileSettings() {
-    const userData = getUserData();
-    const token = getUserToken();
-    const [fname, setFname] = useState<string>(userData.user.first_name);
-    const [lname, setLname] = useState<string>(userData.user.last_name);
-    const [username, setUsername] = useState<string>(userData.user.username);
-    const [email, setEmail] = useState<string>(userData.user.email);
-    const [current, setCurrent] = useState<string>("");
-    const [fresh, setFresh] = useState<string>("");
-    const [confirmFresh, setConfirmFresh] = useState<string>("");
-    const [loader, setLoader] = useState<boolean>(false);
-    const [toggler, setToggler] = useState<boolean>(false);
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [token, setToken] = useState<UserToken | null>(null);
 
-    function handleToggler() {
+    useEffect(() => {
+        const fetchedUserData = getUserData();
+        const fetchedToken = getUserToken();
+        if (fetchedUserData && fetchedToken) {
+            setUserData(fetchedUserData);
+            setToken(fetchedToken);
+        }
+    }, []);
+
+    const [fname, setFname] = useState(userData?.user?.first_name || "");
+    const [lname, setLname] = useState(userData?.user?.last_name || "");
+    const [username, setUsername] = useState(userData?.user?.username || "");
+    const [email, setEmail] = useState(userData?.user?.email || "");
+    const [current, setCurrent] = useState("");
+    const [fresh, setFresh] = useState("");
+    const [confirmFresh, setConfirmFresh] = useState("");
+    const [loaderProfile, setLoaderProfile] = useState(false);
+    const [loaderPassword, setLoaderPassword] = useState(false);
+    const [toggler, setToggler] = useState(false);
+
+    const handleToggler = useCallback(() => {
       setToggler(!toggler);
-  }
+    }, [toggler]);
 
     const update = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-        setLoader(true);
-        const response = await fetch(`https://backend.bcartgh.com/api/update-profile`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token.token}`,
-            },
-            body: JSON.stringify({
-                first_name: fname,
-                last_name: lname,
-                username: username,
-                email: email,
-            }),
-        });
-        const data = await response.json();
-        
-        if (data.success === true && response.status === 200) {
-            // console.log(data);
-            setLoader(false);
-            //****Store User Data in Local Storage****//
-            storeUserData({"user":data.data});
-            toast.success('Profile Updated', {
-              position: 'top-center',
-              duration: 5000,
-              description:data.message
+        e.preventDefault();
+        if (!userData || !token) return;  // Prevent function if userData or token is missing
+
+        setLoaderProfile(true);
+        try {
+            const response = await fetch(`https://backend.bcartgh.com/api/update-profile`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token.token}`,
+                },
+                body: JSON.stringify({ first_name: fname, last_name: lname, username, email }),
             });
-            // navigate("/");
-        } else {
-            setLoader(false);
-            toast.error('Updating Profile Failed', {
-              position: 'top-center',
-              duration: 5000,
-              description:data.message
-            });
+            const data = await response.json();
+
+            if (response.ok) {
+                storeUserData({ user: data.data });
+                toast.success("Profile Updated", { duration: 5000, description: data.message });
+            } else {
+                toast.error("Updating Profile Failed", { duration: 3000, description: data.message });
+            }
+        } finally {
+            setLoaderProfile(false);
         }
     };
 
     const updatePassword = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setLoader(true);
+        if (!userData || !token) return;
+
+        setLoaderPassword(true);
         if (fresh !== confirmFresh) {
-          toast.error('Password Words Do Not Match', {
-            position: 'top-center',
-            duration: 5000,
-            description: "Check your passwords and try again"
-          });
-          setLoader(false);
-          return;
+            toast.error("Password Mismatch", { duration: 3000, description: "Check your passwords and try again" });
+            setLoaderPassword(false);
+            return;
         }
 
-        const response = await fetch(`https://backend.bcartgh.com/api/update-password`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token.token}`,
-            },
-            body: JSON.stringify({
-              current_password: current,
-              new_password: fresh,
-            }),
-        });
-        const data = await response.json();
-        if (response.status === 200) {
-          toast.success('Password Updated', {
-            position: 'top-center',
-            duration: 5000,
-            description:data.message
-          });
-        } else {
-            setLoader(false);
-            toast.error('Password Update Failed', {
-              position: 'top-center',
-              duration: 5000,
-              description:data.message
+        try {
+            const response = await fetch(`https://backend.bcartgh.com/api/update-password`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token.token}`,
+                },
+                body: JSON.stringify({ current_password: current, new_password: fresh }),
             });
-        }
-      }
+            const data = await response.json();
 
-  return (
-    <div className="p-10">
+            if (response.ok) {
+                toast.success("Password Updated", { duration: 5000, description: data.message });
+            } else {
+                toast.error("Password Update Failed", { duration: 3000, description: data.message });
+            }
+        } finally {
+            setLoaderPassword(false);
+        }
+    };
+
+    if (!userData) return <div>Loading...</div>;
+
+    return (
+      <div className="p-10">
       <div className="font-bold text-[#520B1F]">Profile Settings</div>
       <div className="flex flex-col md:flex-row items-start gap-10 py-10 border-b-2 border-[#520b1f3a] ">
         <div className="">
@@ -165,7 +167,7 @@ export default function ProfileSettings() {
             </div>
             <div className="lg:col-span-2 pt-4">
               <button type="submit" className="bg-[#520B1F] text-white rounded-full px-10 md:px-14 text-sm py-2">
-              {loader === true ? "Processing ...... " : "Save"}
+              {loaderProfile === true ? "Processing ...... " : "Save"}
               </button>
             </div>
           </div>
@@ -202,12 +204,12 @@ export default function ProfileSettings() {
         </div>
         <div className="flex justify-end pt-4">
           <button type="submit" className="bg-[#520B1F] text-white rounded-full px-10 md:px-14 text-sm py-2">
-          {loader === true ? "Processing ...... " : "Save"}
+          {loaderPassword === true ? "Processing ...... " : "Save"}
           </button>
         </div>
         </form>
       </div>
       <Toaster richColors />
     </div>
-  );
+    );
 }
