@@ -241,6 +241,46 @@ const Profile = () => {
     } catch (error) {}
   }
 
+  //******order photo now */
+  const buyNow = async (id : number) => {
+    setLoader(true);
+    // ent.preventDefault();
+    const response = await fetch(`https://backend.bcartgh.com/api/buy-photos`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token.token}`,
+        },
+        body: JSON.stringify({
+          photo_ids: [id],
+        }),
+    });
+    const data = await response.json();
+
+    console.log("data : ", data);
+    
+    if (data.success === true && response.status === 200) {
+        // console.log(data);
+        setLoader(false);
+        toast.success('Redirecting .....', {
+          position: 'top-center',
+          duration: 5000,
+          description:data.message
+        });
+        //****Store User Data in Local Storage****//
+        // storeUserData({"user":data.data});
+        // storeUserToken({"token":data.token});
+        window.location.href = `${data.data.authorization_url}`;
+    } else {
+        setLoader(false);
+        toast.error('Purchase Failed', {
+            position: 'top-center',
+            duration: 5000,
+            description:data.message
+          });
+    }
+}
+
   useEffect(() => {
     setLoader(true);
     getAllCategories();
@@ -754,9 +794,10 @@ const Profile = () => {
                         </div>
                         <div className="w-full">
                           <button
+                            onClick={() => buyNow(pickedPhoto.id)}
                             className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
                           >
-                            Buy now
+                            {loader === true ? "Processing ...... " : "Buy Now"}
                           </button>
                         </div>
                       </>

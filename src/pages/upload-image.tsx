@@ -107,9 +107,9 @@ const ImageUpload: React.FC = () => {
     setLoader(true);
     try {
       console.log("image forms : ",image);
-      const image_ = [image];
+      
         const formData = new FormData();
-        formData.append('images', image);
+        formData.append('images[]', image);
         formData.append('title', imageForms[0].title);
         formData.append('description', imageForms[0].description);
         formData.append('price', imageForms[0].price);

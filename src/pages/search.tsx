@@ -7,6 +7,8 @@ import Modal from '../components/modal'
 import { useState, useEffect } from "react";
 import { getUserData, getUserToken } from '../services/user_service'
 import Loader from '../components/loader'
+import { Toaster,toast } from 'sonner'
+import { navigate } from 'gatsby'
 
 export default function Search() {
   const userData = getUserData();
@@ -19,6 +21,7 @@ export default function Search() {
   const [pickedPhoto, setPickedPhoto] = useState<any>(null);
   const [relatedPhotos, setRelatedPhotos] = useState<any>([]);
   const [loader, setLoader] = useState<boolean>(false);
+  const [purchased, setPurchased] = useState<any>([]);
 
   //****** fetch the params from the url*/
   let urlParams;
@@ -243,6 +246,47 @@ export default function Search() {
 
   };
 
+
+  //******order photo now */
+  const buyNow = async (id : number) => {
+    setLoader(true);
+    // ent.preventDefault();
+    const response = await fetch(`https://backend.bcartgh.com/api/buy-photos`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token.token}`,
+        },
+        body: JSON.stringify({
+          photo_ids: [id],
+        }),
+    });
+    const data = await response.json();
+
+    console.log("data : ", data);
+    
+    if (data.success === true && response.status === 200) {
+        // console.log(data);
+        setLoader(false);
+        toast.success('Redirecting .....', {
+          position: 'top-center',
+          duration: 5000,
+          description:data.message
+        });
+        //****Store User Data in Local Storage****//
+        // storeUserData({"user":data.data});
+        // storeUserToken({"token":data.token});
+        window.location.href = `${data.data.authorization_url}`;
+    } else {
+        setLoader(false);
+        toast.error('Purchase Failed', {
+            position: 'top-center',
+            duration: 5000,
+            description:data.message
+          });
+    }
+};
+
   useEffect(() => {
     if (searchKey !== "" && searchKey !== null) {
       searchFromUrl();
@@ -274,6 +318,7 @@ export default function Search() {
             </div>
           }
         </div>
+        <Toaster richColors/>
       </div>
       {showModal &&
         <Modal bigModal={true} handleClose={() => setShowModal(false)}
@@ -339,9 +384,11 @@ export default function Search() {
                     </div>
                     <div className='w-full'>
                       <button
+                        type='button'
+                        onClick={() => buyNow(pickedPhoto.id)}
                         className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
                       >
-                        Buy now
+                        {loader === true ? "Processing ...... " : "Buy Now"}
                       </button>
                     </div>
                     </>

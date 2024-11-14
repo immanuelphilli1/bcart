@@ -154,7 +154,7 @@ const IndexPage: React.FC<PageProps> = () => {
             <div className="border rounded-2xl overflow-hidden">
               <img
                 src={
-                  featuredCreative.profile_picture
+                  featuredCreative?.profile_picture
                     ? featuredCreative.profile_picture
                     : "/img/f-3.webp"
                 }
@@ -168,7 +168,7 @@ const IndexPage: React.FC<PageProps> = () => {
                   Featured creative <br /> of the week.
                 </h1>
               </div>
-              <div className="text-sm">{featuredCreative.description} </div>
+              <div className="text-sm">{featuredCreative?.description} </div>
               <div>
                 <button
                   onClick={() => navigate("/featured-creative")}
