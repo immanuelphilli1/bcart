@@ -1,22 +1,28 @@
-import { ArrowRight, MagnifyingGlass } from '@phosphor-icons/react'
-import React from 'react'
-import Layout from '../components/layout'
-import SearchIndex from '../components/search'
-import CreativeSearch from '../components/search/creativeSearch'
-import Modal from '../components/modal'
+import { ArrowRight, MagnifyingGlass } from "@phosphor-icons/react";
+import React from "react";
+import Layout from "../components/layout";
+import SearchIndex from "../components/search";
+import CreativeSearch from "../components/search/creativeSearch";
+import Modal from "../components/modal";
 import { useState, useEffect } from "react";
-import { getUserData, getUserToken } from '../services/user_service'
-import Loader from '../components/loader'
-import { Toaster,toast } from 'sonner'
-import { navigate } from 'gatsby'
+import { getUserData, getUserToken } from "../services/user_service";
+import Loader from "../components/loader";
+import { Toaster, toast } from "sonner";
+import { navigate } from "gatsby";
+import {
+  addToCart,
+  getPurchasingProducts,
+  removeFromCart,
+} from "../services/add_to_cart";
+import { get } from "http";
 
 export default function Search() {
   const userData = getUserData();
   const token = getUserToken();
   const [featuredCreatives, setFeaturedCreatives] = useState<any>([]);
-  const [showCreativeSearch, setShowCreativeSearch] = React.useState(false)
-  const [showModal, setShowModal] = React.useState(false)
-  const [query, setQuery] = useState<string>('')
+  const [showCreativeSearch, setShowCreativeSearch] = React.useState(false);
+  const [showModal, setShowModal] = React.useState(false);
+  const [query, setQuery] = useState<string>("");
   const [photos, setPhotos] = useState<any>([]);
   const [pickedPhoto, setPickedPhoto] = useState<any>(null);
   const [relatedPhotos, setRelatedPhotos] = useState<any>([]);
@@ -26,7 +32,7 @@ export default function Search() {
   //****** fetch the params from the url*/
   let urlParams;
 
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     urlParams = new URLSearchParams(window.location.search);
   } else {
     // Handle the server-side rendering case if needed
@@ -35,21 +41,23 @@ export default function Search() {
   const searchKey = urlParams.get("q");
 
   function handleSearchCreatives() {
-    setShowCreativeSearch(true)
+    setShowCreativeSearch(true);
   }
 
   useEffect(() => {
-    setLoader(true)
+    setLoader(true);
     setTimeout(() => {
-      setLoader(false)
-    }, 5000)
+      setLoader(false);
+    }, 5000);
   }, []);
 
+  //******fetch single photo */
   async function handleOneImage(take: any) {
-    console.log(take)
+    console.log(take);
     try {
       //*****fetching single photo */
-      const response = await fetch(`https://backend.bcartgh.com/api/photos/${take}`,
+      const response = await fetch(
+        `https://backend.bcartgh.com/api/photos/${take}`,
         {
           method: "GET",
           headers: {
@@ -59,7 +67,8 @@ export default function Search() {
       );
 
       //*****fetching single photo related */
-      const response_another = await fetch(`https://backend.bcartgh.com/api/related-images/${take}`,
+      const response_another = await fetch(
+        `https://backend.bcartgh.com/api/related-images/${take}`,
         {
           method: "GET",
           headers: {
@@ -68,23 +77,19 @@ export default function Search() {
         }
       );
 
-
       const data = await response.json();
       const data_another = await response_another.json();
       if (Object.keys(data.data).length > 0) {
         //TODO:Place a toaster here
-        setShowModal(true)
+        setShowModal(true);
         setPickedPhoto(data.data);
-        console.log(data_another.data);
+        // console.log(data_another.data);
         setRelatedPhotos(data_another.data);
-      }
-      else {
+      } else {
         //TODO:Place a toaster here
         console.log("something");
       }
-
-    } catch (error) { }
-
+    } catch (error) {}
   }
 
   //*******fetch all featured creatives */
@@ -103,33 +108,30 @@ export default function Search() {
       const data = await response.json();
 
       setFeaturedCreatives(data.data);
-    } catch (error) { }
+    } catch (error) {}
   };
 
+  //******fetch photos */
   const getPhotos = async () => {
     try {
-      const response = await fetch(
-        `https://backend.bcartgh.com/api/photos`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`https://backend.bcartgh.com/api/photos`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       const data = await response.json();
       if (data.data.length === 0) {
         setPhotos(data.data);
-      }
-      else {
+      } else {
         setPhotos([]);
       }
-
     } catch (error) {
       console.log(error);
     }
   };
 
+  //******search for creatives using params */
   async function searchFromUrl() {
     try {
       const response = await fetch(
@@ -160,9 +162,8 @@ export default function Search() {
       if (Object.keys(data_.data).length > 0) {
         //TODO:Place a toaster here
         setPhotos(data_.data);
-        console.log("data photo: ", data_);
-      }
-      else {
+        // console.log("data photo: ", data_);
+      } else {
         //TODO:Place a toaster here
         setPhotos([]);
       }
@@ -170,11 +171,10 @@ export default function Search() {
       if (data.data.length > 0) {
         //TODO:Place a toaster here
         setFeaturedCreatives(data.data);
-        console.log("data : ", data);
-      }
-      else {
+        // console.log("data : ", data);
+      } else {
         //TODO:Place a toaster here
-        console.log("something");
+        // console.log("something");
         setFeaturedCreatives([]);
       }
     } catch (error) {
@@ -183,12 +183,15 @@ export default function Search() {
     }
   }
 
-  const searchedCreatives = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //******search for creatives */
+  const searchedCreatives = async (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     if (e.key === "Enter") {
       e.preventDefault();
       setLoader(true);
-      setShowCreativeSearch(false)
-      console.log("query : ", query);
+      setShowCreativeSearch(false);
+      // console.log("query : ", query);
       try {
         const response = await fetch(
           `https://backend.bcartgh.com/api/search-creative?filter[keyword]=${query}`,
@@ -218,10 +221,9 @@ export default function Search() {
         if (Object.keys(data_.data).length > 0) {
           //TODO:Place a toaster here
           setPhotos(data_.data);
-          console.log("data photo: ", data_);
+          // console.log("data photo: ", data_);
           setLoader(false);
-        }
-        else {
+        } else {
           //TODO:Place a toaster here
           setPhotos([]);
           setLoader(false);
@@ -230,10 +232,9 @@ export default function Search() {
         if (data.data.length > 0) {
           //TODO:Place a toaster here
           setFeaturedCreatives(data.data);
-          console.log("data : ", data);
+          // console.log("data : ", data);
           setLoader(false);
-        }
-        else {
+        } else {
           //TODO:Place a toaster here
           setFeaturedCreatives([]);
           setLoader(false);
@@ -243,49 +244,76 @@ export default function Search() {
         console.log(error);
       }
     }
-
   };
 
-
   //******order photo now */
-  const buyNow = async (id : number) => {
+  const buyNow = async (id: number) => {
     setLoader(true);
     // ent.preventDefault();
     const response = await fetch(`https://backend.bcartgh.com/api/buy-photos`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token.token}`,
-        },
-        body: JSON.stringify({
-          photo_ids: [id],
-        }),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token.token}`,
+      },
+      body: JSON.stringify({
+        photo_ids: getPurchasingProducts(),
+      }),
     });
     const data = await response.json();
 
     console.log("data : ", data);
-    
+
     if (data.success === true && response.status === 200) {
-        // console.log(data);
-        setLoader(false);
-        toast.success('Redirecting .....', {
-          position: 'top-center',
-          duration: 5000,
-          description:data.message
-        });
-        //****Store User Data in Local Storage****//
-        // storeUserData({"user":data.data});
-        // storeUserToken({"token":data.token});
-        window.location.href = `${data.data.authorization_url}`;
+      // console.log(data);
+      setLoader(false);
+      toast.success("Redirecting .....", {
+        position: "top-center",
+        duration: 5000,
+        description: data.message,
+      });
+      //****Store User Data in Local Storage****//
+      // storeUserData({"user":data.data});
+      // storeUserToken({"token":data.token});
+      window.location.href = `${data.data.authorization_url}`;
     } else {
-        setLoader(false);
-        toast.error('Purchase Failed', {
-            position: 'top-center',
-            duration: 5000,
-            description:data.message
-          });
+      setLoader(false);
+      toast.error("Purchase Failed", {
+        position: "top-center",
+        duration: 5000,
+        description: data.message,
+      });
     }
-};
+  };
+
+  //******add product to cart */
+  const handleCartAndRefresh = () => {
+    if (addToCart(pickedPhoto)) {
+      // console.log("add");
+      setShowModal(false);
+      toast.success("Product Added Successfully", {
+        position: "top-center",
+        duration: 5000,
+        description: pickedPhoto.description,
+      });
+    }
+
+    console.log(addToCart(pickedPhoto));
+  };
+
+  //******remove product from cart */
+  const handleRemove = () => {
+    // console.log("remove");
+    if (removeFromCart(pickedPhoto.id)) {
+      setShowModal(false);
+      toast.success("Product Removed Successfully", {
+        position: "top-center",
+        duration: 5000,
+        description: pickedPhoto.description,
+      });
+    }
+    console.log(removeFromCart(pickedPhoto.id));
+  };
 
   useEffect(() => {
     if (searchKey !== "" && searchKey !== null) {
@@ -295,116 +323,185 @@ export default function Search() {
     getFeaturedCreatives();
     getPhotos();
   }, []);
+
   return (
     <Layout active="partner">
       <div className="container relative">
-        <div className='pt-5 md:pt-14 pb-40 px-4'>
-          <div className='w-full flex items-center justify-center'>
+        <div className="pt-5 md:pt-14 pb-40 px-4">
+          <div className="w-full flex items-center justify-center">
             <div className="flex w-full md:w-1/2 rounded-full pl-4 border border-[#520B1F] items-center overflow-hidden bg-white gap-3 fill-[#520B1F]">
-              <div ><MagnifyingGlass color="" /></div>
-              <input type="text" className="w-full rounded-lg px-4 py-3 outline-none text-black" value={query} placeholder='Query item' onKeyDown={searchedCreatives} onChange={(e) => setQuery(e.target.value)} />
+              <div>
+                <MagnifyingGlass color="" />
+              </div>
+              <input
+                type="text"
+                className="w-full rounded-lg px-4 py-3 outline-none text-black"
+                value={query}
+                placeholder="Query item"
+                onKeyDown={searchedCreatives}
+                onChange={(e) => setQuery(e.target.value)}
+              />
             </div>
           </div>
-          {loader ? <div className='flex items-center justify-center pt-20'><Loader size="w-12 h-12" /></div> :
+          {loader ? (
+            <div className="flex items-center justify-center pt-20">
+              <Loader size="w-12 h-12" />
+            </div>
+          ) : (
             <div>
-              {!showCreativeSearch && <SearchIndex handleOneImage={handleOneImage} handleSearchCreatives={handleSearchCreatives} featuredCreatives={featuredCreatives} photos={photos} />}
-              {showCreativeSearch && <CreativeSearch featuredCreatives={featuredCreatives} setFeaturedCreatives={setFeaturedCreatives} handleOneImage={handleOneImage} />}
-              <div className='pt-20'>
-                <div className='flex flex-col gap-1 text-center text-[#737B7D] font-bold'>
+              {!showCreativeSearch && (
+                <SearchIndex
+                  handleOneImage={handleOneImage}
+                  handleSearchCreatives={handleSearchCreatives}
+                  featuredCreatives={featuredCreatives}
+                  photos={photos}
+                />
+              )}
+              {showCreativeSearch && (
+                <CreativeSearch
+                  featuredCreatives={featuredCreatives}
+                  setFeaturedCreatives={setFeaturedCreatives}
+                  handleOneImage={handleOneImage}
+                />
+              )}
+              <div className="pt-20">
+                <div className="flex flex-col gap-1 text-center text-[#737B7D] font-bold">
                   <span>You have reached the end of the line. </span>
                   {/* <span>Didn’t see what you were looking for? Suggest an edit</span> */}
                 </div>
               </div>
             </div>
-          }
+          )}
         </div>
-        <Toaster richColors/>
+        <Toaster richColors />
       </div>
-      {showModal &&
-        <Modal bigModal={true} handleClose={() => setShowModal(false)}
+      {showModal && (
+        <Modal
+          bigModal={true}
+          handleClose={() => setShowModal(false)}
           Content={
             <div>
-              <div className='w-full pb-10 border-b-2 border-[#a3a2a249] flex gap-10'>
-                <div className='w-1/2 hidden lg:block'>
-                  <img src={pickedPhoto.image_url} alt="logo" className="w-full rounded-2xl h-full" />
+              <div className="w-full pb-10 border-b-2 border-[#a3a2a249] flex gap-10">
+                <div className="w-1/2 hidden lg:block">
+                  <img
+                    src={pickedPhoto.image_url}
+                    alt="logo"
+                    className="w-full rounded-2xl h-full"
+                  />
                 </div>
-                <div className='w-full lg:w-1/2'>
-                  <div className='flex flex-col gap-4'>
-                    <div className='flex gap-4'>
+                <div className="w-full lg:w-1/2">
+                  <div className="flex flex-col gap-4">
+                    <div className="flex gap-4">
                       <div>
-                        <div className='rounded-full bg-gray-100 overflow-hidden w-28 h-28'>
+                        <div className="rounded-full bg-gray-100 overflow-hidden w-28 h-28">
                           {pickedPhoto?.creative?.profile_picture ? (
-                            <img src={pickedPhoto?.creative?.profile_picture} alt="logo" className="w-full h-full" />
+                            <img
+                              src={pickedPhoto?.creative?.profile_picture}
+                              alt="logo"
+                              className="w-full h-full"
+                            />
                           ) : (
-                            <img src="/img/user-avatar.svg" alt="logo" className="w-full h-full p-4" />
-
+                            <img
+                              src="/img/user-avatar.svg"
+                              alt="logo"
+                              className="w-full h-full p-4"
+                            />
                           )}
                         </div>
                       </div>
-                      <div className='flex flex-col justify-center gap-1 w-80'>
-                        <div className='text-lg font-bold'>{pickedPhoto.creative?.username ? pickedPhoto.creative?.username : "B Cart"}</div>
-                        <div className='text-sm text-[#737B7D]'>{pickedPhoto?.creative?.physical_address ? pickedPhoto?.creative?.physical_address : "American House, 5th Floor, East Legon"}</div>
+                      <div className="flex flex-col justify-center gap-1 w-80">
+                        <div className="text-lg font-bold">
+                          {pickedPhoto.creative?.username
+                            ? pickedPhoto.creative?.username
+                            : "B Cart"}
+                        </div>
+                        <div className="text-sm text-[#737B7D]">
+                          {pickedPhoto?.creative?.physical_address
+                            ? pickedPhoto?.creative?.physical_address
+                            : "American House, 5th Floor, East Legon"}
+                        </div>
                       </div>
                     </div>
                   </div>
-                  <div className='flex gap-4 flex-col pt-10'>
-                    <div className='text-lg font-bold'>{pickedPhoto.description}</div>
-                    <div className=' lg:hidden '>
-                      <img src={pickedPhoto.image_url} alt="logo" className="w-full rounded-2xl h-full" />
+                  <div className="flex gap-4 flex-col pt-10">
+                    <div className="text-lg font-bold">
+                      {pickedPhoto.description}
+                    </div>
+                    <div className=" lg:hidden ">
+                      <img
+                        src={pickedPhoto.image_url}
+                        alt="logo"
+                        className="w-full rounded-2xl h-full"
+                      />
                     </div>
                     {/* <div className='text-sm text-[#5c5c5c] font-bold'>We’re sorry you couldn’t find what you are looking for. Feel free to tell us what you want and our creatives will make your wishes come true</div>
                                 <div className='text-xs text-[#5c5c5c]'>food, color, eggs, people, meal, treat, easter</div> */}
                   </div>
-                  <div className='flex gap-1 flex-col pt-6'>
-                    <div className='text-lg font-bold'>Price</div>
-                    <div className='text-lg text-[#5c5c5c] font-bold'>$ {pickedPhoto.price}</div>
+                  <div className="flex gap-1 flex-col pt-6">
+                    <div className="text-lg font-bold">Price</div>
+                    <div className="text-lg text-[#5c5c5c] font-bold">
+                      $ {pickedPhoto.price}
+                    </div>
                   </div>
-                  <div className='flex gap-8 py-8'>
-                    {pickedPhoto.price === 0 ? 
-                    <>
-                    <div className='w-full'>
-                      <a
-                        className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
-                        href={pickedPhoto.image_url}
-                        download
-                        target="_blank"
-                      >
-                        Free Download Now
-                      </a>
-                    </div>
-                    </>
-                    : 
-                    <>
-                      <div className='w-full'>
-                      <button
-                        className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
-                      >
-                        Add to cart
-                      </button>
-                    </div>
-                    <div className='w-full'>
-                      <button
-                        type='button'
-                        onClick={() => buyNow(pickedPhoto.id)}
-                        className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
-                      >
-                        {loader === true ? "Processing ...... " : "Buy Now"}
-                      </button>
-                    </div>
-                    </>
-                    }
-                    
+                  <div className="flex gap-8 py-8">
+                    {pickedPhoto.price === 0 ? (
+                      <>
+                        <div className="w-full">
+                          <a
+                            className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
+                            href={pickedPhoto.image_url}
+                            download
+                            target="_blank"
+                          >
+                            Free Download Now
+                          </a>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="w-full">
+                          <button
+                            type="button"
+                            className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
+                            onClick={
+                              getPurchasingProducts().includes(pickedPhoto.id)
+                                ? handleRemove
+                                : handleCartAndRefresh
+                            }
+                          >
+                            {getPurchasingProducts().includes(pickedPhoto.id)
+                              ? "Remove from cart"
+                              : "Add to cart"}
+                          </button>
+                        </div>
+                        <div className="w-full">
+                          <button
+                            type="button"
+                            onClick={() => buyNow(pickedPhoto.id)}
+                            className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
+                          >
+                            {loader === true ? "Processing ...... " : "Buy Now"}
+                          </button>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
-              <div className='pt-10'>
+              <div className="pt-10">
                 <div className=" pb-10">
-                  <h1 className="text-lg font-bold text-[#2B1139]">Related Images</h1>
+                  <h1 className="text-lg font-bold text-[#2B1139]">
+                    Related Images
+                  </h1>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-5 grid-rows-3 gap-4">
                   {relatedPhotos.map((photo: any, index: number) => (
                     <div key={index} className=" row-span-2">
-                      <img src={photo.image_url} alt="Image 1" className="w-full h-full rounded-lg object-cover" />
+                      <img
+                        src={photo.image_url}
+                        alt="Image 1"
+                        className="w-full h-full rounded-lg object-cover"
+                      />
                     </div>
                   ))}
                   {/* <div className=" row-span-2">
@@ -435,7 +532,8 @@ export default function Search() {
               </div>
             </div>
           }
-        />}
+        />
+      )}
     </Layout>
-  )
+  );
 }

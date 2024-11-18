@@ -1,18 +1,32 @@
-import { Bell, List, ShoppingCartSimple } from "@phosphor-icons/react";
+import { Bell, Empty, List, ShoppingCartSimple } from "@phosphor-icons/react";
 import { navigate } from "gatsby";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { getUserData, logoutUserData, storeUserData, storeUserToken } from "../../services/user_service";
+import { getUserData, getUserToken, logoutUserData, storeUserData, storeUserToken } from "../../services/user_service";
+import { getCart, removeFromCart, calculateTotal, getPurchasingProducts } from "../../services/add_to_cart";
+import { Toaster, toast } from "sonner";
 
 interface NavigationProps {
   active: string;
 }
 
 const Navigation: React.FC<NavigationProps> = ({ active }) => {
+  const token_ = getUserToken();
   const [showMobileMenu, setMobileMenu] = useState(false);
   const [check, setCheck] = useState(false);
   const [user, setUser] = useState<any | null>("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [loader, setLoader] = useState<boolean>(false);
+
+  const [cart, setCart] = useState([]);
+  const [total, setTotal] = useState(0);
+
+  const refreshCart = () => {
+    setCart(getCart());
+    setTotal(calculateTotal());
+  };
+
+
 
   //*****fetch token from the url for those who used google auth */
   let urlParams;
@@ -58,11 +72,57 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+    refreshCart();
   };
 
   const closeSidebar = () => {
     setIsSidebarOpen(false);
   };
+
+  const removeAndRefresh = (id:number) => {
+    removeFromCart(id);
+    refreshCart();
+  }
+
+  //******order photo now */
+  const buyNow = async (id : number) => {
+    setLoader(true);
+    // ent.preventDefault();
+    const response = await fetch(`https://backend.bcartgh.com/api/buy-photos`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token_.token}`,
+        },
+        body: JSON.stringify({
+          photo_ids: getPurchasingProducts(),
+        }),
+    });
+    const data = await response.json();
+
+    console.log("data : ", data);
+    
+    if (data.success === true && response.status === 200) {
+        // console.log(data);
+        setLoader(false);
+        toast.success('Redirecting .....', {
+          position: 'top-center',
+          duration: 5000,
+          description:data.message
+        });
+        //****Store User Data in Local Storage****//
+        // storeUserData({"user":data.data});
+        // storeUserToken({"token":data.token});
+        window.location.href = `${data.data.authorization_url}`;
+    } else {
+        setLoader(false);
+        toast.error('Purchase Failed', {
+            position: 'top-center',
+            duration: 5000,
+            description:data.message
+          });
+    }
+}
 
   useEffect(() => {
     const userData = getUserData();
@@ -76,7 +136,9 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
       setCheck(true);
     }
 
-    console.log("check : ", check);
+    refreshCart();
+
+    // console.log("check : ", check);
   }, []);
 
   const showMenuTray = () => {
@@ -90,7 +152,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
     navigate("/");
   };
 
-  console.log("user : ", user);
+  // console.log("user : ", user);
 
   return (
     <div>
@@ -108,7 +170,35 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
       >
         <div className="pt-24 lg:pt-36 px-4">
           <div className="px-4 font-bold pb-5 text-[#520B1F]">Your Cart</div>
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          {cart.length > 0 ? 
+          <>
+            {cart.map((item: any, index: number) => (
+              <div key={index} className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="flex justify-center rounded-2xl overflow-hidden items-center w-full">
+                <img src={item.image_url} alt="logo" className="w-80 " />
+              </div>
+              <div className="w-full">
+                <div className="text-lg font-bold pb-5">Description</div>
+                   <button
+                  type="button"
+                  onClick={() => removeAndRefresh(item.id)}
+                  className="bg-red-500 text-white rounded-lg px-4 py-2 font-bold"
+                >
+                  Remove
+                </button>
+                <div className="text-sm tracking-wider">
+                {item.description}
+                </div>
+                <div className="pt-7 text-xl font-semibold text-[#2B1139]">
+                  $ {item.price}
+                </div>
+              </div>
+            </div>
+            ))}
+          </> 
+          
+          : "Cart is empty"}
+          {/* <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex justify-center rounded-2xl overflow-hidden items-center w-full">
               <img src="/img/f-1.webp" alt="logo" className="w-80 " />
             </div>
@@ -122,16 +212,17 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
                 $ 20.00
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="border-t-2 border-gray-300 mt-10">
             <div className="flex items-start gap-4 justify-between w-full text-[#520B1F] px-4 pt-10">
               <div className="font-bold text-3xl">Total</div>
               <div className="flex flex-col gap-4">
-                <div className="font-bold text-3xl text-right">$ 20.00</div>
+                <div className="font-bold text-3xl text-right">$ {total}</div>
                 <div className="pt-4">
                   <button
                     className="bg-[#520B1F] text-white px-10 py-3 text-sm font-bold rounded-full"
                     onClick={toggleSidebar}
+                    type="button"
                   >
                     Buy now
                   </button>
@@ -198,9 +289,11 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
                   type="button"
                   title="Open menu"
                   onClick={toggleSidebar}
-                  className="fill-[#ccc] stroke-black hover:fill-gray-600"
+                  className="fill-[#ccc] stroke-black hover:fill-gray-600 relative"
                 >
-                  <ShoppingCartSimple size={24} color="" weight="fill" />
+                  <div className="absolute w-full top-1 right-3">
+                  <div className="bg-[#520B1F] text-white p-[2px] text-xs w-full rounded-full">{getCart().length}</div>
+                    </div><ShoppingCartSimple size={24} color="" weight="fill" />
                 </button>
                 <button
                   type="button"
@@ -345,6 +438,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
           </div>
         </nav>
       </div>
+      <Toaster richColors />
     </div>
   );
 };

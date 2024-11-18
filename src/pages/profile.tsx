@@ -7,6 +7,7 @@ import { getUserData, getUserToken } from "../services/user_service";
 import Loader from "../components/loader";
 import { navigate } from "gatsby";
 import { Toaster, toast } from "sonner";
+import { addToCart, calculateTotal, getCart, getPurchasingProducts, removeFromCart, } from "../services/add_to_cart";
 
 const Profile = () => {
   const token = getUserToken();
@@ -30,6 +31,7 @@ const Profile = () => {
   const [toDo, setToDo] = useState<any>(null);
   const [description, setDescription] = useState<any>(null);
   const [checks, setChecks] = useState<any>([]);
+  const cart = false;
 
   //****** fetch the params from the url*/
   let urlParams;
@@ -252,7 +254,7 @@ const Profile = () => {
             "Authorization": `Bearer ${token.token}`,
         },
         body: JSON.stringify({
-          photo_ids: [id],
+          photo_ids: getPurchasingProducts(),
         }),
     });
     const data = await response.json();
@@ -281,6 +283,42 @@ const Profile = () => {
     }
 }
 
+const refreshCart = () => {
+  getCart()
+  calculateTotal()
+};
+
+ //******add product to cart */
+ const handleCartAndRefresh = () => {
+  if (addToCart(pickedPhoto)) {
+    // console.log("add");
+    setShowRelatedModal(false);
+    toast.success("Product Added Successfully", {
+      position: "top-center",
+      duration: 5000,
+      description: pickedPhoto.description,
+    });
+    refreshCart();
+  }
+
+  console.log(addToCart(pickedPhoto));
+};
+
+//******remove product from cart */
+const handleRemove = () => {
+  // console.log("remove");
+  if (removeFromCart(pickedPhoto.id)) {
+    setShowModal(false);
+    toast.success("Product Removed Successfully", {
+      position: "top-center",
+      duration: 5000,
+      description: pickedPhoto.description,
+    });
+    refreshCart();
+  }
+  console.log(removeFromCart(pickedPhoto.id));
+};
+
   useEffect(() => {
     setLoader(true);
     getAllCategories();
@@ -288,16 +326,18 @@ const Profile = () => {
       setLoader(false);
     }, 5000);
     if (featured === "true") {
-      console.log("fetching featured creative");
+      // console.log("fetching featured creative");
       getFeaturedCreative();
     } else if (creative !== "" && creative !== null) {
-      console.log("fetching creative user");
+      // console.log("fetching creative user");
       getCreativeUser();
     } else {
-      console.log("fetching user data");
+      // console.log("fetching user data");
       getUserData_();
     }
-  }, []);
+
+    refreshCart();
+  }, [cart]);
 
   return (
     <Layout active="partner">
@@ -787,13 +827,22 @@ const Profile = () => {
                       <>
                         <div className="w-full">
                           <button
+                            type="button"
                             className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
+                            onClick={
+                              getPurchasingProducts().includes(pickedPhoto.id)
+                                ? handleRemove
+                                : handleCartAndRefresh
+                            }
                           >
-                            Add to cart
+                            {getPurchasingProducts().includes(pickedPhoto.id)
+                              ? "Remove from cart"
+                              : "Add to cart"}
                           </button>
                         </div>
                         <div className="w-full">
                           <button
+                            type="button"
                             onClick={() => buyNow(pickedPhoto.id)}
                             className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
                           >
