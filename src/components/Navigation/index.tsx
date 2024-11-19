@@ -1,4 +1,4 @@
-import { Bell, Empty, List, ShoppingCartSimple } from "@phosphor-icons/react";
+import { Bell, Empty, List, ShoppingCartSimple, Trash } from "@phosphor-icons/react";
 import { navigate } from "gatsby";
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -169,68 +169,79 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
           } transition-transform duration-300 ease-in-out`}
       >
         <div className="pt-24 lg:pt-36 px-4">
-          <div className="px-4 font-bold pb-5 text-[#520B1F]">Your Cart</div>
-          {cart.length > 0 ? 
-          <>
-            {cart.map((item: any, index: number) => (
-              <div key={index} className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="flex justify-center rounded-2xl overflow-hidden items-center w-full">
-                <img src={item.image_url} alt="logo" className="w-80 " />
-              </div>
-              <div className="w-full">
-                <div className="text-lg font-bold pb-5">Description</div>
-                   <button
-                  type="button"
-                  onClick={() => removeAndRefresh(item.id)}
-                  className="bg-red-500 text-white rounded-lg px-4 py-2 font-bold"
-                >
-                  Remove
-                </button>
-                <div className="text-sm tracking-wider">
-                {item.description}
-                </div>
-                <div className="pt-7 text-xl font-semibold text-[#2B1139]">
-                  $ {item.price}
-                </div>
-              </div>
-            </div>
-            ))}
-          </> 
-          
-          : "Cart is empty"}
-          {/* <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex justify-center rounded-2xl overflow-hidden items-center w-full">
-              <img src="/img/f-1.webp" alt="logo" className="w-80 " />
-            </div>
-            <div className="w-full">
-              <div className="text-lg font-bold pb-5">Description</div>
-              <div className="text-sm tracking-wider">
-                We’re sorry you couldn’t find what you are looking for. Feel
-                free to tell us what
-              </div>
+  <div className="px-4 font-bold pb-5 text-[#520B1F]">
+    {cart.length > 0 ? "Your Cart" : ""}
+  </div>
+  
+  {cart.length > 0 ? (
+    <div className="h-[60vh] overflow-y-scroll no-scrollbar pb-4">
+      {cart.map((item: any, index: number) => (
+        <div
+          key={index}
+          className="flex flex-col md:flex-row items-center justify-between gap-4 py-6 border-b-2"
+        >
+          <div className="flex justify-center rounded-2xl overflow-hidden items-center w-full">
+            <img src={item.image_url} alt="logo" className="w-80" />
+          </div>
+          <div className="w-full">
+            <div className="text-lg font-bold pb-5">Description</div>
+            <div className="text-sm tracking-wider">{item.description}</div>
+            <div className="flex justify-between items-end">
               <div className="pt-7 text-xl font-semibold text-[#2B1139]">
-                $ 20.00
+                $ {item.price}
               </div>
-            </div>
-          </div> */}
-          <div className="border-t-2 border-gray-300 mt-10">
-            <div className="flex items-start gap-4 justify-between w-full text-[#520B1F] px-4 pt-10">
-              <div className="font-bold text-3xl">Total</div>
-              <div className="flex flex-col gap-4">
-                <div className="font-bold text-3xl text-right">$ {total}</div>
-                <div className="pt-4">
-                  <button
-                    className="bg-[#520B1F] text-white px-10 py-3 text-sm font-bold rounded-full"
-                    onClick={toggleSidebar}
-                    type="button"
-                  >
-                    Buy now
-                  </button>
-                </div>
-              </div>
+              <button
+                type="button"
+                onClick={() => removeAndRefresh(item.id)}
+                className=""
+              >
+                <Trash
+                  className="w-6 h-6 fill-red-700"
+                  color=""
+                  weight="duotone"
+                />
+              </button>
             </div>
           </div>
         </div>
+      ))}
+    </div>
+  ) : (
+    <div className="w-full">
+      <div className="flex flex-col items-center justify-between gap-4">
+        <ShoppingCartSimple
+          className="w-28 h-28 fill-red-700"
+          color=""
+          weight="duotone"
+        />
+        <div className="text-lg text-red-700 font-bold pb-5">
+          Your Cart is Empty
+        </div>
+      </div>
+    </div>
+  )}
+
+  {cart.length > 0 ? (
+    <div className="mt-4">
+      <div className="flex items-start gap-4 justify-between w-full text-[#520B1F] px-4 pb-10">
+        <div className="font-bold text-3xl">Total</div>
+        <div className="flex flex-col gap-4">
+          <div className="font-bold text-3xl text-right">$ {total.toFixed(2)}</div>
+          <div className="pt-4">
+            <button
+              className="bg-[#520B1F] text-white px-10 py-3 text-sm font-bold rounded-full"
+              onClick={toggleSidebar}
+              type="button"
+            >
+              Buy now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  ) : null}
+</div>
+
       </div>
 
       {/* Navigation */}
@@ -316,7 +327,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
                   <div className="absolute dropdown border-0 mt-4 border-aluminium top-10 right-0 w-[150px] bg-white text-black shadow-xl rounded-md overflow-hidden">
                     <ul className="py-1 w-full">
                       <li
-                        onClick={() => navigate("/profile")}
+                        onClick={() => window.location.href = "/profile"}
                         className="px-4 hover:bg-blue hover:text-white hover:bg-[#520B1F] py-3 cursor-pointer"
                       >
                         Profile

@@ -46,7 +46,7 @@ export default function About() {
             <div className='pt-24'>
                 <div>
                     <div className='text-xl md:text-3xl font-bold pb-60 text-[#520B1F]'>Meet the team</div>
-                    <div className='flex justify-between items-end gap-6'>
+                    <div className='flex flex-wrap md:flex-nowrap justify-between items-end gap-y-40 md:gap-y-6 gap-x-6'>
                         <div className='bg-[#520B1F] bg-opacity-20 rounded-3xl w-full p-6 flex flex-col items-center relative'>
                             <div className='absolute bottom-40'>
                                 <img src="/img/team-1.webp" alt="logo" className="w-full h-full" />

@@ -13,6 +13,7 @@ const IndexPage: React.FC<PageProps> = () => {
   const [featuredCreatives, setFeaturedCreatives] = useState<any>([]);
   const [searchKey, setSearchKey] = useState<string>("");
   const [loader, setLoader] = useState<boolean>(false);
+  const [placeholder, setPlaceholder] = useState<boolean>(true)
 
   const apiUrl = process.env.BASE_URL;
 
@@ -33,6 +34,7 @@ const IndexPage: React.FC<PageProps> = () => {
       const data = await response.json();
 
       setCategories(data.data);
+      setPlaceholder(false)
     } catch (error) {}
   };
 
@@ -135,6 +137,38 @@ const IndexPage: React.FC<PageProps> = () => {
                       </div>
                     </button>
                   )
+              )}
+              {placeholder && (
+                <div className="flex gap-4 lg:gap-10 items-center overflow-scroll no-scrollbar">
+                  <div className="border w-72 h-48 rounded-lg overflow-hidden bg-gray-100">
+                  <img
+                    src="/img/f-1.webp"
+                    alt="logo"
+                    className="w-full h-full"
+                  />
+                </div>
+                <div className="border w-72 h-48 rounded-lg overflow-hidden bg-gray-100">
+                  <img
+                    src="/img/f-1.webp"
+                    alt="logo"
+                    className="w-full h-full"
+                  />
+                </div>
+                <div className="border w-72 h-48 rounded-lg overflow-hidden bg-gray-100">
+                  <img
+                    src="/img/f-1.webp"
+                    alt="logo"
+                    className="w-full h-full"
+                  />
+                </div>
+                <div className="border w-72 h-48 rounded-lg overflow-hidden bg-gray-100">
+                  <img
+                    src="/img/f-1.webp"
+                    alt="logo"
+                    className="w-full h-full"
+                  />
+                </div>
+                </div>
               )}
             </div>
             <div className="flex">
@@ -241,19 +275,20 @@ const IndexPage: React.FC<PageProps> = () => {
         </div>
       </div>
       <div id="categories" className="container">
-        <div className="py-20">
+        <div className="py-20 px-4">
           <div className=" pb-10">
             <h1 className="text-lg font-bold text-[#2B1139]">All Categories</h1>
           </div>
           <div className="grid grid-cols-2 gap-x-4 w-full lg:gap-x-10 gap-y-10 md:grid-cols-4 lg:grid-cols-5">
             {categories.map((cat: any, index: number) => (
-              <div className="flex flex-col gap-10">
+              <div key={index} className="flex flex-col gap-10">
                 <button
                   onClick={() =>
                     navigate(
                       `/search/?q=${encodeURIComponent(cat.creative_category)}`
                     )
                   }
+                  
                   className="font-semibold text-left text-gray-800 hover:text-gray-600"
                 >
                   {cat.creative_category}

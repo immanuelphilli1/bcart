@@ -1,7 +1,7 @@
 import React from "react";
 import Layout from "../components/layout";
 import Modal from "../components/modal";
-import { CloudArrowUp } from "@phosphor-icons/react";
+import { CloudArrowUp, EyeClosed } from "@phosphor-icons/react";
 import { useEffect, useState } from "react";
 import { getUserData, getUserToken } from "../services/user_service";
 import Loader from "../components/loader";
@@ -597,7 +597,7 @@ const handleRemove = () => {
                     Which of these would you want username to do for you?
                   </div>
                   {/* checkbox */}
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {categories.map((cat: any, index: number) => (
                       <div className="flex items-center me-4">
                         <input
@@ -752,7 +752,7 @@ const handleRemove = () => {
                   <img
                     src={pickedPhoto.image_url}
                     alt="logo"
-                    className="w-full rounded-2xl h-full"
+                    className="w-full rounded-2xl min-h-fit"
                   />
                 </div>
                 <div className="w-full lg:w-1/2">
@@ -813,14 +813,34 @@ const handleRemove = () => {
                     {pickedPhoto.price === 0 ? (
                       <>
                         <div className="w-full">
-                          <a
-                            className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
-                            href={pickedPhoto.image_url}
-                            download
-                            target="_blank"
+                        <button
+                            className="text-white bg-[#520B1F] border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full"
+                            onClick={async () => {
+                              try {
+                                const response = await fetch(pickedPhoto.image_url);
+                                if (!response.ok) {
+                                  throw new Error('Network response was not ok');
+                                }
+
+                                const blob = await response.blob();
+                                const url = window.URL.createObjectURL(blob);
+
+                                const link = document.createElement('a');
+                                link.href = url;
+                                link.download = 'bcart_free.png'; // Set your desired filename
+                                document.body.appendChild(link);
+                                link.click();
+                                link.remove();
+
+                                // Revoke the object URL to free up memory
+                                window.URL.revokeObjectURL(url);
+                              } catch (error) {
+                                console.error('Failed to download file:', error);
+                              }
+                            }}
                           >
                             Free Download Now
-                          </a>
+                          </button>
                         </div>
                       </>
                     ) : (
@@ -851,6 +871,16 @@ const handleRemove = () => {
                         </div>
                       </>
                     )}
+                    <div className="flex-shrink self-center hidden lg:block">
+                      <a
+                        className={`flex-shrink`}
+                        href={pickedPhoto.image_url}
+                        title="preview"
+                        target="_blank"
+                      >
+                        <EyeClosed className="w-10 h-10" weight="duotone" />
+                      </a>
+                    </div>
                   </div>
                   {/* <div className="flex gap-8 py-8">
                     <div className="w-full">
@@ -873,18 +903,18 @@ const handleRemove = () => {
               <div className="pt-10">
                 <div className=" pb-10">
                   <h1 className="text-lg font-bold text-[#2B1139]">
-                    Related Images
+                  {relatedPhotos.length <= 0 ? "No Related Images" : "Related Images"}
                   </h1>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-5 grid-rows-3 gap-4">
                   {relatedPhotos.map((photo: any, index: number) => (
-                    <div key={index} className=" row-span-2">
+                    <button onClick={(take: any) => handleOneImage(photo.id)} key={index} className=" row-span-2">
                       <img
                         src={photo.image_url}
                         alt="Image 1"
                         className="w-full h-full rounded-lg object-cover"
                       />
-                    </div>
+                    </button>
                   ))}
                 </div>
               </div>

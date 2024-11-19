@@ -1,19 +1,22 @@
 import { ArrowRight } from "@phosphor-icons/react";
 import React from "react";
 import { useState, useEffect } from "react";
+import Loader from "../loader";
 
 interface SearchProps {
   handleSearchCreatives: () => void;
   handleOneImage: (take: any) => void;
   featuredCreatives: any;
   photos: any;
+  loading: boolean;
 }
 
 const SearchIndex: React.FC<SearchProps> = ({
   handleSearchCreatives,
   handleOneImage,
   featuredCreatives,
-  photos
+  photos,
+  loading
 }) => {
 
   return (
@@ -63,9 +66,9 @@ const SearchIndex: React.FC<SearchProps> = ({
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 grid-rows-3 gap-4">
           {photos.length > 0 ? photos.map((photo: any, index: number) => (
-            <>
+            <div key={index} className="h-full relative">
               {photo.image_url &&
-                <button onClick={(take: any) => handleOneImage(photo.id)} className=" row-span-2">
+                <button onClick={(take: any) => handleOneImage(photo.id)} className=" row-span-2 h-full">
 
                   <img
                     src={photo.image_url}
@@ -75,7 +78,16 @@ const SearchIndex: React.FC<SearchProps> = ({
 
                 </button>
               }
-            </>
+              {loading &&
+              <div className="">
+              <div className="absolute bottom-0 left-0 text-white font-bold bg-black bg-opacity-50 rounded-lg w-full h-full">
+                <div className="flex items-center justify-center h-full">
+                  <Loader size="w-8 h-8" />
+                </div>
+              </div>
+            </div>
+              }
+            </div>
           )) : "No Photos Found"}
         </div>
       </div>

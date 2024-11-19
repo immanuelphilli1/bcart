@@ -1,4 +1,4 @@
-import { ArrowRight, MagnifyingGlass } from "@phosphor-icons/react";
+import { ArrowRight, Eye, EyeClosed, MagnifyingGlass } from "@phosphor-icons/react";
 import React from "react";
 import Layout from "../components/layout";
 import SearchIndex from "../components/search";
@@ -28,6 +28,7 @@ export default function Search() {
   const [relatedPhotos, setRelatedPhotos] = useState<any>([]);
   const [loader, setLoader] = useState<boolean>(false);
   const [purchased, setPurchased] = useState<any>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   //****** fetch the params from the url*/
   let urlParams;
@@ -54,6 +55,7 @@ export default function Search() {
   //******fetch single photo */
   async function handleOneImage(take: any) {
     console.log(take);
+    setLoading(true);
     try {
       //*****fetching single photo */
       const response = await fetch(
@@ -82,6 +84,7 @@ export default function Search() {
       if (Object.keys(data.data).length > 0) {
         //TODO:Place a toaster here
         setShowModal(true);
+        setLoading(false);
         setPickedPhoto(data.data);
         // console.log(data_another.data);
         setRelatedPhotos(data_another.data);
@@ -89,7 +92,7 @@ export default function Search() {
         //TODO:Place a toaster here
         console.log("something");
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   //*******fetch all featured creatives */
@@ -108,7 +111,7 @@ export default function Search() {
       const data = await response.json();
 
       setFeaturedCreatives(data.data);
-    } catch (error) {}
+    } catch (error) { }
   };
 
   //******fetch photos */
@@ -355,6 +358,7 @@ export default function Search() {
                   handleSearchCreatives={handleSearchCreatives}
                   featuredCreatives={featuredCreatives}
                   photos={photos}
+                  loading={loading}
                 />
               )}
               {showCreativeSearch && (
@@ -381,17 +385,17 @@ export default function Search() {
           handleClose={() => setShowModal(false)}
           Content={
             <div>
-              <div className="w-full pb-10 border-b-2 border-[#a3a2a249] flex gap-10">
+              <div className="w-full pb-2 border-b-2 border-[#a3a2a249] flex gap-10">
                 <div className="w-1/2 hidden lg:block">
                   <img
                     src={pickedPhoto.image_url}
                     alt="logo"
-                    className="w-full rounded-2xl h-full"
+                    className="w-full rounded-2xl min-h-fit "
                   />
                 </div>
                 <div className="w-full lg:w-1/2">
                   <div className="flex flex-col gap-4">
-                    <div className="flex gap-4">
+                    <a href={`/profile?creative=${pickedPhoto.creative?.username}`} className="flex gap-4">
                       <div>
                         <div className="rounded-full bg-gray-100 overflow-hidden w-28 h-28">
                           {pickedPhoto?.creative?.profile_picture ? (
@@ -421,10 +425,10 @@ export default function Search() {
                             : "American House, 5th Floor, East Legon"}
                         </div>
                       </div>
-                    </div>
+                    </a>
                   </div>
-                  <div className="flex gap-4 flex-col pt-10">
-                    <div className="text-lg font-bold">
+                  <div className="flex gap-4 flex-col pt-6">
+                    <div className="text-sm font-bold">
                       {pickedPhoto.description}
                     </div>
                     <div className=" lg:hidden ">
@@ -447,14 +451,34 @@ export default function Search() {
                     {pickedPhoto.price === 0 ? (
                       <>
                         <div className="w-full">
-                          <a
-                            className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
-                            href={pickedPhoto.image_url}
-                            download
-                            target="_blank"
+                          <button
+                            className="text-white bg-[#520B1F] border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full"
+                            onClick={async () => {
+                              try {
+                                const response = await fetch(pickedPhoto.image_url);
+                                if (!response.ok) {
+                                  throw new Error('Network response was not ok');
+                                }
+
+                                const blob = await response.blob();
+                                const url = window.URL.createObjectURL(blob);
+
+                                const link = document.createElement('a');
+                                link.href = url;
+                                link.download = 'bcart_free.png'; // Set your desired filename
+                                document.body.appendChild(link);
+                                link.click();
+                                link.remove();
+
+                                // Revoke the object URL to free up memory
+                                window.URL.revokeObjectURL(url);
+                              } catch (error) {
+                                console.error('Failed to download file:', error);
+                              }
+                            }}
                           >
                             Free Download Now
-                          </a>
+                          </button>
                         </div>
                       </>
                     ) : (
@@ -485,24 +509,34 @@ export default function Search() {
                         </div>
                       </>
                     )}
+                    <div className="flex-shrink self-center hidden lg:block">
+                      <a
+                        className={`flex-shrink`}
+                        href={pickedPhoto.image_url}
+                        title="preview"
+                        target="_blank"
+                      >
+                        <EyeClosed className="w-10 h-10" weight="duotone" />
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
               <div className="pt-10">
                 <div className=" pb-10">
                   <h1 className="text-lg font-bold text-[#2B1139]">
-                    Related Images
+                    {relatedPhotos.length <= 0 ? "No Related Images" : "Related Images"}
                   </h1>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-5 grid-rows-3 gap-4">
                   {relatedPhotos.map((photo: any, index: number) => (
-                    <div key={index} className=" row-span-2">
+                    <button onClick={(take: any) => handleOneImage(photo.id)} key={index} className=" row-span-2">
                       <img
                         src={photo.image_url}
                         alt="Image 1"
                         className="w-full h-full rounded-lg object-cover"
                       />
-                    </div>
+                    </button>
                   ))}
                   {/* <div className=" row-span-2">
                                     <img src="/img/f-1.webp" alt="Image 1" className="w-full h-full rounded-lg object-cover" />
