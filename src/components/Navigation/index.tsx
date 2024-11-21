@@ -89,6 +89,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
   const buyNow = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setButtonLoader(true);
     e.preventDefault();
+    // console.log(getPurchasingProducts());
     const response = await fetch(`https://backend.bcartgh.com/api/buy-photos`, {
         method: "POST",
         headers: {

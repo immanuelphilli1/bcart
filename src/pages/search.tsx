@@ -320,6 +320,7 @@ export default function Search() {
   };
 
   useEffect(() => {
+    console.log("user data : ",userData)
     if (searchKey !== "" && searchKey !== null) {
       searchFromUrl();
       // setQuery(searchKey)
@@ -486,6 +487,7 @@ export default function Search() {
                       <>
                         <div className="w-full">
                           <button
+                             disabled={!userData} 
                             type="button"
                             className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
                             onClick={
@@ -494,9 +496,12 @@ export default function Search() {
                                 : handleCartAndRefresh
                             }
                           >
-                            {getPurchasingProducts().includes(pickedPhoto.id)
-                              ? "Remove from cart"
-                              : "Add to cart"}
+                            {
+                              userData !== null ? getPurchasingProducts().includes(pickedPhoto.id)
+                                ? "Remove from cart"
+                                : "Add to cart" : "please login to add to cart"
+                            }
+                            
                           </button>
                         </div>
                         <div className="w-full">
