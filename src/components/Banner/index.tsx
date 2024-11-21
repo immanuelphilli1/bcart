@@ -12,7 +12,7 @@ const Banner: React.FC<SearchProps> =({search, searchKey, setSearchKey}) => {
   return (
     <div className="relative px-4">
       <div className="rounded-2xl overflow-hidden border w-full md:mt-8">
-        <img src="/img/bcart-banner.webp" alt="logo" className="w-full min-h-60 md:min-h-40" />
+        <img src="/img/bcart-banner.webp" alt="logo" className="w-full min-h-52 md:min-h-40" />
         
       </div>
       <div className="w-full h-full text-white">

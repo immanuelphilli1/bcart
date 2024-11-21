@@ -147,21 +147,21 @@ const IndexPage: React.FC<PageProps> = () => {
                     className="w-full h-full"
                   />
                 </div>
-                <div className="border w-72 h-48 rounded-lg overflow-hidden bg-gray-100">
+                <div className="border w-72 h-48 rounded-lg hidden lg:block overflow-hidden bg-gray-100">
                   <img
                     src="/img/f-1.webp"
                     alt="logo"
                     className="w-full h-full"
                   />
                 </div>
-                <div className="border w-72 h-48 rounded-lg overflow-hidden bg-gray-100">
+                <div className="border w-72 h-48 rounded-lg hidden lg:block overflow-hidden bg-gray-100">
                   <img
                     src="/img/f-1.webp"
                     alt="logo"
                     className="w-full h-full"
                   />
                 </div>
-                <div className="border w-72 h-48 rounded-lg overflow-hidden bg-gray-100">
+                <div className="border w-72 h-48 rounded-lg hidden lg:block overflow-hidden bg-gray-100">
                   <img
                     src="/img/f-1.webp"
                     alt="logo"
