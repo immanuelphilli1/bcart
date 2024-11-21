@@ -18,7 +18,7 @@ import { get } from "http";
 
 export default function Search() {
   const userData = getUserData();
-  const token = getUserToken();
+  const token = getUserToken() === null ? {token:""} : getUserToken();
   const [featuredCreatives, setFeaturedCreatives] = useState<any>([]);
   const [showCreativeSearch, setShowCreativeSearch] = React.useState(false);
   const [showModal, setShowModal] = React.useState(false);
@@ -29,6 +29,7 @@ export default function Search() {
   const [loader, setLoader] = useState<boolean>(false);
   const [purchased, setPurchased] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [buttonLoader, setButtonLoader] = useState<boolean>(false);
 
   //****** fetch the params from the url*/
   let urlParams;
@@ -250,9 +251,9 @@ export default function Search() {
   };
 
   //******order photo now */
-  const buyNow = async (id: number) => {
-    setLoader(true);
-    // ent.preventDefault();
+  const buyNow = async (id: number, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    setButtonLoader(true);
+     e.preventDefault();
     const response = await fetch(`https://backend.bcartgh.com/api/buy-photos`, {
       method: "POST",
       headers: {
@@ -260,16 +261,16 @@ export default function Search() {
         Authorization: `Bearer ${token.token}`,
       },
       body: JSON.stringify({
-        photo_ids: getPurchasingProducts(),
+        photo_ids: [id],
       }),
     });
     const data = await response.json();
 
-    console.log("data : ", data);
+    // console.log("data : ", data);
 
     if (data.success === true && response.status === 200) {
       // console.log(data);
-      setLoader(false);
+      setButtonLoader(false);
       toast.success("Redirecting .....", {
         position: "top-center",
         duration: 5000,
@@ -280,7 +281,7 @@ export default function Search() {
       // storeUserToken({"token":data.token});
       window.location.href = `${data.data.authorization_url}`;
     } else {
-      setLoader(false);
+      setButtonLoader(false);
       toast.error("Purchase Failed", {
         position: "top-center",
         duration: 5000,
@@ -501,10 +502,10 @@ export default function Search() {
                         <div className="w-full">
                           <button
                             type="button"
-                            onClick={() => buyNow(pickedPhoto.id)}
+                            onClick={(e) => buyNow(pickedPhoto.id, e)}
                             className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
                           >
-                            {loader === true ? "Processing ...... " : "Buy Now"}
+                            {buttonLoader === true ? "Processing ...... " : "Buy Now"}
                           </button>
                         </div>
                       </>

@@ -21,7 +21,7 @@ const Modal: React.FC<ModalProps> = ({
         </div>
       </div>
       <div>
-        <button type="button" className="fill-white hover:fill-red-600" onClick={handleClose}>
+        <button title="close" type="button" className="fill-white hover:fill-red-600" onClick={handleClose}>
           <XCircle size={40} color="" />
         </button>
       </div>

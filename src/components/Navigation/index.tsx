@@ -17,6 +17,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
   const [user, setUser] = useState<any | null>("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [loader, setLoader] = useState<boolean>(false);
+  const [buttonLoader, setButtonLoader] = useState<boolean>(false);
 
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState(0);
@@ -85,9 +86,9 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
   }
 
   //******order photo now */
-  const buyNow = async (id : number) => {
-    setLoader(true);
-    // ent.preventDefault();
+  const buyNow = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    setButtonLoader(true);
+    e.preventDefault();
     const response = await fetch(`https://backend.bcartgh.com/api/buy-photos`, {
         method: "POST",
         headers: {
@@ -104,7 +105,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
     
     if (data.success === true && response.status === 200) {
         // console.log(data);
-        setLoader(false);
+        setButtonLoader(false);
         toast.success('Redirecting .....', {
           position: 'top-center',
           duration: 5000,
@@ -115,7 +116,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
         // storeUserToken({"token":data.token});
         window.location.href = `${data.data.authorization_url}`;
     } else {
-        setLoader(false);
+      setButtonLoader(false);
         toast.error('Purchase Failed', {
             position: 'top-center',
             duration: 5000,
@@ -191,6 +192,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
                 $ {item.price}
               </div>
               <button
+                title="Remove from cart"
                 type="button"
                 onClick={() => removeAndRefresh(item.id)}
                 className=""
@@ -230,10 +232,10 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
           <div className="pt-4">
             <button
               className="bg-[#520B1F] text-white px-10 py-3 text-sm font-bold rounded-full"
-              onClick={toggleSidebar}
+              onClick={(e) => buyNow(e)}
               type="button"
             >
-              Buy now
+              {buttonLoader === true ? "Processing ...... " : "Buy now"}
             </button>
           </div>
         </div>
