@@ -81,8 +81,8 @@ const CreativeSearch: React.FC<SearchProps> = ({
 
   return (
     <div className="pt-20">
-      <div className="flex gap-10">
-        <div>
+      <div className="flex justify-center gap-10">
+        <div className="hidden lg:block">
           <div className="w-fit bg-opacity-30 rounded-2xl  bg-[#520b1f34]">
             <div className="p-8">
               <div className="font-bold text-[#520B1F] pb-4">Filters</div>
@@ -226,7 +226,10 @@ const CreativeSearch: React.FC<SearchProps> = ({
         <div className="flex flex-col gap-4">
           {featuredCreatives.map((creative: any, index: number) => (
             <>
-              <div className="flex items-center border-b-2 pb-10 gap-6 w-full">
+              <div className="flex items-center border-b-2 pb-10 gap-1 md:gap-6 w-full">
+                <button onClick={() =>
+                    navigate(`/profile?creative=${creative.username}`)
+                  }>
                 <div className="rounded-full bg-gray-100 overflow-hidden w-28 h-28">
                   {creative.profile_picture ? (
                     <img
@@ -242,23 +245,24 @@ const CreativeSearch: React.FC<SearchProps> = ({
                     />
                   )}
                 </div>
-                <div className="flex flex-col justify-center gap-1 w-80">
+                </button>
+                <div className="flex flex-col justify-center gap-1 pl-2 min-w-40  md:min-w-[500px]">
                   <div className="text-xs font-bold text-[#520B1F]">
                     {/* {creative.username} */}
                     <a href={`/profile?creative=${creative.username}`}>
                       {creative.username}
                     </a>
                   </div>
-                  <div className="text-xs text-[#737B7D]">
+                  <div className="text-xs text-[#737B7D] text-wrap">
                     {creative.physical_address
                       ? creative.physical_address
                       : "No address added"}
                   </div>
-                  <div className="text-xs">{creative.description}</div>
+                  <div className="text-xs text-wrap">{creative.description}</div>
                 </div>
                 {creative?.photos?.length > 0 ? (
                   creative?.photos.map((photo: any, index: number) => (
-                    <div key={index}>
+                    <div key={index} className="hidden lg:block">
                       <div className="rounded-2xl overflow-hidden w-40 h-28">
                         <button
                           onClick={(take: any) => handleOneImage(photo.id)}
@@ -274,7 +278,7 @@ const CreativeSearch: React.FC<SearchProps> = ({
                     </div>
                   ))
                 ) : (
-                  <div className="rounded-2xl overflow-hidden w-40 h-28">
+                  <div className="rounded-2xl overflow-hidden hidden lg:block w-40 h-28">
                     <img
                       src="/img/f-1.webp"
                       alt="logo"
@@ -297,7 +301,7 @@ const CreativeSearch: React.FC<SearchProps> = ({
                   onClick={() =>
                     navigate(`/profile?creative=${creative.username}`)
                   }
-                  className="flex"
+                  className="md:flex hidden "
                 >
                   <div className="border rounded-full p-4 lg:p-8 text-white bg-[#520B1F]">
                     <ArrowRight size={40} />
