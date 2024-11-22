@@ -873,12 +873,12 @@ const handleRemove = () => {
                     )}
                     <div className="flex-shrink self-center hidden lg:block">
                       <a
-                        className={`flex-shrink`}
+                        className={`flex-shrink hover:fill-[#91485d]`}
                         href={pickedPhoto.image_url}
                         title="preview"
                         target="_blank"
                       >
-                        <EyeClosed className="w-10 h-10" weight="duotone" />
+                        <EyeClosed className="w-10 h-10" color="" weight="duotone" />
                       </a>
                     </div>
                   </div>

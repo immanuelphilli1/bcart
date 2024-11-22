@@ -66,9 +66,9 @@ const SearchIndex: React.FC<SearchProps> = ({
         </div>
         <div className="grid grid-cols-2 md:grid-cols-5 grid-rows-3 gap-4">
           {photos.length > 0 ? photos.map((photo: any, index: number) => (
-            <div key={index} className="h-full relative">
+            <div key={index} className={`h-full relative row-span-${photo.col_span} col-span-${photo.row_span} `}>
               {photo.image_url &&
-                <button onClick={(take: any) => handleOneImage(photo.id)} className=" row-span-2 h-full">
+                <button onClick={(take: any) => handleOneImage(photo.id)} className=" h-full">
 
                   <img
                     src={photo.image_url}

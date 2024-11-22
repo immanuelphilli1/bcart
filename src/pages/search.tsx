@@ -18,7 +18,7 @@ import { get } from "http";
 
 export default function Search() {
   const userData = getUserData();
-  const token = getUserToken() === null ? {token:""} : getUserToken();
+  const token = getUserToken() === null ? { token: "" } : getUserToken();
   const [featuredCreatives, setFeaturedCreatives] = useState<any>([]);
   const [showCreativeSearch, setShowCreativeSearch] = React.useState(false);
   const [showModal, setShowModal] = React.useState(false);
@@ -253,7 +253,7 @@ export default function Search() {
   //******order photo now */
   const buyNow = async (id: number, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setButtonLoader(true);
-     e.preventDefault();
+    e.preventDefault();
     const response = await fetch(`https://backend.bcartgh.com/api/buy-photos`, {
       method: "POST",
       headers: {
@@ -320,7 +320,7 @@ export default function Search() {
   };
 
   useEffect(() => {
-    console.log("user data : ",userData)
+    console.log("user data : ", userData)
     if (searchKey !== "" && searchKey !== null) {
       searchFromUrl();
       // setQuery(searchKey)
@@ -485,25 +485,28 @@ export default function Search() {
                       </>
                     ) : (
                       <>
-                        <div className="w-full">
-                          <button
-                             disabled={!userData} 
-                            type="button"
-                            className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
-                            onClick={
-                              getPurchasingProducts().includes(pickedPhoto.id)
-                                ? handleRemove
-                                : handleCartAndRefresh
-                            }
-                          >
-                            {
-                              userData !== null ? getPurchasingProducts().includes(pickedPhoto.id)
-                                ? "Remove from cart"
-                                : "Add to cart" : "please login to add to cart"
-                            }
-                            
-                          </button>
-                        </div>
+                        {userData && (
+                          <div className="w-full">
+                            <button
+                              disabled={!userData}
+                              type="button"
+                              className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
+                              onClick={
+                                getPurchasingProducts().includes(pickedPhoto.id)
+                                  ? handleRemove
+                                  : handleCartAndRefresh
+                              }
+                            >
+                              {
+                                userData !== null ? getPurchasingProducts().includes(pickedPhoto.id)
+                                  ? "Remove from cart"
+                                  : "Add to cart" : "please login to add to cart"
+                              }
+
+                            </button>
+                          </div>
+                        )}
+
                         <div className="w-full">
                           <button
                             type="button"
@@ -517,12 +520,12 @@ export default function Search() {
                     )}
                     <div className="flex-shrink self-center hidden lg:block">
                       <a
-                        className={`flex-shrink`}
+                        className={`flex-shrink hover:fill-[#91485d]`}
                         href={pickedPhoto.image_url}
                         title="preview"
                         target="_blank"
                       >
-                        <EyeClosed className="w-10 h-10" weight="duotone" />
+                        <EyeClosed className="w-10 h-10" color="" weight="duotone" />
                       </a>
                     </div>
                   </div>
