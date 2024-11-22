@@ -190,7 +190,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
             <div className="text-sm tracking-wider">{item.description}</div>
             <div className="flex justify-between items-end">
               <div className="pt-7 text-xl font-semibold text-[#2B1139]">
-                $ {item.price}
+              GH₵ {item.price}
               </div>
               <button
                 title="Remove from cart"
@@ -229,10 +229,10 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
       <div className="flex items-start gap-4 justify-between w-full text-[#520B1F] px-4 pb-10">
         <div className="font-bold text-3xl">Total</div>
         <div className="flex flex-col gap-4">
-          <div className="font-bold text-3xl text-right">$ {total.toFixed(2)}</div>
+          <div className="font-bold text-3xl text-right">GH₵ {total.toFixed(2)}</div>
           <div className="pt-4">
             <button
-              className="bg-[#520B1F] text-white px-10 py-3 text-sm font-bold rounded-full"
+              className="bg-[#520B1F] text-white px-8 md:px-10 py-3 text-sm font-bold rounded-full"
               onClick={(e) => buyNow(e)}
               type="button"
             >
@@ -412,13 +412,13 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
               <div>
                 <a
                   href="/login"
-                  className="block py-2 px-4 text-sm text-green hover:text-white hover:bg-blue uppercase"
+                  className="block py-2 px-4 text-sm hover:text-[#520B1F] text-[#2B1139] uppercase"
                 >
                   sign in
                 </a>
                 <a
                   href="/sign-up"
-                  className="block py-2 px-4 text-sm text-blue hover:text-white hover:bg-blue uppercase"
+                  className="block py-2 px-4 text-sm hover:text-[#520B1F] text-[#2B1139] uppercase"
                 >
                   sign up
                 </a>
@@ -427,7 +427,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
               <div>
                 <a
                   onClick={() => navigate("/profile")}
-                  className="block py-2 px-4 text-sm text-blue hover:text-white hover:bg-blue"
+                  className="block py-2 px-4 text-sm hover:text-[#520B1F] text-[#2B1139]"
                 >
                   profile
                 </a>
@@ -435,7 +435,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
                   type="button"
                   title=""
                   onClick={() => navigate("/settings")}
-                  className="block py-2 px-4 text-sm uppercase text-red hover:text-white hover:bg-blue"
+                  className="block py-2 px-4 text-sm uppercase hover:text-[#520B1F] text-[#2B1139]"
                 >
                   settings
                 </button>
@@ -443,7 +443,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
                   type="button"
                   title=""
                   onClick={handleLogout}
-                  className="block py-2 px-4 text-sm uppercase text-red hover:text-white hover:bg-blue"
+                  className="block py-2 px-4 text-sm uppercase hover:text-[#520B1F] text-red-600"
                 >
                   logout
                 </button>

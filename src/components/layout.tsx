@@ -15,7 +15,7 @@ const Layout: React.FC<LayoutProps> = ({ active, children }) => {
             <div>
             <Navigation active={active} />
             <main className="">
-                <div className="pt-24">
+                <div className="pt-16 md:pt-24">
                     {children}
                 </div>
             </main>

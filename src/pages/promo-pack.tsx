@@ -39,7 +39,7 @@ export default function PromoPack() {
                                     We’re sorry you couldn’t find what you are looking for. Feel free to tell us what you want and our creatives will make your wishes come true
                                 </div>
                                 <div className='pt-7 text-xl font-semibold text-[#2B1139]'>
-                                    $ 20.00 / month
+                                GH₵ 20.00 / month
                                 </div>
                             </div>
                         </div>
@@ -47,7 +47,7 @@ export default function PromoPack() {
                             <div className='flex items-start gap-4 justify-between w-full text-[#520B1F] px-4 pt-10'>
                                 <div className='font-bold text-3xl'>Total</div>
                                 <div className='flex flex-col gap-4'>
-                                    <div className='font-bold text-3xl text-right'>$ 20.00</div>
+                                    <div className='font-bold text-3xl text-right'>GH₵ 20.00</div>
                                     {/* checkbox */}
                                     <div className='flex justify-end items-center'>
                                         <input type="checkbox" className="w-5 h-5" />

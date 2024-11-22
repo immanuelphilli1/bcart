@@ -446,7 +446,7 @@ export default function Search() {
                   <div className="flex gap-1 flex-col pt-6">
                     <div className="text-lg font-bold">Price</div>
                     <div className="text-lg text-[#5c5c5c] font-bold">
-                      $ {pickedPhoto.price}
+                    GH₵ {pickedPhoto.price}
                     </div>
                   </div>
                   <div className="flex gap-8 py-8">

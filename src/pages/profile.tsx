@@ -349,8 +349,9 @@ const handleRemove = () => {
         ) : (
           <div className=" pb-40">
             <div className="bg-[#520b1f21] px-10 py-24">
-              <div className="container flex items-center">
-                <div className="flex items-center w-full px-4 gap-10">
+              <div className="container flex flex-col md:flex-row items-center">
+                <div className="flex flex-col md:flex-row items-center w-full px-4 gap-10">
+                  <div>
                   <div className="rounded-full overflow-hidden w-40 h-40">
                     <img
                       src={
@@ -362,7 +363,8 @@ const handleRemove = () => {
                       className="w-full h-full"
                     />
                   </div>
-                  <div className="flex flex-col justify-center gap-1 w-80">
+                  </div>
+                  <div className="flex flex-col justify-center w-full border-b border-gray-300 md:border-b-0 pb-4 md:pb-0 gap-1 max-w-80">
                     <div className="text-2xl font-bold text-[#520B1F]">
                       {userData?.user?.username || userData?.user?.last_name}
                     </div>
@@ -410,7 +412,7 @@ const handleRemove = () => {
                 </div>
                 {userData?.user?.creative_hire_status === true && isLoggedIn ? (
                   <>
-                    <div className="flex flex-col border-l border-gray-300 text-sm justify-center p-4 gap-1">
+                    <div className="flex w-full md:w-fit flex-col md:border-l mt-4 md:mt-0 border-gray-300 text-sm justify-center p-4 gap-1">
                       <div className="text-[#2B1139]">hire me for </div>
                       <div>
                         {userData?.user?.creative_categories.map(
@@ -423,7 +425,7 @@ const handleRemove = () => {
                   </>
                 ) : userData?.user?.creative_hire_status === true ? (
                   <>
-                    <div className="flex flex-col border-l border-gray-300 text-sm justify-center p-4 gap-1">
+                    <div className="flex w-full md:w-fit flex-col md:border-l mt-4 md:mt-0 border-gray-300 text-sm justify-center p-4 gap-1">
                       <div className="text-[#2B1139]">hire me for </div>
                       <div>
                         {userData?.user?.creative_categories.map(
@@ -438,7 +440,7 @@ const handleRemove = () => {
               </div>
             </div>
             <div className="container mx-auto">
-              <div className="pt-20">
+              <div className="pt-20 px-4">
                 <div className="grid grid-cols-2 md:grid-cols-5 grid-rows-3 gap-4">
                   {/* {userData?.user?.creative_hire_status === true ? */}
                   {/* <> */}
@@ -806,7 +808,7 @@ const handleRemove = () => {
                   <div className="flex gap-1 flex-col pt-6">
                     <div className="text-lg font-bold">Price</div>
                     <div className="text-lg text-[#5c5c5c] font-bold">
-                      $ {pickedPhoto.price}
+                    GH₵ {pickedPhoto.price}
                     </div>
                   </div>
                   <div className="flex gap-8 py-8">
