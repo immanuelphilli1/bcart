@@ -152,7 +152,7 @@ export default function Search() {
 
       //******search for photos */
       const response_ = await fetch(
-        `https://backend.bcartgh.com/api/search-photo?keyword=${searchKey}`,
+        `https://backend.bcartgh.com/api/search-photo?filter[keyword]=${searchKey}`,
         {
           method: "GET",
           headers: {
@@ -211,7 +211,7 @@ export default function Search() {
 
         //******search for photos */
         const response_ = await fetch(
-          `https://backend.bcartgh.com/api/search-photo?keyword=${query}`,
+          `https://backend.bcartgh.com/api/search-photo?filter[keyword]=${query}`,
           {
             method: "GET",
             headers: {
