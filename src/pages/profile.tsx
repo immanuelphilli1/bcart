@@ -10,7 +10,8 @@ import { Toaster, toast } from "sonner";
 import { addToCart, calculateTotal, getCart, getPurchasingProducts, removeFromCart, } from "../services/add_to_cart";
 
 const Profile = () => {
-  const token = getUserToken();
+  const userData_ = getUserData();
+  const token = getUserToken() === null ? { token: "" } : getUserToken();
   let [userData, setUserData] = useState<any>([]);
   const [showModal, setShowModal] = React.useState(false);
   const [showEditModal, setShowEditModal] = React.useState(false);
@@ -22,6 +23,7 @@ const Profile = () => {
   const [pickedPhoto, setPickedPhoto] = useState<any>(null);
   const [relatedPhotos, setRelatedPhotos] = useState<any>([]);
   const [categories, setCategories] = useState<any>([]);
+  const [buttonLoader, setButtonLoader] = useState<boolean>(false);
 
   //*****hire me details */
   const [date, setDate] = useState<any>(null);
@@ -245,7 +247,7 @@ const Profile = () => {
 
   //******order photo now */
   const buyNow = async (id : number) => {
-    setLoader(true);
+    setButtonLoader(true);
     // ent.preventDefault();
     const response = await fetch(`https://backend.bcartgh.com/api/buy-photos`, {
         method: "POST",
@@ -254,7 +256,7 @@ const Profile = () => {
             "Authorization": `Bearer ${token.token}`,
         },
         body: JSON.stringify({
-          photo_ids: getPurchasingProducts(),
+          photo_ids: [id],
         }),
     });
     const data = await response.json();
@@ -263,7 +265,7 @@ const Profile = () => {
     
     if (data.success === true && response.status === 200) {
         // console.log(data);
-        setLoader(false);
+        setButtonLoader(false);
         toast.success('Redirecting .....', {
           position: 'top-center',
           duration: 5000,
@@ -274,7 +276,7 @@ const Profile = () => {
         // storeUserToken({"token":data.token});
         window.location.href = `${data.data.authorization_url}`;
     } else {
-        setLoader(false);
+      setButtonLoader(false);
         toast.error('Purchase Failed', {
             position: 'top-center',
             duration: 5000,
@@ -847,8 +849,32 @@ const handleRemove = () => {
                       </>
                     ) : (
                       <>
-                        <div className="w-full">
+                      {userData_ && (
+                          <div className="w-full">
+                            <button
+                              title="Add to cart"
+                              disabled={!userData}
+                              type="button"
+                              className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
+                              onClick={
+                                getPurchasingProducts().includes(pickedPhoto.id)
+                                  ? handleRemove
+                                  : handleCartAndRefresh
+                              }
+                            >
+                              {
+                                userData !== null ? getPurchasingProducts().includes(pickedPhoto.id)
+                                  ? "Remove from cart"
+                                  : "Add to cart" : "please login to add to cart"
+                              }
+
+                            </button>
+                          </div>
+                        )}
+                        {/* <div className="w-full">
                           <button
+                          title="Add to cart"
+                          disabled={!userData_}
                             type="button"
                             className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
                             onClick={
@@ -861,14 +887,14 @@ const handleRemove = () => {
                               ? "Remove from cart"
                               : "Add to cart"}
                           </button>
-                        </div>
+                        </div> */}
                         <div className="w-full">
                           <button
                             type="button"
                             onClick={() => buyNow(pickedPhoto.id)}
                             className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
                           >
-                            {loader === true ? "Processing ...... " : "Buy Now"}
+                            {buttonLoader === true ? "Processing ...... " : "Buy Now"}
                           </button>
                         </div>
                       </>

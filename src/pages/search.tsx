@@ -488,6 +488,7 @@ export default function Search() {
                         {userData && (
                           <div className="w-full">
                             <button
+                              title="Add to cart"
                               disabled={!userData}
                               type="button"
                               className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
