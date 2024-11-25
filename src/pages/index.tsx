@@ -17,6 +17,17 @@ const IndexPage: React.FC<PageProps> = () => {
 
   const apiUrl = process.env.BASE_URL;
 
+    const handleScroll = (id: string) => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        element.classList.add('highlight');
+        setTimeout(() => {
+          element.classList.remove('highlight');
+        }, 2000); // Remove the highlight after 2 seconds
+      }
+    };
+
   //*******fetch all featured categories */
   const getCreativeCategories = async () => {
     try {
@@ -101,6 +112,8 @@ const IndexPage: React.FC<PageProps> = () => {
           search={search}
           searchKey={searchKey}
           setSearchKey={setSearchKey}
+          bannerImage={"/img/bcart-banner.webp"}
+          bannerCreative={"gg"}
         />
       </div>
       <div className="container">
@@ -110,9 +123,8 @@ const IndexPage: React.FC<PageProps> = () => {
               Featured Categories
             </h1>
           </div>
-          <div className="flex gap-4 lg:gap-10 items-center justify-between">
-            <div className="flex gap-4 lg:gap-10 items-center overflow-scroll no-scrollbar">
-              {categories.map(
+          <div className="grid grid-cols-2 gap-x-4 gap-y-12 md:hidden">
+          {categories.slice(0, 5).map(
                 (cat: any, index: number) =>
                   cat.image_url && (
                     <button
@@ -125,43 +137,90 @@ const IndexPage: React.FC<PageProps> = () => {
                       }
                       key={index}
                     >
-                      <div className="border w-72 h-48 rounded-lg overflow-hidden bg-gray-100">
+                      <div className="border w-full h-full rounded-2xl overflow-hidden bg-gray-100">
                         <img
                           src={cat.image_url}
                           alt="logo"
                           className="w-full h-full"
                         />
                       </div>
-                      <div className="pt-2 text-sm font-bold">
+                      <div className="pt-2 text-sm text-left font-bold">
                         {cat.creative_category}
                       </div>
                     </button>
                   )
               )}
               {placeholder && (
-                <div className="flex gap-4 lg:gap-10 items-center overflow-scroll no-scrollbar">
-                  <div className="border w-72 h-48 rounded-lg overflow-hidden bg-gray-100">
+                <div className="flex gap-4 lg:gap-5 items-center overflow-scroll no-scrollbar">
+                  <div className="border w-96 h-64 rounded-lg overflow-hidden bg-gray-100">
                   <img
                     src="/img/f-1.webp"
                     alt="logo"
                     className="w-full h-full"
                   />
                 </div>
-                <div className="border w-72 h-48 rounded-lg hidden lg:block overflow-hidden bg-gray-100">
+                <div className="border w-96 h-64 rounded-lg hidden lg:block overflow-hidden bg-gray-100">
                   <img
                     src="/img/f-1.webp"
                     alt="logo"
                     className="w-full h-full"
                   />
                 </div>
-                <div className="border w-72 h-48 rounded-lg hidden lg:block overflow-hidden bg-gray-100">
+                <div className="border w-96 h-64 rounded-lg hidden lg:block overflow-hidden bg-gray-100">
                   <img
                     src="/img/f-1.webp"
                     alt="logo"
                     className="w-full h-full"
                   />
                 </div>
-                <div className="border w-72 h-48 rounded-lg hidden lg:block overflow-hidden bg-gray-100">
+                </div>
+              )}
+          </div>
+          <div className="hidden md:flex gap-4 lg:gap-10 items-center justify-between">
+            <div className="flex gap-4 lg:gap-5 items-center overflow-scroll no-scrollbar">
+              {categories.slice(0, 4).map(
+                (cat: any, index: number) =>
+                  cat.image_url && (
+                    <button
+                      onClick={() =>
+                        navigate(
+                          `/search?q=${encodeURIComponent(
+                            cat.creative_category
+                          )}`
+                        )
+                      }
+                      key={index}
+                    >
+                      <div className="border w-96 h-64 rounded-2xl overflow-hidden bg-gray-100">
+                        <img
+                          src={cat.image_url}
+                          alt="logo"
+                          className="w-full h-full"
+                        />
+                      </div>
+                      <div className="pt-2 text-sm text-left font-bold">
+                        {cat.creative_category}
+                      </div>
+                    </button>
+                  )
+              )}
+              {placeholder && (
+                <div className="flex gap-4 lg:gap-5 items-center overflow-scroll no-scrollbar">
+                  <div className="border w-96 h-64 rounded-lg overflow-hidden bg-gray-100">
+                  <img
+                    src="/img/f-1.webp"
+                    alt="logo"
+                    className="w-full h-full"
+                  />
+                </div>
+                <div className="border w-96 h-64 rounded-lg hidden lg:block overflow-hidden bg-gray-100">
+                  <img
+                    src="/img/f-1.webp"
+                    alt="logo"
+                    className="w-full h-full"
+                  />
+                </div>
+                <div className="border w-96 h-64 rounded-lg hidden lg:block overflow-hidden bg-gray-100">
                   <img
                     src="/img/f-1.webp"
                     alt="logo"
@@ -171,11 +230,11 @@ const IndexPage: React.FC<PageProps> = () => {
                 </div>
               )}
             </div>
-            <div className="flex">
+            <div className="flex pb-7">
               <button
                 type="button"
                 title="button"
-                onClick={() => navigate("/search")}
+                onClick={() => handleScroll('categories')}
                 className="border rounded-full p-4 lg:p-8 text-white bg-[#520B1F] hover:bg-[#520b1fb2]"
               >
                 <ArrowRight size={40} />
@@ -184,8 +243,9 @@ const IndexPage: React.FC<PageProps> = () => {
           </div>
         </div>
         <div className="px-4 pt-10 pb-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div className="border rounded-2xl overflow-hidden">
+          <div className="flex flex-col md:flex-row gap-4 md:gap-16">
+            <div className="w-fit">
+            <div className="border rounded-2xl max-w-[500px] max-h-[500px] overflow-hidden">
               <img
                 src={
                   featuredCreative?.profile_picture
@@ -196,13 +256,17 @@ const IndexPage: React.FC<PageProps> = () => {
                 className="w-full h-full"
               />
             </div>
-            <div className="flex flex-col justify-center gap-4">
+            </div>
+            <div className="flex flex-col justify-center gap-4 w-full md:w-1/2">
               <div>
                 <h1 className="text-3xl font-bold text-[#3c3441]">
                   Featured creative <br /> of the week.
                 </h1>
               </div>
-              <div className="text-sm">{featuredCreative?.description} </div>
+              <div className="text-sm">
+                {featuredCreative?.description} 
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut viverra turpis. In in odio iaculis velit convallis commodo. Sed odio est, gravida elementum sollicitudin a, ultricies non eros. Etiam ut iaculis eros, at auctor diam. In quis tempus tortor. Nullam hendrerit metus auctor tortor condimentum, id porttitor ipsum varius. Donec quis nunc sit amet ante posuere facilisis ut eget eros. Duis venenatis lacinia cursus. Curabitur tempus nisl elit, quis scelerisque justo interdum luctus. Integer vitae ante placerat, facilisis eros vitae, tempor justo. Curabitur finibus nisl sit amet pharetra pharetra.
+                 </div>
               <div>
                 <button
                   onClick={() => navigate("/featured-creative")}
@@ -223,9 +287,8 @@ const IndexPage: React.FC<PageProps> = () => {
                 Featured Creatives
               </h1>
             </div>
-            <div className="flex gap-4 lg:gap-10 items-center justify-between">
-              <div className="flex gap-4 lg:gap-10 items-center overflow-scroll no-scrollbar">
-                {featuredCreatives.map((creative: any, index: number) => (
+            <div className="grid grid-cols-2 justify-items-center md:hidden gap-x-4 gap-y-10">
+            {featuredCreatives.slice(0, 6).map((creative: any, index: number) => (
                   <button
                     onClick={() =>
                       navigate(
@@ -236,7 +299,7 @@ const IndexPage: React.FC<PageProps> = () => {
                     }
                     key={index}
                   >
-                    <div className="border w-28 h-28 rounded-full overflow-hidden bg-white">
+                    <div className="border w-40 h-40 rounded-full overflow-hidden bg-white">
                       {creative.profile_picture ? (
                         <img
                           src={creative.profile_picture}
@@ -247,7 +310,44 @@ const IndexPage: React.FC<PageProps> = () => {
                         <img
                           src="/img/user-avatar.svg"
                           alt="logo"
-                          className="w-full h-full p-2"
+                          className="w-full h-full p-10"
+                        />
+                      )}
+                    </div>
+                    <div className="pt-2 text-sm font-bold text-center">
+                      <a href={`/profile?creative=${creative.username}`}>
+                        {creative.username}
+                      </a>
+                      {/* {creative.username} */}
+                    </div>
+                  </button>
+                ))}
+            </div>
+            <div className="hidden md:flex gap-4 lg:gap-10 items-center justify-between">
+              <div className="flex w-full gap-4 lg:gap-10 items-center justify-between overflow-scroll no-scrollbar">
+                {featuredCreatives.slice(0, 6).map((creative: any, index: number) => (
+                  <button
+                    onClick={() =>
+                      navigate(
+                        `/profile?creative=${encodeURIComponent(
+                          creative.username
+                        )}`
+                      )
+                    }
+                    key={index}
+                  >
+                    <div className="border w-40 h-40 rounded-full overflow-hidden bg-white">
+                      {creative.profile_picture ? (
+                        <img
+                          src={creative.profile_picture}
+                          alt="logo"
+                          className="w-full h-full"
+                        />
+                      ) : (
+                        <img
+                          src="/img/user-avatar.svg"
+                          alt="logo"
+                          className="w-full h-full p-10"
                         />
                       )}
                     </div>
@@ -260,7 +360,7 @@ const IndexPage: React.FC<PageProps> = () => {
                   </button>
                 ))}
               </div>
-              <div className="flex">
+              <div className="flex pb-7">
                 <button
                   type="button"
                   title="Search"

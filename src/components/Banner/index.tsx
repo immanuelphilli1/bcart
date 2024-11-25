@@ -1,4 +1,5 @@
 import { MagnifyingGlass } from '@phosphor-icons/react'
+import { navigate } from 'gatsby';
 import React from 'react'
 
 interface SearchProps {
@@ -6,13 +7,15 @@ interface SearchProps {
   // handleOneImage: (take: any) => void;
   searchKey: any;
   setSearchKey: any;
+  bannerImage: any;
+  bannerCreative: any
 }
 
-const Banner: React.FC<SearchProps> =({search, searchKey, setSearchKey}) => {
+const Banner: React.FC<SearchProps> =({search, searchKey, setSearchKey, bannerImage, bannerCreative}) => {
   return (
     <div className="relative px-4">
       <div className="rounded-2xl overflow-hidden border w-full mt-8">
-        <img src="/img/bcart-banner.webp" alt="logo" className="w-full min-h-52 md:min-h-40" />
+        <img src={bannerImage} alt="logo" className="w-full min-h-52 md:min-h-40" />
         
       </div>
       <div className="w-full h-full text-white">
@@ -25,7 +28,14 @@ const Banner: React.FC<SearchProps> =({search, searchKey, setSearchKey}) => {
       <input placeholder='Search' type="text" className="w-full rounded-lg px-4 py-3 outline-none text-black" value={searchKey} onChange={(e) => setSearchKey(e.target.value)} onKeyDown={search} />
     </div>
   </div>
-  <div className="flex items-end md:self-end text-xs">Image of the day by <span className="underline pl-1"> Brandon Nichelle</span></div>
+  <div className="flex items-end md:self-end text-xs">Image of the day by <button
+                    onClick={() =>
+                      navigate(
+                        `/profile?creative=${encodeURIComponent(
+                          bannerCreative
+                        )}`
+                      )
+                    } className="underline pl-1"> Brandon Nichelle</button></div>
 </div>
         </div>
         </div>
