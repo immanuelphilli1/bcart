@@ -107,14 +107,14 @@ export default function ProfileSettings() {
     return (
       <div className="p-10">
       <div className="font-bold text-[#520B1F]">Profile Settings</div>
-      <div className="flex flex-col md:flex-row items-start gap-10 py-10 border-b-2 border-[#520b1f3a] ">
+      <div className="flex flex-col md:flex-row items-center md:items-start gap-10 py-10 border-b-2 border-[#520b1f3a] ">
         <div className="">
           <div className="rounded-full overflow-hidden w-40 h-40">
             <img src="/img/f-1.webp" alt="logo" className="w-full h-full" />
           </div>
         </div>
         <div>
-          <div className="font-bold text-sm text-[#520B1F] pb-10">
+          <div className="font-bold text-sm text-[#520B1F] pb-6">
             Personal Information
           </div>
           <form onSubmit={update}>

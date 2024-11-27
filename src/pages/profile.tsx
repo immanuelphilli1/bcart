@@ -753,11 +753,17 @@ const handleRemove = () => {
             <div>
               <div className="w-full pb-10 border-b-2 border-[#a3a2a249] flex gap-10">
                 <div className="w-1/2 hidden lg:block">
+                <a
+                        href={pickedPhoto.image_url}
+                        title="preview"
+                        target="_blank"
+                      >
                   <img
                     src={pickedPhoto.image_url}
                     alt="logo"
                     className="w-full rounded-2xl min-h-fit"
                   />
+                  </a>
                 </div>
                 <div className="w-full lg:w-1/2">
                   <div className="flex flex-col gap-4">
@@ -794,7 +800,7 @@ const handleRemove = () => {
                     </div>
                   </div>
                   <div className="flex gap-4 flex-col pt-10">
-                    <div className="text-lg font-bold">
+                    <div className="text-sm md:text-lg font-bold">
                       {pickedPhoto.description}
                     </div>
                     <div className=" lg:hidden ">
@@ -899,7 +905,7 @@ const handleRemove = () => {
                         </div>
                       </>
                     )}
-                    <div className="flex-shrink self-center hidden lg:block">
+                    <div className="flex-shrink self-center hidden ">
                       <a
                         className={`flex-shrink hover:fill-[#91485d]`}
                         href={pickedPhoto.image_url}

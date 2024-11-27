@@ -151,7 +151,7 @@ const SignUpPage: React.FC<PageProps> = () => {
                                                     className="w-full placeholder:text-black px-4 py-3 outline-none bg-transparent text-black"
                                                 />
                                                 <button type="button" onClick={handleToggler} className="flex items-center justify-center px-2">
-                                                    {toggler ? <Eye size={32} /> : <EyeClosed size={32} />}
+                                                    {toggler ? <Eye size={18} /> : <EyeClosed size={18} />}
                                                 </button>
                                             </div>
                                         </div>

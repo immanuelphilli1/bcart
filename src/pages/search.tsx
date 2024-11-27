@@ -1,4 +1,4 @@
-import { ArrowRight, Eye, EyeClosed, MagnifyingGlass } from "@phosphor-icons/react";
+import { ArrowRight, CloudArrowUp, Eye, EyeClosed, MagnifyingGlass } from "@phosphor-icons/react";
 import React from "react";
 import Layout from "../components/layout";
 import SearchIndex from "../components/search";
@@ -26,6 +26,8 @@ export default function Search() {
   const [photos, setPhotos] = useState<any>([]);
   const [pickedPhoto, setPickedPhoto] = useState<any>(null);
   const [relatedPhotos, setRelatedPhotos] = useState<any>([]);
+  const [showEditModal, setShowEditModal] = React.useState(false);
+  const [suggestion, setSuggestion] = useState<string>("");
   const [loader, setLoader] = useState<boolean>(false);
   const [purchased, setPurchased] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -319,6 +321,33 @@ export default function Search() {
     console.log(removeFromCart(pickedPhoto.id));
   };
 
+  const submitSuggestion = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoader(true);
+    const response = await fetch(
+      `https://backend.bcartgh.com/api/suggest-upload`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // "Authorization": `Bearer ${token.token}`,
+        },
+        body: JSON.stringify({
+          suggestion: suggestion,
+        }),
+      }
+    );
+    const data = await response.json();
+    if (response.status === 200) {
+      setLoader(false);
+      // storeUserData({"user":data.data});
+      alert(data.message);
+    } else {
+      setLoader(false);
+      alert(data.message);
+    }
+  };
+
   useEffect(() => {
     console.log("user data : ", userData)
     if (searchKey !== "" && searchKey !== null) {
@@ -373,6 +402,15 @@ export default function Search() {
               <div className="pt-20">
                 <div className="flex flex-col gap-1 text-center text-[#737B7D] font-bold">
                   <span>You have reached the end of the line. </span>
+                  <span>
+                    Didn’t see what you were looking for?{" "}
+                    <button
+                      onClick={() => setShowEditModal(true)}
+                      className="hover:underline"
+                    >
+                      Suggest an edit
+                    </button>
+                  </span>
                   {/* <span>Didn’t see what you were looking for? Suggest an edit</span> */}
                 </div>
               </div>
@@ -389,11 +427,17 @@ export default function Search() {
             <div>
               <div className="w-full pb-2 border-b-2 border-[#a3a2a249] flex gap-10">
                 <div className="w-1/2 hidden lg:block">
-                  <img
-                    src={pickedPhoto.image_url}
-                    alt="logo"
-                    className="w-full rounded-2xl min-h-fit "
-                  />
+                  <a
+                    href={pickedPhoto.image_url}
+                    title="preview"
+                    target="_blank"
+                  >
+                    <img
+                      src={pickedPhoto.image_url}
+                      alt="logo"
+                      className="w-full rounded-2xl min-h-fit "
+                    />
+                  </a>
                 </div>
                 <div className="w-full lg:w-1/2">
                   <div className="flex flex-col gap-4">
@@ -446,7 +490,7 @@ export default function Search() {
                   <div className="flex gap-1 flex-col pt-6">
                     <div className="text-lg font-bold">Price</div>
                     <div className="text-lg text-[#5c5c5c] font-bold">
-                    GH₵ {pickedPhoto.price}
+                      GH₵ {pickedPhoto.price}
                     </div>
                   </div>
                   <div className="flex gap-8 py-8">
@@ -519,7 +563,7 @@ export default function Search() {
                         </div>
                       </>
                     )}
-                    <div className="flex-shrink self-center hidden lg:block">
+                    <div className="flex-shrink self-center hidden">
                       <a
                         className={`flex-shrink hover:fill-[#91485d]`}
                         href={pickedPhoto.image_url}
@@ -574,6 +618,54 @@ export default function Search() {
                                 </div> */}
                 </div>
               </div>
+            </div>
+          }
+        />
+      )}
+      {showEditModal && (
+        <Modal
+          bigModal={true}
+          back="bg-[#DCCED2]"
+          handleClose={() => setShowEditModal(false)}
+          Content={
+            <div>
+              <div className="flex items-center justify-center pb-1">
+                <div className="bg-[#FF6F51] fill-[#520B1F] rounded-full p-10">
+                  <CloudArrowUp size={80} color="" />
+                </div>
+              </div>
+              <form onSubmit={submitSuggestion}>
+                <div className="pb-8 pt-2">
+                  <div className="font-bold text-[#520B1F] text-2xl pb-4 text-center">
+                    Suggest an upload
+                  </div>
+                  <div className="grid grid-cols-1 gap-4">
+                    <div className="">
+                      <div className="text-sm font-bold text-[#5C5C5C] text-center">
+                        We’re sorry you couldn’t find what you are looking for.
+                        Feel free to tell us what you want and our creatives
+                        will make your wishes come true
+                      </div>
+                      <textarea
+                        title="suggestion"
+                        value={suggestion}
+                        onChange={(e) => setSuggestion(e.target.value)}
+                        className="w-full mt-2 rounded-3xl px-4 py-2"
+                        rows={5}
+                        cols={5}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="flex justify-center pt-4">
+                  <button
+                    type="submit"
+                    className="bg-[#520B1F] text-white rounded-full px-10 md:px-14 text-sm py-2"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </form>
             </div>
           }
         />

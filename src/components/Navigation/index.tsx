@@ -298,7 +298,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
               </div>
             </div>
             {check === true ? (
-              <div className="flex gap-4">
+              <div className="hidden lg:flex gap-4">
                 <button
                   type="button"
                   title="Open menu"
@@ -359,6 +359,25 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
               </div>
             )}
             <div className="lg:hidden flex items-center">
+            <div className="pr-2 flex items-end gap-1">
+                <button
+                  type="button"
+                  title="Open menu"
+                  onClick={toggleSidebar}
+                  className="fill-[#ccc] stroke-black hover:fill-gray-600 relative"
+                >
+                  <div className="absolute w-full top-1 right-3">
+                  <div className="bg-[#520B1F] text-white p-[2px] text-xs w-full rounded-full">{getCart().length}</div>
+                    </div><ShoppingCartSimple size={24} color="" weight="fill" />
+                </button>
+                <button
+                  type="button"
+                  title="Open menu"
+                  className="fill-[#737B7D] hover:fill-gray-900">
+                  <Bell size={24} color="" weight="fill"
+                  />
+                </button>
+                </div>
               <button
                 type="button"
                 title="Open menu"

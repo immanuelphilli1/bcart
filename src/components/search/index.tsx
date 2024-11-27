@@ -21,7 +21,7 @@ const SearchIndex: React.FC<SearchProps> = ({
 
   return (
     <div>
-      <div className="pt-20">
+      <div className="pt-14">
         <div className=" pb-6">
           <h1 className="text-lg font-bold text-[#2B1139]">Creatives</h1>
         </div>
@@ -53,8 +53,8 @@ const SearchIndex: React.FC<SearchProps> = ({
           </div>
           {featuredCreatives.length > 0 &&
             <button type="button" title="forward" onClick={handleSearchCreatives} className="flex">
-              <div className="border rounded-full p-4 lg:p-8 text-white bg-[#520B1F]">
-                <ArrowRight size={40} />
+              <div className="border rounded-full p-4 text-white bg-[#520B1F]">
+                <ArrowRight size={28} />
               </div>
             </button>
           }

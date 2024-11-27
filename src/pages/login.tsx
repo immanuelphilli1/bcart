@@ -60,7 +60,7 @@ const LoginPage: React.FC<PageProps> = () => {
             </div>
             <div className="container">
                 <div className="px-4">
-                    <div className="pt-16">
+                    <div className="pt-16 pb-6">
                         <div className="w-full md:w-[500px] rounded-2xl bg-black bg-opacity-30">
                             <div className="pt-16 pb-20 px-10">
                                 <div>
@@ -77,7 +77,7 @@ const LoginPage: React.FC<PageProps> = () => {
                                         <label className="text-[#E2E8F0]">Password</label>
                                         <div className="flex bg-white bg-opacity-40 rounded-full mt-2 overflow-hidden border border-[#E2E8F0]">
                                         <input type={toggler ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="***********" className="w-full  placeholder:text-black px-4 py-3 outline-none bg-transparent text-black " />
-                                        <button type="button" onClick={handleToggler} className="flex items-center justify-center px-2">{toggler ? (<Eye size={32} />) : (<EyeClosed size={32} />)}</button>
+                                        <button type="button" onClick={handleToggler} className="flex items-center justify-center px-4">{toggler ? (<Eye size={24} />) : (<EyeClosed size={24} />)}</button>
                                         </div>
                                     </div>
                                     <div className="flex justify-end text-white text-xs">

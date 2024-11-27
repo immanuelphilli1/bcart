@@ -13,22 +13,22 @@ interface SearchProps {
 
 const Banner: React.FC<SearchProps> =({search, searchKey, setSearchKey, bannerImage, bannerCreative}) => {
   return (
-    <div className="relative px-4">
-      <div className="rounded-2xl overflow-hidden border w-full mt-8">
-        <img src={bannerImage} alt="logo" className="w-full min-h-52 md:min-h-40" />
+    <div className="relative">
+      <div className="rounded-2xl overflow-hidden border w-full mt-8 ">
+        <img src={bannerImage} alt="logo" className="w-full min-h-96 md:min-h-40 object-cover" />
         
       </div>
       <div className="w-full h-full text-white">
       <div className="absolute top-0 left-0 right-0 w-full h-full">
-<div className="flex flex-col md:flex-row justify-center items-center  h-full md:py-10 md:px-20 md:justify-between gap-4">
-  <div className="flex flex-col gap-4 justify-center">
-    <div className="font-bold md:text-3xl"> Real pictures, <br/> by the creatives you love</div>
+<div className="flex flex-col md:flex-row justify-center md:items-center h-full md:py-10 md:px-20 md:justify-between gap-4">
+  <div className="flex flex-col gap-4 justify-center px-4 md:px-0">
+    <div className="font-bold text-2xl md:text-3xl"> Real pictures, <br/> by the creatives you love</div>
     <div className="flex rounded-full pl-4 items-center overflow-hidden bg-white gap-3 fill-black">
      <div ><MagnifyingGlass color="" /></div>
       <input placeholder='Search' type="text" className="w-full rounded-lg px-4 py-3 outline-none text-black" value={searchKey} onChange={(e) => setSearchKey(e.target.value)} onKeyDown={search} />
     </div>
   </div>
-  <div className="flex items-end md:self-end text-xs">Image of the day by <button
+  <div className="flex items-end md:self-end px-4 md:px-0 text-xs">Image of the day by <button
                     onClick={() =>
                       navigate(
                         `/profile?creative=${encodeURIComponent(

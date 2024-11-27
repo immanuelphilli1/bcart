@@ -108,13 +108,15 @@ const IndexPage: React.FC<PageProps> = () => {
   return (
     <Layout active="about">
       <div className="container">
-        <Banner
+        <div className="px-4">
+          <Banner
           search={search}
           searchKey={searchKey}
           setSearchKey={setSearchKey}
           bannerImage={"/img/bcart-banner.webp"}
           bannerCreative={"gg"}
         />
+        </div>
       </div>
       <div className="container">
         <div className="px-4 py-10">
@@ -152,7 +154,7 @@ const IndexPage: React.FC<PageProps> = () => {
               )}
               {placeholder && (
                 <div className="flex gap-4 lg:gap-5 items-center overflow-scroll no-scrollbar">
-                  <div className="border w-96 h-64 rounded-lg overflow-hidden bg-gray-100">
+                  <div className="border lg:w-96 lg:h-64 rounded-lg overflow-hidden bg-gray-100">
                   <img
                     src="/img/f-1.webp"
                     alt="logo"

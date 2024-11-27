@@ -15,8 +15,9 @@ export default function Settings() {
 
                 <div className='pt-5 pb-40 px-4'>
                     <div className='flex flex-col md:flex-row gap-4 lg:gap-20 items-start'>
-                        <div className='flex flex-col gap-4 md:gap-10 justify-center items-center min-w-max'>
-                        <div className='font-bold text-[#520B1F] md:pt-10'>Account Settings</div>
+                    <div className='font-bold text-[#520B1F] md:hidden md:pt-10'>Account Settings</div>
+                        <div className='flex md:flex-col gap-4 md:gap-10 md:justify-center md:items-center md:min-w-max w-full md:w-fit overflow-scroll no-scrollbar '>
+                        <div className='font-bold text-[#520B1F] hidden md:block md:pt-10'>Account Settings</div>
                         <div className='w-full'>
                                         <button
                                             className={`${active === "profile" ? " text-white bg-[#520B1F] " : "text-[#520B1F] bg-white hover:text-white hover:bg-[#520B1F] "} border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
@@ -26,14 +27,14 @@ export default function Settings() {
                                     </div>
                                     <div className='w-full'>
                                         <button
-                                            className={`${active === "creative" ? " text-white bg-[#520B1F] " : "text-[#520B1F] bg-white hover:text-white hover:bg-[#520B1F]"} border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
+                                            className={`${active === "creative" ? " text-white bg-[#520B1F] " : "text-[#520B1F] bg-white hover:text-white hover:bg-[#520B1F]"} border border-[#520B1F] font-bold w-full px-4 py-3 text-sm  text-nowrap rounded-full`}
                                             onClick={() => setActive("creative")}>
                                             Creatives & Hiring
                                         </button>
                                     </div>
                                     <div className='w-full'>
                                         <button
-                                            className={`${active === "promo" ? " text-white  bg-[#520B1F] " : "text-[#520B1F] bg-white hover:text-white hover:bg-[#520B1F]"} border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
+                                            className={`${active === "promo" ? " text-white  bg-[#520B1F] " : "text-[#520B1F] bg-white hover:text-white hover:bg-[#520B1F]"} border border-[#520B1F] font-bold w-full px-4 py-3 text-sm text-nowrap rounded-full`}
                                             onClick={() => setActive("promo")}>
                                             Promo Packs
                                         </button>

@@ -249,7 +249,7 @@ const ImageUpload: React.FC = () => {
               <div className="flex justify-center">
                 <div className="bg-white rounded-2xl p-4 shadow-md">
                   <div
-                    className="border border-dashed border-[#520B1F] rounded-2xl py-10 px-40"
+                    className="border border-dashed border-[#520B1F] rounded-2xl py-10 px-4 md:px-40"
                     onDrop={handleDrop}
                     onDragOver={handleDragOver}
                   >
@@ -290,7 +290,7 @@ const ImageUpload: React.FC = () => {
                 className="flex flex-col md:flex-row items-start gap-10 py-10 "
               >
                 <div className="w-fit">
-                  <div className="rounded-2xl overflow-hidden w-96 h-80">
+                  <div className="rounded-2xl overflow-hidden  h-80">
                     {form.src && (
                       <img
                         src={form.src as string}
