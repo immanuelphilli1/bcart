@@ -256,7 +256,7 @@ const Profile = () => {
             "Authorization": `Bearer ${token.token}`,
         },
         body: JSON.stringify({
-          photo_ids: [id],
+          photo_ids: getPurchasingProducts().length > 0 ? getPurchasingProducts() : [id],
         }),
     });
     const data = await response.json();
@@ -449,6 +449,22 @@ const handleRemove = () => {
                   {userData?.user?.photos.length > 0
                     ? userData?.user?.photos.map(
                         (photo: any, index: number) => (
+                          photo.is_approved ===	0 ? 
+                          <button
+                            onClick={(take: any) => handleOneImage(photo.id)}
+                            type="button"
+                            title="photo"
+                            key={index}
+                            className=" row-span-2"
+                          >
+                            Photo Not Approved
+                            <img
+                              src={photo.image_url}
+                              alt="Image 1"
+                              className="w-full h-full rounded-lg object-cover"
+                            />
+                          </button>
+                          :
                           <button
                             onClick={(take: any) => handleOneImage(photo.id)}
                             type="button"
@@ -462,6 +478,7 @@ const handleRemove = () => {
                               className="w-full h-full rounded-lg object-cover"
                             />
                           </button>
+                          
                         )
                       )
                     : "No Photos Yet"}
@@ -897,7 +914,7 @@ const handleRemove = () => {
                         <div className="w-full">
                           <button
                             type="button"
-                            onClick={() => buyNow(pickedPhoto.id)}
+                            onClick={() => {() => getPurchasingProducts().length > 0 ? handleCartAndRefresh() : buyNow(pickedPhoto.id)}}
                             className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
                           >
                             {buttonLoader === true ? "Processing ...... " : "Buy Now"}

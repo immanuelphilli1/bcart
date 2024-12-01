@@ -6,6 +6,7 @@ import { ArrowRight } from "@phosphor-icons/react";
 import { useState, useEffect } from "react";
 import { storeUserData, storeUserToken } from "../services/user_service";
 import { Toaster, toast } from "sonner";
+import Loader from "../components/loader";
 
 const IndexPage: React.FC<PageProps> = () => {
   const [categories, setCategories] = useState<any>([]);
@@ -14,6 +15,7 @@ const IndexPage: React.FC<PageProps> = () => {
   const [searchKey, setSearchKey] = useState<string>("");
   const [loader, setLoader] = useState<boolean>(false);
   const [placeholder, setPlaceholder] = useState<boolean>(true)
+  const [bannerImage, setBannerImage] = useState<any>(null);
 
   const apiUrl = process.env.BASE_URL;
 
@@ -46,6 +48,37 @@ const IndexPage: React.FC<PageProps> = () => {
 
       setCategories(data.data);
       setPlaceholder(false)
+    } catch (error) {}
+  };
+
+  //*****banner image */
+  const getBannerImage = async () => {
+    setLoader(true);
+    try {
+      const response = await fetch(
+        `https://backend.bcartgh.com/api/banner`,
+        // 'https://b578-154-161-187-132.ngrok-free.app/api/featured-creative-categories',
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const data = await response.json();
+
+
+      if (data.success === true) {
+        setLoader(false);
+        setBannerImage(data.data);
+      }
+      else{
+        setLoader(false);
+        setBannerImage(null);
+      }
+
+      
     } catch (error) {}
   };
 
@@ -88,6 +121,8 @@ const IndexPage: React.FC<PageProps> = () => {
     } catch (error) {}
   };
 
+
+
   function search(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       navigate(`/search?q=${encodeURIComponent(searchKey)}`);
@@ -103,9 +138,16 @@ const IndexPage: React.FC<PageProps> = () => {
     getCreativeCategories();
     getFeaturedCreatives();
     getFeaturedCreative();
+    getBannerImage();
   }, []);
 
   return (
+    <>
+    {loader ? (
+       <div className="flex items-center justify-center pt-20">
+       <Loader size="w-15 h-10" />
+     </div>
+     ) : 
     <Layout active="about">
       <div className="container">
         <div className="px-4">
@@ -113,8 +155,8 @@ const IndexPage: React.FC<PageProps> = () => {
           search={search}
           searchKey={searchKey}
           setSearchKey={setSearchKey}
-          bannerImage={"/img/bcart-banner.webp"}
-          bannerCreative={"gg"}
+          bannerImage={bannerImage?.image_url === null ? "/img/bcart-banner.webp" : bannerImage?.image_url}
+          bannerCreative={bannerImage?.creative?.username}
         />
         </div>
       </div>
@@ -126,7 +168,7 @@ const IndexPage: React.FC<PageProps> = () => {
             </h1>
           </div>
           <div className="grid grid-cols-2 gap-x-4 gap-y-12 md:hidden">
-          {categories.slice(0, 5).map(
+          {categories.slice(0, 6).map(
                 (cat: any, index: number) =>
                   cat.image_url && (
                     <button
@@ -180,7 +222,7 @@ const IndexPage: React.FC<PageProps> = () => {
           </div>
           <div className="hidden md:flex gap-4 lg:gap-10 items-center justify-between">
             <div className="flex gap-4 lg:gap-5 items-center overflow-scroll no-scrollbar">
-              {categories.slice(0, 4).map(
+              {categories.slice(0, 5).map(
                 (cat: any, index: number) =>
                   cat.image_url && (
                     <button
@@ -400,7 +442,10 @@ const IndexPage: React.FC<PageProps> = () => {
           </div>
         </div>
       </div>
-    </Layout>
+      </Layout>
+      }
+    </>
+    
   );
 };
 

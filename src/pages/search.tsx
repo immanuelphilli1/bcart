@@ -11,6 +11,7 @@ import { Toaster, toast } from "sonner";
 import { navigate } from "gatsby";
 import {
   addToCart,
+  clearCart,
   getPurchasingProducts,
   removeFromCart,
 } from "../services/add_to_cart";
@@ -32,6 +33,7 @@ export default function Search() {
   const [purchased, setPurchased] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [buttonLoader, setButtonLoader] = useState<boolean>(false);
+  const [mine, setMine] = useState<boolean>(false);
 
   //****** fetch the params from the url*/
   let urlParams;
@@ -43,6 +45,7 @@ export default function Search() {
     urlParams = new URLSearchParams();
   }
   const searchKey = urlParams.get("q");
+  const message = urlParams.get("message");
 
   function handleSearchCreatives() {
     setShowCreativeSearch(true);
@@ -53,6 +56,15 @@ export default function Search() {
     setTimeout(() => {
       setLoader(false);
     }, 5000);
+
+    if (message === "Payment Successful") {
+      clearCart();
+      toast.success("Purchase Successful", {
+        position: "top-center",
+        duration: 5000,
+        // description: "Purchase Successful",
+      });
+    }
   }, []);
 
   //******fetch single photo */
@@ -67,6 +79,7 @@ export default function Search() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token.token}`,
           },
         }
       );
@@ -78,6 +91,7 @@ export default function Search() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token.token}`,
           },
         }
       );
@@ -91,6 +105,11 @@ export default function Search() {
         setPickedPhoto(data.data);
         // console.log(data_another.data);
         setRelatedPhotos(data_another.data);
+
+        //****check if user is mine */
+        if (data.data.creative.username === userData?.user?.username) {
+          setMine(true);
+        }
       } else {
         //TODO:Place a toaster here
         console.log("something");
@@ -146,7 +165,7 @@ export default function Search() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            //   "Authorization": `Bearer ${token.token}`,
+              "Authorization": `Bearer ${token.token}`,
           },
         }
       );
@@ -159,7 +178,7 @@ export default function Search() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            //   "Authorization": `Bearer ${token.token}`,
+              "Authorization": `Bearer ${token.token}`,
           },
         }
       );
@@ -205,7 +224,7 @@ export default function Search() {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              //   "Authorization": `Bearer ${token.token}`,
+                "Authorization": `Bearer ${token.token}`,
             },
           }
         );
@@ -218,7 +237,7 @@ export default function Search() {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              //   "Authorization": `Bearer ${token.token}`,
+                "Authorization": `Bearer ${token.token}`,
             },
           }
         );
@@ -263,7 +282,7 @@ export default function Search() {
         Authorization: `Bearer ${token.token}`,
       },
       body: JSON.stringify({
-        photo_ids: [id],
+        photo_ids: getPurchasingProducts().length > 0 ? getPurchasingProducts() : [id],
       }),
     });
     const data = await response.json();
@@ -390,10 +409,12 @@ export default function Search() {
                   featuredCreatives={featuredCreatives}
                   photos={photos}
                   loading={loading}
+                  userData={userData}
                 />
               )}
               {showCreativeSearch && (
                 <CreativeSearch
+                  userData={userData}
                   featuredCreatives={featuredCreatives}
                   setFeaturedCreatives={setFeaturedCreatives}
                   handleOneImage={handleOneImage}
@@ -494,8 +515,40 @@ export default function Search() {
                     </div>
                   </div>
                   <div className="flex gap-8 py-8">
-                    {pickedPhoto.price === 0 ? (
+                    {pickedPhoto.price === 0 || pickedPhoto.has_purchased === 1 ? (
                       <>
+                        {mine === true || pickedPhoto.has_purchased === 1 ?
+                        <div className="w-full">
+                          <button
+                            className="text-white bg-[#520B1F] border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full"
+                            onClick={async () => {
+                              try {
+                                const response = await fetch(pickedPhoto.image_url);
+                                if (!response.ok) {
+                                  throw new Error('Network response was not ok');
+                                }
+
+                                const blob = await response.blob();
+                                const url = window.URL.createObjectURL(blob);
+
+                                const link = document.createElement('a');
+                                link.href = url;
+                                link.download = 'bcart_free.png'; // Set your desired filename
+                                document.body.appendChild(link);
+                                link.click();
+                                link.remove();
+
+                                // Revoke the object URL to free up memory
+                                window.URL.revokeObjectURL(url);
+                              } catch (error) {
+                                console.error('Failed to download file:', error);
+                              }
+                            }}
+                          >
+                             Download
+                          </button>
+                        </div>
+                        :
                         <div className="w-full">
                           <button
                             className="text-white bg-[#520B1F] border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full"
@@ -526,10 +579,12 @@ export default function Search() {
                             Free Download Now
                           </button>
                         </div>
+                    }
                       </>
                     ) : (
                       <>
                         {userData && (
+                          mine === true ? null:
                           <div className="w-full">
                             <button
                               title="Add to cart"
@@ -550,17 +605,20 @@ export default function Search() {
 
                             </button>
                           </div>
+                            
                         )}
 
+                        {mine === true ? null:
                         <div className="w-full">
                           <button
                             type="button"
-                            onClick={(e) => buyNow(pickedPhoto.id, e)}
+                            onClick={(e) => getPurchasingProducts().length > 0 ? handleCartAndRefresh() : buyNow(pickedPhoto.id, e)}
                             className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
                           >
                             {buttonLoader === true ? "Processing ...... " : "Buy Now"}
                           </button>
                         </div>
+                   }
                       </>
                     )}
                     <div className="flex-shrink self-center hidden">

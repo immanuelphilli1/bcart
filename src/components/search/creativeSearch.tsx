@@ -6,12 +6,14 @@ interface SearchProps {
   handleOneImage: (take: any) => void;
   featuredCreatives: any;
   setFeaturedCreatives: any;
+  userData: any;
 }
 
 const CreativeSearch: React.FC<SearchProps> = ({
   featuredCreatives,
   setFeaturedCreatives,
   handleOneImage,
+  userData
 }) => {
   const [categories, setCategories] = useState<any>([]);
   const [checks, setChecks] = useState<any>([]);
@@ -228,7 +230,7 @@ const CreativeSearch: React.FC<SearchProps> = ({
             <>
               <div className="flex items-center border-b-2 pb-10 gap-1 md:gap-6 w-full">
                 <button onClick={() =>
-                    navigate(`/profile?creative=${creative.username}`)
+                    navigate(`${userData?.user?.username === creative.username ? "/profile" : "/profile?creative=${creative.username}"}`)
                   }>
                 <div className="rounded-full bg-gray-100 overflow-hidden w-28 h-28">
                   {creative.profile_picture ? (
@@ -249,7 +251,7 @@ const CreativeSearch: React.FC<SearchProps> = ({
                 <div className="flex flex-col justify-center gap-1 pl-2 min-w-40  md:min-w-[500px]">
                   <div className="text-xs font-bold text-[#520B1F]">
                     {/* {creative.username} */}
-                    <a href={`/profile?creative=${creative.username}`}>
+                    <a href={`${userData?.user?.username === creative.username ? "/profile" : "/profile?creative=${creative.username}"}`}>
                       {creative.username}
                     </a>
                   </div>

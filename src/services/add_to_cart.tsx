@@ -72,3 +72,16 @@ export const getPurchasingProducts = () => {
     // console.log('Purchasing Products:', purchasingProducts);
     return purchasingProducts;
   };
+
+  //****clear cart */
+  export const clearCart = () => {
+    if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
+        localStorage.setItem('cart', JSON.stringify([]));
+        
+      } else {
+
+        return false;
+      }
+
+    return true;
+  };

@@ -113,8 +113,8 @@ const ImageUpload: React.FC = () => {
         formData.append('title', imageForms[0].title);
         formData.append('description', imageForms[0].description);
         formData.append('price', imageForms[0].price);
-        formData.append('category', imageForms[0].category);
-        formData.append('tags', imageForms[0].tags);
+        formData.append('category[]', imageForms[0].category);
+        formData.append('tags[]', imageForms[0].tags);
 
         console.log("form data : ",formData);
 
@@ -122,7 +122,7 @@ const ImageUpload: React.FC = () => {
         method: 'POST',
         body: formData,
         headers: {
-          "Content-Type": "application/json",
+          // "Content-Type": "application/json",
           "Authorization": `Bearer ${token.token}`,
         },
       });

@@ -25,6 +25,8 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
   const refreshCart = () => {
     setCart(getCart());
     setTotal(calculateTotal());
+
+    console.log("cart : ", cart);
   };
 
 
@@ -178,6 +180,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
   {cart.length > 0 ? (
     <div className="h-[60vh] overflow-y-scroll no-scrollbar pb-4">
       {cart.map((item: any, index: number) => (
+        item.has_purchased === 1 ? null :
         <div
           key={index}
           className="flex flex-col md:flex-row items-center justify-between gap-4 py-6 border-b-2"
