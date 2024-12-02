@@ -144,7 +144,12 @@ const IndexPage: React.FC<PageProps> = () => {
   return (
     <>
     {loader ? (
-       <div className="flex items-center justify-center pt-20">
+       <div className="flex flex-col gap-4 min-h-screen items-center justify-center pt-20">
+        <img
+                  src="/img/bcart-logo.webp"
+                  alt="logo"
+                  className="w-16 md:w-20"
+                />
        <Loader size="w-15 h-10" />
      </div>
      ) : 

@@ -15,8 +15,8 @@ const Banner: React.FC<SearchProps> =({search, searchKey, setSearchKey, bannerIm
   return (
     <div className="relative">
       <div className="rounded-2xl overflow-hidden border w-full mt-8 ">
-        <img src={bannerImage} alt="logo" className="w-full min-h-96 md:min-h-40 object-cover" />
-        
+        <img src={bannerImage} alt="logo" className="w-full min-h-96 max-h-96 md:min-h-40 md:max-h-[35rem] object-cover" />
+        <div className="absolute inset-0 bg-black bg-opacity-20 rounded-2xl"></div>
       </div>
       <div className="w-full h-full text-white">
       <div className="absolute top-0 left-0 right-0 w-full h-full">
@@ -35,7 +35,7 @@ const Banner: React.FC<SearchProps> =({search, searchKey, setSearchKey, bannerIm
                           bannerCreative
                         )}`
                       )
-                    } className="underline pl-1"> Brandon Nichelle</button></div>
+                    } className="underline pl-1"> {bannerCreative}</button></div>
 </div>
         </div>
         </div>
