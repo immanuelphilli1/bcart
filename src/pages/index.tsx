@@ -34,7 +34,7 @@ const IndexPage: React.FC<PageProps> = () => {
   const getCreativeCategories = async () => {
     try {
       const response = await fetch(
-        `https://backend.bcartgh.com/api/featured-creative-categories`,
+        `https://c952-154-161-39-111.ngrok-free.app/api/featured-creative-categories`,
         // 'https://b578-154-161-187-132.ngrok-free.app/api/featured-creative-categories',
         {
           method: "GET",
@@ -56,7 +56,7 @@ const IndexPage: React.FC<PageProps> = () => {
     setLoader(true);
     try {
       const response = await fetch(
-        `https://backend.bcartgh.com/api/banner`,
+        `https://c952-154-161-39-111.ngrok-free.app/api/banner`,
         // 'https://b578-154-161-187-132.ngrok-free.app/api/featured-creative-categories',
         {
           method: "GET",
@@ -86,7 +86,7 @@ const IndexPage: React.FC<PageProps> = () => {
   const getFeaturedCreatives = async () => {
     try {
       const response = await fetch(
-        `https://backend.bcartgh.com/api/featured-creatives`,
+        `https://c952-154-161-39-111.ngrok-free.app/api/featured-creatives`,
         // 'https://b578-154-161-187-132.ngrok-free.app/api/featured-creatives',
         {
           method: "GET",
@@ -107,7 +107,7 @@ const IndexPage: React.FC<PageProps> = () => {
   const getFeaturedCreative = async () => {
     try {
       const response = await fetch(
-        "https://backend.bcartgh.com/api/featured-creative",
+        "https://c952-154-161-39-111.ngrok-free.app/api/featured-creative",
         {
           method: "GET",
           headers: {

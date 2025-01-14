@@ -9,7 +9,7 @@ export default function FeaturedCreative() {
 const getFeaturedCreative = async () => {
     try {
       const response = await fetch(
-        'https://backend.bcartgh.com/api/featured-creative',
+        'https://c952-154-161-39-111.ngrok-free.app/api/featured-creative',
         {
           method: "GET",
           headers: {

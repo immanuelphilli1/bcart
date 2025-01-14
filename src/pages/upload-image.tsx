@@ -118,7 +118,7 @@ const ImageUpload: React.FC = () => {
 
         console.log("form data : ",formData);
 
-      const response = await fetch('https://backend.bcartgh.com/api/photos', {
+      const response = await fetch('https://c952-154-161-39-111.ngrok-free.app/api/photos', {
         method: 'POST',
         body: formData,
         headers: {
@@ -154,7 +154,7 @@ const ImageUpload: React.FC = () => {
       //   formData.append('image', image);
     
       //   try {
-      //     const response = await fetch('https://backend.bcartgh.com/api/photos', {
+      //     const response = await fetch('https://c952-154-161-39-111.ngrok-free.app/api/photos', {
       //       method: 'POST',
       //       body: formData,
       //     });
@@ -164,7 +164,7 @@ const ImageUpload: React.FC = () => {
       //     console.error('Error:', error);
       //   }
       // };
-      // const response = await fetch(`https://backend.bcartgh.com/api/photos`, {
+      // const response = await fetch(`https://c952-154-161-39-111.ngrok-free.app/api/photos`, {
       //   method: "POST",
       //   headers: {
       //     "Content-Type": "application/json",
@@ -210,7 +210,7 @@ const ImageUpload: React.FC = () => {
   //*******fetch all categories */
   const getAllCreate = async () => {
     const response = await fetch(
-      `https://backend.bcartgh.com/api/creative-categories`,
+      `https://c952-154-161-39-111.ngrok-free.app/api/creative-categories`,
       {
         method: "GET",
         headers: {

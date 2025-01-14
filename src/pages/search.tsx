@@ -74,7 +74,7 @@ export default function Search() {
     try {
       //*****fetching single photo */
       const response = await fetch(
-        `https://backend.bcartgh.com/api/photos/${take}`,
+        `https://c952-154-161-39-111.ngrok-free.app/api/photos/${take}`,
         {
           method: "GET",
           headers: {
@@ -86,7 +86,7 @@ export default function Search() {
 
       //*****fetching single photo related */
       const response_another = await fetch(
-        `https://backend.bcartgh.com/api/related-images/${take}`,
+        `https://c952-154-161-39-111.ngrok-free.app/api/related-images/${take}`,
         {
           method: "GET",
           headers: {
@@ -121,7 +121,7 @@ export default function Search() {
   const getFeaturedCreatives = async () => {
     try {
       const response = await fetch(
-        `https://backend.bcartgh.com/api/featured-creatives`,
+        `https://c952-154-161-39-111.ngrok-free.app/api/featured-creatives`,
         // 'https://b578-154-161-187-132.ngrok-free.app/api/featured-creatives',
         {
           method: "GET",
@@ -139,7 +139,7 @@ export default function Search() {
   //******fetch photos */
   const getPhotos = async () => {
     try {
-      const response = await fetch(`https://backend.bcartgh.com/api/photos`, {
+      const response = await fetch(`https://c952-154-161-39-111.ngrok-free.app/api/photos`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -160,7 +160,7 @@ export default function Search() {
   async function searchFromUrl() {
     try {
       const response = await fetch(
-        `https://backend.bcartgh.com/api/search-creative?filter[keyword]=${searchKey}`,
+        `https://c952-154-161-39-111.ngrok-free.app/api/search-creative?filter[keyword]=${searchKey}`,
         {
           method: "GET",
           headers: {
@@ -173,7 +173,7 @@ export default function Search() {
 
       //******search for photos */
       const response_ = await fetch(
-        `https://backend.bcartgh.com/api/search-photo?filter[keyword]=${searchKey}`,
+        `https://c952-154-161-39-111.ngrok-free.app/api/search-photo?filter[keyword]=${searchKey}`,
         {
           method: "GET",
           headers: {
@@ -219,7 +219,7 @@ export default function Search() {
       // console.log("query : ", query);
       try {
         const response = await fetch(
-          `https://backend.bcartgh.com/api/search-creative?filter[keyword]=${query}`,
+          `https://c952-154-161-39-111.ngrok-free.app/api/search-creative?filter[keyword]=${query}`,
           {
             method: "GET",
             headers: {
@@ -232,7 +232,7 @@ export default function Search() {
 
         //******search for photos */
         const response_ = await fetch(
-          `https://backend.bcartgh.com/api/search-photo?filter[keyword]=${query}`,
+          `https://c952-154-161-39-111.ngrok-free.app/api/search-photo?filter[keyword]=${query}`,
           {
             method: "GET",
             headers: {
@@ -275,7 +275,7 @@ export default function Search() {
   const buyNow = async (id: number, e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setButtonLoader(true);
     e.preventDefault();
-    const response = await fetch(`https://backend.bcartgh.com/api/buy-photos`, {
+    const response = await fetch(`https://c952-154-161-39-111.ngrok-free.app/api/buy-photos`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -344,7 +344,7 @@ export default function Search() {
     e.preventDefault();
     setLoader(true);
     const response = await fetch(
-      `https://backend.bcartgh.com/api/suggest-upload`,
+      `https://c952-154-161-39-111.ngrok-free.app/api/suggest-upload`,
       {
         method: "POST",
         headers: {

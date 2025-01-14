@@ -34,7 +34,7 @@ const SignUpPage: React.FC<PageProps> = () => {
             alert("Passwords do not match");
             return;
         }
-        const response = await fetch(`https://backend.bcartgh.com/api/register`, {
+        const response = await fetch(`https://c952-154-161-39-111.ngrok-free.app/api/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -191,7 +191,7 @@ const SignUpPage: React.FC<PageProps> = () => {
                                             <div className="w-1/4 h-[1px] bg-[#E2E8F0]" />
                                         </div>
                                         <div>
-                                            <button className="w-full rounded-full bg-[#FF6F51] text-white font-bold py-3" type="button" onClick={() => navigate('https://backend.bcartgh.com/api/auth/google')}>Continue with Google</button>
+                                            <button className="w-full rounded-full bg-[#FF6F51] text-white font-bold py-3" type="button" onClick={() => navigate('https://c952-154-161-39-111.ngrok-free.app/api/auth/google')}>Continue with Google</button>
                                         </div>
                                         <div className="text-white pt-4 text-center text-sm">
                                             Already have an account? <a href="/login" className="underline">Sign In here</a>

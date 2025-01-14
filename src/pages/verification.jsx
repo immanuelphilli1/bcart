@@ -28,7 +28,7 @@ if (typeof window !== 'undefined') {
     setLoader(true);
     try {
       const response = await fetch(
-        `https://backend.bcartgh.com/api/email-verify/${userId}/${hash}?expires=${expires}&signature=${signature}`,
+        `https://c952-154-161-39-111.ngrok-free.app/api/email-verify/${userId}/${hash}?expires=${expires}&signature=${signature}`,
         {
           method: "GET",
           headers: {

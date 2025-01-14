@@ -27,7 +27,7 @@ const CreativeSearch: React.FC<SearchProps> = ({
   const getAllCategories = async () => {
     setLoader(true);
     const response = await fetch(
-      `https://backend.bcartgh.com/api/creative-categories`,
+      `https://c952-154-161-39-111.ngrok-free.app/api/creative-categories`,
       {
         method: "GET",
         headers: {
@@ -45,7 +45,7 @@ const CreativeSearch: React.FC<SearchProps> = ({
     setLoader(true);
     setFilter(true);
     const response = await fetch(
-      `https://backend.bcartgh.com/api/creatives?filter[city]=${location}&filter[minimum_rate]=${rate}&filter[creative_categories.id]=${checks}`,
+      `https://c952-154-161-39-111.ngrok-free.app/api/creatives?filter[city]=${location}&filter[minimum_rate]=${rate}&filter[creative_categories.id]=${checks}`,
       {
         method: "GET",
         headers: {

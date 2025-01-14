@@ -49,7 +49,7 @@ export default function ProfileSettings() {
 
         setLoaderProfile(true);
         try {
-            const response = await fetch(`https://backend.bcartgh.com/api/update-profile`, {
+            const response = await fetch(`https://c952-154-161-39-111.ngrok-free.app/api/update-profile`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -82,7 +82,7 @@ export default function ProfileSettings() {
         }
 
         try {
-            const response = await fetch(`https://backend.bcartgh.com/api/update-password`, {
+            const response = await fetch(`https://c952-154-161-39-111.ngrok-free.app/api/update-password`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

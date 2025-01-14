@@ -18,7 +18,7 @@ const LoginPage: React.FC<PageProps> = () => {
     const loginUser = async (e: React.FormEvent<HTMLFormElement>) => {
         setLoader(true);
         e.preventDefault();
-        const response = await fetch(`https://backend.bcartgh.com/api/login`, {
+        const response = await fetch(`https://c952-154-161-39-111.ngrok-free.app/api/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -90,7 +90,7 @@ const LoginPage: React.FC<PageProps> = () => {
                                             <div className="px-8">or</div>
                                             <div className="w-1/4 h-[1px] bg-[#E2E8F0] " />  
                                         </div>
-                                        <div><button className="w-full rounded-full bg-[#FF6F51] text-white font-bold py-3" type="button" onClick={() => navigate('https://backend.bcartgh.com/api/auth/google')}>{loader === true ? "Redirecting ...... " : "Continue with Google"}</button></div>
+                                        <div><button className="w-full rounded-full bg-[#FF6F51] text-white font-bold py-3" type="button" onClick={() => navigate('https://c952-154-161-39-111.ngrok-free.app/api/auth/google')}>{loader === true ? "Redirecting ...... " : "Continue with Google"}</button></div>
                                         <div className="text-white pt-4 text-center text-sm">Don’t have an account? <a href="/sign-up" className="underline">Sign Up here</a></div>
                                     </div>
                                 </form>

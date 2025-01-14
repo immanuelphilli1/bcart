@@ -24,7 +24,7 @@ export default function CreativeHiring() {
   //*******fetch all categories */
   const getAllCreate = async () => {
     const response = await fetch(
-      `https://backend.bcartgh.com/api/creative-categories`,
+      `https://c952-154-161-39-111.ngrok-free.app/api/creative-categories`,
       {
         method: "GET",
         headers: {
@@ -51,7 +51,7 @@ export default function CreativeHiring() {
     e.preventDefault();
     console.log(creativeHireStatus);
     const response = await fetch(
-      `https://backend.bcartgh.com/api/update-creative-details`,
+      `https://c952-154-161-39-111.ngrok-free.app/api/update-creative-details`,
       {
         method: "PUT",
         headers: {

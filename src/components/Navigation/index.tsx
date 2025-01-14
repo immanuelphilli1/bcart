@@ -45,7 +45,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
     // setLoader(true);
     try {
       const response = await fetch(
-        `https://backend.bcartgh.com/api/user-profile`,
+        `https://c952-154-161-39-111.ngrok-free.app/api/user-profile`,
         {
           method: "GET",
           headers: {
@@ -92,7 +92,7 @@ const Navigation: React.FC<NavigationProps> = ({ active }) => {
     setButtonLoader(true);
     e.preventDefault();
     // console.log(getPurchasingProducts());
-    const response = await fetch(`https://backend.bcartgh.com/api/buy-photos`, {
+    const response = await fetch(`https://c952-154-161-39-111.ngrok-free.app/api/buy-photos`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

@@ -51,7 +51,7 @@ const Profile = () => {
   const getFeaturedCreative = async () => {
     try {
       const response = await fetch(
-        "https://backend.bcartgh.com/api/featured-creative",
+        "https://c952-154-161-39-111.ngrok-free.app/api/featured-creative",
         {
           method: "GET",
           headers: {
@@ -74,7 +74,7 @@ const Profile = () => {
     setLoader(true);
     try {
       const response = await fetch(
-        `https://backend.bcartgh.com/api/search-creative?filter[keyword]=${creative}`,
+        `https://c952-154-161-39-111.ngrok-free.app/api/search-creative?filter[keyword]=${creative}`,
         {
           method: "GET",
           headers: {
@@ -98,7 +98,7 @@ const Profile = () => {
     setLoader(true);
     try {
       const response = await fetch(
-        `https://backend.bcartgh.com/api/user-profile`,
+        `https://c952-154-161-39-111.ngrok-free.app/api/user-profile`,
         {
           method: "GET",
           headers: {
@@ -124,7 +124,7 @@ const Profile = () => {
     e.preventDefault();
     setLoader(true);
     const response = await fetch(
-      `https://backend.bcartgh.com/api/suggest-upload`,
+      `https://c952-154-161-39-111.ngrok-free.app/api/suggest-upload`,
       {
         method: "POST",
         headers: {
@@ -150,7 +150,7 @@ const Profile = () => {
   //*******fetch all categories */
   const getAllCategories = async () => {
     const response = await fetch(
-      `https://backend.bcartgh.com/api/creative-categories`,
+      `https://c952-154-161-39-111.ngrok-free.app/api/creative-categories`,
       {
         method: "GET",
         headers: {
@@ -167,7 +167,7 @@ const Profile = () => {
     e.preventDefault();
     setLoader(true);
     const response = await fetch(
-      `https://backend.bcartgh.com/api/hire-creative`,
+      `https://c952-154-161-39-111.ngrok-free.app/api/hire-creative`,
       {
         method: "POST",
         headers: {
@@ -210,7 +210,7 @@ const Profile = () => {
     try {
       //*****fetching single photo */
       const response = await fetch(
-        `https://backend.bcartgh.com/api/photos/${take}`,
+        `https://c952-154-161-39-111.ngrok-free.app/api/photos/${take}`,
         {
           method: "GET",
           headers: {
@@ -221,7 +221,7 @@ const Profile = () => {
 
       //*****fetching single photo related */
       const response_another = await fetch(
-        `https://backend.bcartgh.com/api/related-images/${take}`,
+        `https://c952-154-161-39-111.ngrok-free.app/api/related-images/${take}`,
         {
           method: "GET",
           headers: {
@@ -249,7 +249,7 @@ const Profile = () => {
   const buyNow = async (id : number) => {
     setButtonLoader(true);
     // ent.preventDefault();
-    const response = await fetch(`https://backend.bcartgh.com/api/buy-photos`, {
+    const response = await fetch(`https://c952-154-161-39-111.ngrok-free.app/api/buy-photos`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
