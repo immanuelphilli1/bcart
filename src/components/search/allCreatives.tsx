@@ -8,11 +8,11 @@ interface SearchProps {
   handleOneImage: (take: any) => void;
   featuredCreatives: any;
   photos: any;
-  loading: any;
+  loading: boolean;
   userData: any;
 }
 
-const SearchIndex: React.FC<SearchProps> = ({
+const AllCreativeSearchIndex: React.FC<SearchProps> = ({
   handleSearchCreatives,
   handleOneImage,
   featuredCreatives,
@@ -23,7 +23,7 @@ const SearchIndex: React.FC<SearchProps> = ({
 
   return (
     <div>
-      {/* <div className="pt-14">
+      <div className="pt-14">
         <div className=" pb-6">
           <h1 className="text-lg font-bold text-[#2B1139]">Creatives</h1>
         </div>
@@ -61,40 +61,10 @@ const SearchIndex: React.FC<SearchProps> = ({
             </button>
           }
         </div>
-      </div> */}
-      <div className="pt-20">
-        <div className=" pb-6">
-          <h1 className="text-lg font-bold text-[#2B1139]">Photos</h1>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-5 grid-rows-3 gap-4">
-          {photos.length > 0 ? photos.map((photo: any, index: number) => (
-            <div key={index} className={`h-full relative row-span-${photo.col_span} col-span-${photo.row_span} `}>
-              {photo.image_url &&
-                <button onClick={(take: any) => handleOneImage(photo.id)} className=" h-full">
-
-                  <img
-                    src={photo.image_url}
-                    alt="Image 1"
-                    className="w-full h-full rounded-lg object-cover"
-                  />
-
-                </button>
-              }
-              {loading[photo.id]  &&
-              <div className="">
-              <div className="absolute bottom-0 left-0 text-white font-bold bg-black bg-opacity-50 rounded-lg w-full h-full">
-                <div className="flex items-center justify-center h-full">
-                  <Loader size="w-8 h-8" />
-                </div>
-              </div>
-            </div>
-              }
-            </div>
-          )) : "No Photos Found"}
-        </div>
       </div>
+      
     </div>
   );
 };
 
-export default SearchIndex;
+export default AllCreativeSearchIndex;

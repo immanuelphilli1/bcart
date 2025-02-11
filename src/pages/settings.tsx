@@ -32,13 +32,13 @@ export default function Settings() {
                                             Creatives & Hiring
                                         </button>
                                     </div>
-                                    <div className='w-full'>
+                                    {/* <div className='w-full'>
                                         <button
                                             className={`${active === "promo" ? " text-white  bg-[#520B1F] " : "text-[#520B1F] bg-white hover:text-white hover:bg-[#520B1F]"} border border-[#520B1F] font-bold w-full px-4 py-3 text-sm text-nowrap rounded-full`}
                                             onClick={() => setActive("promo")}>
                                             Promo Packs
                                         </button>
-                                    </div>
+                                    </div> */}
                         </div>
                         <div className='w-full bg-opacity-30 rounded-2xl md:min-h-[40rem] bg-[#520B1F]'>
                            {active === "profile" && <ProfileSettings /> }
