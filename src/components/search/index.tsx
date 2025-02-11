@@ -31,7 +31,7 @@ const SearchIndex: React.FC<SearchProps> = ({
           <div className="flex gap-8 lg:gap-10 items-center overflow-scroll no-scrollbar">
             {featuredCreatives.length > 0 ?
               featuredCreatives.map((creative: any, index: number) => (
-                <a href={`${userData?.user?.username === creative.username ? "/profile" : `/profile?creative=${creative.username}`}`} key={index}>
+                <a href={`${userData?.user?.username === creative.username ? "/profile" : "/profile?creative=${creative.username}"}`} key={index}>
                   <div className="border w-28 h-28 rounded-full overflow-hidden bg-gray-200">
                     {creative.profile_picture ? (
                       <img

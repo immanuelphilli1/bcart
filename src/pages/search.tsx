@@ -146,7 +146,7 @@ export default function Search() {
         },
       });
       const data = await response.json();
-      if (data.data.length > 0) {
+      if (data.data.length === 0) {
         setPhotos(data.data);
       } else {
         setPhotos([]);
