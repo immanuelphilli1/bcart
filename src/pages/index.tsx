@@ -190,7 +190,7 @@ const IndexPage: React.FC<PageProps> = () => {
                         <img
                           src={cat.image_url}
                           alt="logo"
-                          className="w-full h-full"
+                          className="w-full h-full object-cover"
                         />
                       </div>
                       <div className="pt-2 text-sm text-left font-bold">
@@ -333,7 +333,7 @@ const IndexPage: React.FC<PageProps> = () => {
           <div className="container">
             <div className=" pb-6">
               <h1 className="text-lg font-bold text-[#2B1139]">
-                Featured Creatives
+                 Creatives
               </h1>
             </div>
             <div className="grid grid-cols-2 justify-items-center md:hidden gap-x-4 gap-y-10">
@@ -413,7 +413,7 @@ const IndexPage: React.FC<PageProps> = () => {
                 <button
                   type="button"
                   title="Search"
-                  onClick={() => navigate("/search")}
+                  onClick={() => navigate("/creatives")}
                   className="border rounded-full p-4 lg:p-8 text-white bg-[#520B1F] hover:bg-[#520b1fb2]"
                 >
                   <ArrowRight size={40} />

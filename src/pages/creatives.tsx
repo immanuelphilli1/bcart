@@ -1,7 +1,6 @@
 import { ArrowRight, CloudArrowUp, Eye, EyeClosed, MagnifyingGlass } from "@phosphor-icons/react";
 import React from "react";
 import Layout from "../components/layout";
-import SearchIndex from "../components/search";
 import CreativeSearch from "../components/search/creativeSearch";
 import Modal from "../components/modal";
 import { useState, useEffect } from "react";
@@ -17,6 +16,7 @@ import {
 } from "../services/add_to_cart";
 import { get } from "http";
 import PictureModal from "../components/modal/pictureModal";
+import AllCreativeSearchIndex from "../components/search/allCreatives";
 
 export default function Search() {
   const userData = getUserData();
@@ -26,8 +26,6 @@ export default function Search() {
   const [showModal, setShowModal] = React.useState(false);
   const [query, setQuery] = useState<string>("");
   const [photos, setPhotos] = useState<any>([]);
-  const [showFilter, setShowFilter] = useState<string>("All");
-  const [allPhotos, setAllPhotos] = useState<any[]>([]);
   const [pickedPhoto, setPickedPhoto] = useState<any>(null);
   const [relatedPhotos, setRelatedPhotos] = useState<any>([]);
   const [showEditModal, setShowEditModal] = React.useState(false);
@@ -35,7 +33,6 @@ export default function Search() {
   const [loader, setLoader] = useState<boolean>(false);
   const [purchased, setPurchased] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [loadingMap, setLoadingMap] = useState<{ [key: number]: boolean }>({});
   const [buttonLoader, setButtonLoader] = useState<boolean>(false);
   const [showImageModal, setShowImageModal] = useState<boolean>(false);
   const [mine, setMine] = useState<boolean>(false);
@@ -75,7 +72,7 @@ export default function Search() {
   //******fetch single photo */
   async function handleOneImage(take: any) {
     console.log(take);
-    setLoadingMap(prev => ({ ...prev, [take]: true }));
+    setLoading(true);
     try {
       //*****fetching single photo */
       const response = await fetch(
@@ -106,7 +103,7 @@ export default function Search() {
       if (Object.keys(data.data).length > 0) {
         //TODO:Place a toaster here
         setShowModal(true);
-        setLoadingMap(prev => ({ ...prev, [take]: false }));
+        setLoading(false);
         setPickedPhoto(data.data);
         // console.log(data_another.data);
         setRelatedPhotos(data_another.data);
@@ -153,11 +150,8 @@ export default function Search() {
       const data = await response.json();
       if (data.data.length > 0) {
         setPhotos(data.data);
-        setAllPhotos(data.data);
-        setShowFilter("All");
       } else {
         setPhotos([]);
-        setAllPhotos([]);
       }
     } catch (error) {
       console.log(error);
@@ -173,7 +167,7 @@ export default function Search() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token.token}`,
+              "Authorization": `Bearer ${token.token}`,
           },
         }
       );
@@ -186,7 +180,7 @@ export default function Search() {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token.token}`,
+              "Authorization": `Bearer ${token.token}`,
           },
         }
       );
@@ -232,7 +226,7 @@ export default function Search() {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              "Authorization": `Bearer ${token.token}`,
+                "Authorization": `Bearer ${token.token}`,
             },
           }
         );
@@ -245,7 +239,7 @@ export default function Search() {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              "Authorization": `Bearer ${token.token}`,
+                "Authorization": `Bearer ${token.token}`,
             },
           }
         );
@@ -385,31 +379,6 @@ export default function Search() {
     getPhotos();
   }, []);
 
-  const handleFilter = (filterType: "All" | "Free Photos" | "Paid Photos") => {
-    if (filterType === showFilter) {
-      setPhotos(allPhotos); // Reset if clicking the same filter
-      setShowFilter("All");
-      return;
-    }
-
-    let filteredPhotos = allPhotos;
-    if (filterType === "Free Photos") {
-      filteredPhotos = allPhotos.filter(photo =>
-        ["0", "0.0", "0.00", 0, 0.0, 0.00].includes(photo.price)
-      );
-    } else if (filterType === "Paid Photos") {
-      filteredPhotos = allPhotos.filter(photo =>
-        !["0", "0.0", "0.00", 0, 0.0, 0.00].includes(photo.price)
-      );
-    }
-
-    setPhotos(filteredPhotos);
-    setShowFilter(filterType);
-  };
-
-
-
-
   return (
     <Layout active="partner">
       <div className="container relative">
@@ -429,21 +398,6 @@ export default function Search() {
               />
             </div>
           </div>
-          {/* filter photos by paid and free */}
-          <div>
-            <div className="flex gap-4 pt-4">
-              {["All", "Free Photos", "Paid Photos"].map(filter => (
-                <button
-                  key={filter}
-                  onClick={() => handleFilter(filter as "All" | "Free Photos" | "Paid Photos")}
-                  className={`${showFilter === filter ? "bg-[#520B1F] text-white" : "bg-white text-[#520B1F]"
-                    } border border-[#520B1F] px-4 py-2 rounded-full`}
-                >
-                  {filter}
-                </button>
-              ))}
-            </div>
-          </div>
           {loader ? (
             <div className="flex items-center justify-center pt-20">
               <Loader size="w-12 h-12" />
@@ -451,12 +405,12 @@ export default function Search() {
           ) : (
             <div>
               {!showCreativeSearch && (
-                <SearchIndex
+                <AllCreativeSearchIndex
                   handleOneImage={handleOneImage}
                   handleSearchCreatives={handleSearchCreatives}
                   featuredCreatives={featuredCreatives}
                   photos={photos}
-                  loading={loadingMap}
+                  loading={loading}
                   userData={userData}
                 />
               )}
@@ -546,15 +500,15 @@ export default function Search() {
                       {pickedPhoto.description}
                     </div>
                     <div className=" lg:hidden ">
-                      <button
-                        onClick={() => setShowImageModal(true)}
-                        title="preview"
-                      >
-                        <img
-                          src={pickedPhoto.image_url}
-                          alt="logo"
-                          className="w-full rounded-2xl h-full"
-                        />
+                    <button
+                    onClick={() => setShowImageModal(true)}
+                    title="preview"
+                  >
+                      <img
+                        src={pickedPhoto.image_url}
+                        alt="logo"
+                        className="w-full rounded-2xl h-full"
+                      />
                       </button>
                     </div>
                     {/* <div className='text-sm text-[#5c5c5c] font-bold'>We’re sorry you couldn’t find what you are looking for. Feel free to tell us what you want and our creatives will make your wishes come true</div>
@@ -570,107 +524,107 @@ export default function Search() {
                     {pickedPhoto.price === 0 || pickedPhoto.has_purchased === 1 ? (
                       <>
                         {mine === true || pickedPhoto.has_purchased === 1 ?
-                          <div className="w-full">
-                            <button
-                              className="text-white bg-[#520B1F] border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full"
-                              onClick={async () => {
-                                try {
-                                  const response = await fetch(pickedPhoto.image_url);
-                                  if (!response.ok) {
-                                    throw new Error('Network response was not ok');
-                                  }
-
-                                  const blob = await response.blob();
-                                  const url = window.URL.createObjectURL(blob);
-
-                                  const link = document.createElement('a');
-                                  link.href = url;
-                                  link.download = 'bcart_free.png'; // Set your desired filename
-                                  document.body.appendChild(link);
-                                  link.click();
-                                  link.remove();
-
-                                  // Revoke the object URL to free up memory
-                                  window.URL.revokeObjectURL(url);
-                                } catch (error) {
-                                  console.error('Failed to download file:', error);
+                        <div className="w-full">
+                          <button
+                            className="text-white bg-[#520B1F] border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full"
+                            onClick={async () => {
+                              try {
+                                const response = await fetch(pickedPhoto.image_url);
+                                if (!response.ok) {
+                                  throw new Error('Network response was not ok');
                                 }
-                              }}
-                            >
-                              Download
-                            </button>
-                          </div>
-                          :
-                          <div className="w-full">
-                            <button
-                              className="text-white bg-[#520B1F] border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full"
-                              onClick={async () => {
-                                try {
-                                  const response = await fetch(pickedPhoto.image_url);
-                                  if (!response.ok) {
-                                    throw new Error('Network response was not ok');
-                                  }
 
-                                  const blob = await response.blob();
-                                  const url = window.URL.createObjectURL(blob);
+                                const blob = await response.blob();
+                                const url = window.URL.createObjectURL(blob);
 
-                                  const link = document.createElement('a');
-                                  link.href = url;
-                                  link.download = 'bcart_free.png'; // Set your desired filename
-                                  document.body.appendChild(link);
-                                  link.click();
-                                  link.remove();
+                                const link = document.createElement('a');
+                                link.href = url;
+                                link.download = 'bcart_free.png'; // Set your desired filename
+                                document.body.appendChild(link);
+                                link.click();
+                                link.remove();
 
-                                  // Revoke the object URL to free up memory
-                                  window.URL.revokeObjectURL(url);
-                                } catch (error) {
-                                  console.error('Failed to download file:', error);
+                                // Revoke the object URL to free up memory
+                                window.URL.revokeObjectURL(url);
+                              } catch (error) {
+                                console.error('Failed to download file:', error);
+                              }
+                            }}
+                          >
+                             Download
+                          </button>
+                        </div>
+                        :
+                        <div className="w-full">
+                          <button
+                            className="text-white bg-[#520B1F] border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full"
+                            onClick={async () => {
+                              try {
+                                const response = await fetch(pickedPhoto.image_url);
+                                if (!response.ok) {
+                                  throw new Error('Network response was not ok');
                                 }
-                              }}
-                            >
-                              Free Download Now
-                            </button>
-                          </div>
-                        }
+
+                                const blob = await response.blob();
+                                const url = window.URL.createObjectURL(blob);
+
+                                const link = document.createElement('a');
+                                link.href = url;
+                                link.download = 'bcart_free.png'; // Set your desired filename
+                                document.body.appendChild(link);
+                                link.click();
+                                link.remove();
+
+                                // Revoke the object URL to free up memory
+                                window.URL.revokeObjectURL(url);
+                              } catch (error) {
+                                console.error('Failed to download file:', error);
+                              }
+                            }}
+                          >
+                            Free Download Now
+                          </button>
+                        </div>
+                    }
                       </>
                     ) : (
                       <>
                         {userData && (
-                          mine === true ? null :
-                            <div className="w-full">
-                              <button
-                                title="Add to cart"
-                                disabled={!userData}
-                                type="button"
-                                className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
-                                onClick={
-                                  getPurchasingProducts().includes(pickedPhoto.id)
-                                    ? handleRemove
-                                    : handleCartAndRefresh
-                                }
-                              >
-                                {
-                                  userData !== null ? getPurchasingProducts().includes(pickedPhoto.id)
-                                    ? "Remove from cart"
-                                    : "Add to cart" : "please login to add to cart"
-                                }
-
-                              </button>
-                            </div>
-
-                        )}
-
-                        {mine === true ? null :
+                          mine === true ? null:
                           <div className="w-full">
                             <button
+                              title="Add to cart"
+                              disabled={!userData}
                               type="button"
-                              onClick={(e) => getPurchasingProducts().length > 0 ? handleCartAndRefresh() : buyNow(pickedPhoto.id, e)}
                               className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
+                              onClick={
+                                getPurchasingProducts().includes(pickedPhoto.id)
+                                  ? handleRemove
+                                  : handleCartAndRefresh
+                              }
                             >
-                              {buttonLoader === true ? "Processing ...... " : "Buy Now"}
+                              {
+                                userData !== null ? getPurchasingProducts().includes(pickedPhoto.id)
+                                  ? "Remove from cart"
+                                  : "Add to cart" : "please login to add to cart"
+                              }
+
                             </button>
                           </div>
-                        }
+                            
+                        )}
+
+                        {mine === true ? null:
+                        <div className="w-full">
+                          <button
+                            type="button"
+                            onClick={(e) => getPurchasingProducts().length > 0 ? handleCartAndRefresh() : buyNow(pickedPhoto.id, e)}
+                            className={` text-white  bg-[#520B1F]  border border-[#520B1F] font-bold w-full px-4 py-3 text-sm rounded-full`}
+                          >
+                            {buttonLoader === true ? "Processing ...... " : "Buy Now"}
+                          </button>
+                        </div>
+                   }
                       </>
                     )}
                     <div className="flex-shrink self-center hidden">
@@ -786,11 +740,11 @@ export default function Search() {
           Content={
             <div className="flex flex-col items-center justify-center w-full mx-auto">
               <div className="h-10">
-                <img
-                  src={pickedPhoto.image_url}
-                  alt="logo"
-                  className="w-full rounded-2xl h-fit object-cover md:h-[80vh] "
-                />
+              <img
+                      src={pickedPhoto.image_url}
+                      alt="logo"
+                      className="w-full rounded-2xl h-fit object-cover md:h-[80vh] "
+                    />
               </div>
             </div>
           }
