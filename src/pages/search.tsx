@@ -789,7 +789,7 @@ export default function Search() {
                 <img
                   src={pickedPhoto.image_url}
                   alt="logo"
-                  className="w-full rounded-2xl h-fit object-cover md:h-[80vh] "
+                  className="w-full rounded-2xl object-cover md:h-[80vh] "
                 />
               </div>
             </div>
