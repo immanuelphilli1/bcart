@@ -167,11 +167,13 @@ const IndexPage: React.FC<PageProps> = () => {
       </div>
       <div className="container">
         <div className="px-4 py-10">
-          <div className=" pb-6">
+          {categories.length > 0 && (
+            <div className=" pb-6">
             <h1 className="text-lg font-bold text-[#2B1139]">
               Featured Categories
             </h1>
           </div>
+          )}
           <div className="grid grid-cols-2 gap-x-4 gap-y-12 md:hidden">
           {categories.slice(0, 6).map(
                 (cat: any, index: number) =>
@@ -280,14 +282,24 @@ const IndexPage: React.FC<PageProps> = () => {
               )}
             </div>
             <div className="flex pb-7">
-              <button
+          {categories.length > 0 && (
+            <button
+            type="button"
+            title="button"
+            onClick={() => handleScroll('categories')}
+            className="border rounded-full p-4 lg:p-8 text-white bg-[#520B1F] hover:bg-[#520b1fb2]"
+          >
+            <ArrowRight size={40} />
+          </button>
+          )}
+              {/* <button
                 type="button"
                 title="button"
                 onClick={() => handleScroll('categories')}
                 className="border rounded-full p-4 lg:p-8 text-white bg-[#520B1F] hover:bg-[#520b1fb2]"
               >
                 <ArrowRight size={40} />
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
@@ -329,7 +341,8 @@ const IndexPage: React.FC<PageProps> = () => {
         </div>
       </div>
       <div>
-        <div className="bg-[#520B1F] bg-opacity-20 py-20 px-4">
+        {featuredCreatives.length > 0 && (
+          <div className="bg-[#520B1F] bg-opacity-20 py-20 px-4">
           <div className="container">
             <div className=" pb-6">
               <h1 className="text-lg font-bold text-[#2B1139]">
@@ -422,31 +435,37 @@ const IndexPage: React.FC<PageProps> = () => {
             </div>
           </div>
         </div>
+        )}
+        
       </div>
-      <div id="categories" className="container">
-        <div className="py-20 px-4">
-          <div className=" pb-10">
-            <h1 className="text-lg font-bold text-[#2B1139]">All Categories</h1>
-          </div>
-          <div className="grid grid-cols-2 gap-x-4 w-full lg:gap-x-10 gap-y-10 md:grid-cols-4 lg:grid-cols-5">
-            {categories.map((cat: any, index: number) => (
-              <div key={index} className="flex flex-col gap-10">
-                <button
-                  onClick={() =>
-                    navigate(
-                      `/search/?q=${encodeURIComponent(cat.creative_category)}`
-                    )
-                  }
-                  
-                  className="font-semibold text-left text-gray-800 hover:text-gray-600"
-                >
-                  {cat.creative_category}
-                </button>
-              </div>
-            ))}
+      {
+        categories.length > 0 && (
+          <div id="categories" className="container">
+          <div className="py-20 px-4">
+            <div className=" pb-10">
+              <h1 className="text-lg font-bold text-[#2B1139]">All Categories</h1>
+            </div>
+            <div className="grid grid-cols-2 gap-x-4 w-full lg:gap-x-10 gap-y-10 md:grid-cols-4 lg:grid-cols-5">
+              {categories.map((cat: any, index: number) => (
+                <div key={index} className="flex flex-col gap-10">
+                  <button
+                    onClick={() =>
+                      navigate(
+                        `/search/?q=${encodeURIComponent(cat.creative_category)}`
+                      )
+                    }
+                    
+                    className="font-semibold text-left text-gray-800 hover:text-gray-600"
+                  >
+                    {cat.creative_category}
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+        )}
+     
       </Layout>
       }
     </>
