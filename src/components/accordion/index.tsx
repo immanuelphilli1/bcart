@@ -24,7 +24,7 @@ const Accordion: React.FC<AccordionProps> = ({ title, children }) => {
         <div className='bg-[#520B1F] p-2 text-white rounded-full'>{isOpen ? <Minus size={24} weight='bold' /> : <Plus size={24} weight='bold' />}</div>
         <div><div className='font-bold text-xl text-[#2B1139] lg:text-2xl pt-1 mb-4'>{title}</div>
         <div
-        className={` overflow-hidden text-sm transition-max-height duration-300 ease-in-out ${isOpen ? 'max-h-screen py-4' : 'max-h-0'}`}
+        className={` overflow-hidden text-sm md:text-base transition-max-height duration-300 ease-in-out ${isOpen ? 'max-h-screen py-4' : 'max-h-0'}`}
       >
         {children}
       </div>
