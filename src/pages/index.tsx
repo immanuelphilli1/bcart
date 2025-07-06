@@ -325,7 +325,7 @@ const IndexPage: React.FC<PageProps> = () => {
                 </h1>
               </div>
               <div className="text-sm">
-                {featuredCreative.description ? featuredCreative.description : <div>
+                {featuredCreative?.description ? featuredCreative.description : <div>
                   Every week, we shine a spotlight on outstanding talents from our BCART community — photographers, designers, artists, and storytellers who are using their lenses and creativity to inspire the world. These featured creatives represent the spirit of originality and excellence we champion at BCart GH. <br />
                   <br />
                   Explore their work, support their craft, and discover the stories behind the shots.
@@ -370,7 +370,7 @@ const IndexPage: React.FC<PageProps> = () => {
                         <img
                           src={creative.profile_picture}
                           alt="logo"
-                          className="w-full h-full"
+                          className="w-full h-full object-contain"
                         />
                       ) : (
                         <img
