@@ -325,9 +325,13 @@ const IndexPage: React.FC<PageProps> = () => {
                 </h1>
               </div>
               <div className="text-sm">
-                {featuredCreative?.description} 
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut viverra turpis. In in odio iaculis velit convallis commodo. Sed odio est, gravida elementum sollicitudin a, ultricies non eros. Etiam ut iaculis eros, at auctor diam. In quis tempus tortor. Nullam hendrerit metus auctor tortor condimentum, id porttitor ipsum varius. Donec quis nunc sit amet ante posuere facilisis ut eget eros. Duis venenatis lacinia cursus. Curabitur tempus nisl elit, quis scelerisque justo interdum luctus. Integer vitae ante placerat, facilisis eros vitae, tempor justo. Curabitur finibus nisl sit amet pharetra pharetra.
-                 </div>
+                {featuredCreative.description ? featuredCreative.description : <div>
+                  Every week, we shine a spotlight on outstanding talents from our BCART community — photographers, designers, artists, and storytellers who are using their lenses and creativity to inspire the world. These featured creatives represent the spirit of originality and excellence we champion at BCart GH. <br />
+                  <br />
+                  Explore their work, support their craft, and discover the stories behind the shots.
+                  </div>} 
+                
+              </div>
               <div>
                 <button
                   onClick={() => navigate("/featured-creative")}
