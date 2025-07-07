@@ -370,7 +370,7 @@ const IndexPage: React.FC<PageProps> = () => {
                         <img
                           src={creative.profile_picture}
                           alt="logo"
-                          className="w-full h-full object-contain"
+                          className="w-full h-full object-cover"
                         />
                       ) : (
                         <img
@@ -407,7 +407,7 @@ const IndexPage: React.FC<PageProps> = () => {
                         <img
                           src={creative.profile_picture}
                           alt="logo"
-                          className="w-full h-full"
+                          className="w-full h-full object-cover"
                         />
                       ) : (
                         <img
